@@ -5,7 +5,7 @@
 		<setting name="ComPort" value="COM1" />
 
 		<!-- Don't enable bluetooth if you don't have a bluetooth device -->
-		<setting name="EnableBluetooth" value="true" />
+		<setting name="EnableBluetooth" value="false" />
 
 		<!-- Root directory of mp3's -->
 		<setting name="MusicRoot" value="D:\BeverDrive\Mp3" />

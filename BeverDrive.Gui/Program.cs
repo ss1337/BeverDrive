@@ -35,6 +35,8 @@ namespace BeverDrive.Gui
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
+			Application.Run(new SplashForm());
+
 			Logger.Clear();
 
 			BeverDriveContext.Initialize();
