@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<config>
+	<settings>
+		<!-- Which serial port is the IBUS interface connected to -->
+		<setting name="ComPort" value="COM1" />
+
+		<!-- Don't enable bluetooth if you don't have a bluetooth device -->
+		<setting name="EnableBluetooth" value="true" />
+
+		<!-- Root directory of mp3's -->
+		<setting name="MusicRoot" value="D:\BeverDrive\Mp3" />
+		
+		<!-- Root directory of videos -->
+		<setting name="VideoRoot" value="D:\BeverDrive\Videos" />
+		
+		<!-- Hide the cursor? Yes you almost always want this on -->
+		<setting name="HideCursor" value="true" />
+		
+		<!-- How many pixels from each direction should we offset the drawing area -->
+		<setting name="OffsetBottom" value="0" />
+		<setting name="OffsetLeft" value="10" />
+		<setting name="OffsetRight" value="10" />
+		<setting name="OffsetTop" value="0" />
+
+		<!-- Path to VLC libraries -->
+		<setting name="VlcPath" value="C:\Program Files\Media\VLC" />
+
+		<!-- Background color -->
+		<setting name="BackgroundColor" value="#3E4382" />
+		
+		<!-- Foreground color -->
+		<setting name="ForegroundColor" value="#D3D3D3" />
+		
+		<!-- Color when selected -->
+		<setting name="SelectedColor" value="#FF4500" />
+
+		<!-- Clock background color -->
+		<setting name="ClockBackgroundColor" value="#D3D3D3" />
+
+		<!-- Clock foreground color -->
+		<setting name="ClockForegroundColor" value="#000000" />
+
+		<!-- Debug stuff -->
+		<setting name="DebugTrack" value="3" />
+	</settings>
+</config>

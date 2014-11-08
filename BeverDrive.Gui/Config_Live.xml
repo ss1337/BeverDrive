@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<config>
+	<settings>
+		<setting name="ComPort" value="COM1" />
+		<setting name="EnableBluetooth" value="true" />
+		<setting name="MusicRoot" value="C:\Bever\Mp3s" />
+		<setting name="VideoRoot" value="C:\Bever\Videos" />
+		<setting name="HideCursor" value="true" />
+		<setting name="OffsetBottom" value="10" />
+		<setting name="OffsetLeft" value="40" />
+		<setting name="OffsetRight" value="00" />
+		<setting name="OffsetTop" value="0" />
+		<setting name="VlcPath" value="C:\Program Files\vlc-2.0.2" />
+
+		<setting name="BackColor" value="#3E4382" />
+		<setting name="ForeColor" value="#D3D3D3" />
+		<setting name="SelectedColor" value="#FF4500" />
+		<setting name="ClockBackgroundColor" value="#D3D3D3" />
+		<setting name="ClockForegroundColor" value="#000000" />
+
+		<setting name="DebugTrack" value="3" />
+	</settings>
+</config>
