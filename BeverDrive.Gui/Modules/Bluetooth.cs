@@ -128,6 +128,7 @@ namespace BeverDrive.Gui.Modules
 		private void Show()
 		{
 			VlcContext.AudioPlayer.Stop();
+			VlcContext.VideoPlayer.Stop();
 			isActive = true;
 			BeverDriveContext.CurrentCoreGui.AddControl(this.lbl_title);
 			BeverDriveContext.CurrentCoreGui.AddControl(this.lbl_bt1);
