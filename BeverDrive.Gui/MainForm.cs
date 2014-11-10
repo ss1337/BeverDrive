@@ -38,6 +38,13 @@ namespace BeverDrive.Gui
 		public MainForm()
 		{
 			InitializeComponent();
+			
+			// Check if ShowSplashScreen returned an error, if so, don't do anything
+			if (this.ShowSplashScreen() == -1)
+				return;
+
+			BeverDriveContext.Initialize();
+			VlcContext.Initialize(BeverDriveContext.Settings.VlcPath);
 			BeverDriveContext.CurrentMainForm = this;
 			BeverDriveContext.LoadedModules.Add(new BeverDrive.Gui.Modules.CoreGui());
 			BeverDriveContext.LoadedModules.Add(new BeverDrive.Gui.Modules.MainMenu());
@@ -87,7 +94,8 @@ namespace BeverDrive.Gui
 			base.OnPaint(e);
 
 			// Paint any AOverlayModules visible
-			BeverDriveContext.LoadedModules.OfType<AOverlayedModule>().Any(x => { if (x.Visible) { x.Paint(e.Graphics); } return false; });
+			if (BeverDriveContext.LoadedModules != null)
+				BeverDriveContext.LoadedModules.OfType<AOverlayedModule>().Any(x => { if (x.Visible) { x.Paint(e.Graphics); } return false; });
 		}
 
 		protected override void OnPaintBackground(PaintEventArgs e)
@@ -114,9 +122,14 @@ namespace BeverDrive.Gui
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			// UNLOAD ALL THE THINGS!
-			VlcContext.AudioPlayer.Dispose();
-			VlcContext.VizPlayer.Dispose();
-			VlcContext.VideoPlayer.Dispose();
+			if (VlcContext.AudioPlayer != null)
+				VlcContext.AudioPlayer.Dispose();
+
+			if (VlcContext.VideoPlayer != null)
+				VlcContext.VizPlayer.Dispose();
+
+			if (VlcContext.VizPlayer != null)
+				VlcContext.VideoPlayer.Dispose();
 		}
 	}
 }

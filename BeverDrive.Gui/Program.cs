@@ -35,13 +35,7 @@ namespace BeverDrive.Gui
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new SplashForm());
-
 			Logger.Clear();
-
-			BeverDriveContext.Initialize();
-			VlcContext.Initialize(BeverDriveContext.Settings.VlcPath);
-
 			Application.Run(new MainForm());
 		}
 	}
