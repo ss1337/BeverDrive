@@ -36,7 +36,6 @@ namespace BeverDrive.Gui.Modules
 		public MetroidButton BackButton;							// Ambigous back button
 		public Panel ClockContainer;
 		public Panel ModuleContainer;							// All module controls goes into here
-		protected Separator separator;
 
 		public Size ModuleAreaSize { get { return this.ModuleContainer.Size; } }
 
@@ -58,8 +57,6 @@ namespace BeverDrive.Gui.Modules
 					this.ClockContainer.Controls.Add(this.BaseDate);
 					this.BaseContainer.Controls.Add(this.ClockContainer);
 					this.BaseContainer.Controls.Add(this.ModuleContainer);
-					//this.BaseContainer.Controls.Add(this.separator);
-					//this.separator.SizeToFit();
 					break;
 				case ModuleCommands.NextTrack:
 				case ModuleCommands.PreviousTrack:
@@ -145,17 +142,13 @@ namespace BeverDrive.Gui.Modules
 			this.BackButton.TabIndex = 0;
 			this.BackButton.Visible = false;
 
-			// This panel were everything ends up
+			// This panel is were everything ends up
 			this.ModuleContainer = new Panel();
 			this.ModuleContainer.BackColor = System.Drawing.Color.Transparent;
 			this.ModuleContainer.Location = new System.Drawing.Point(0, 0);
 			this.ModuleContainer.Name = "ModuleContainer";
 			this.ModuleContainer.Size = new System.Drawing.Size(this.BaseContainer.Size.Width, this.BaseContainer.Size.Height - 40);
 			this.ModuleContainer.TabIndex = 0;
-
-			/*this.separator = new Separator();
-			this.separator.Location = new System.Drawing.Point(0, this.BaseContainer.Size.Height - 40);
-			this.separator.Height = 3;*/
 
 #if DEBUG
 			//this.BaseContainer.BackColor = System.Drawing.Color.Chartreuse;
