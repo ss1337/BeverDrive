@@ -25,6 +25,7 @@ using BeverDrive.Gui.Controls;
 using BeverDrive.Gui.Core;
 using BeverDrive.Gui.Core.Styles;
 using nVlc.LibVlcWrapper.Declarations.Media;
+using System.Drawing;
 
 namespace BeverDrive.Gui.Modules
 {
@@ -32,7 +33,7 @@ namespace BeverDrive.Gui.Modules
 	//[PlaybackModule] // Nexting track in main menu causes a reboot
 	public class VideoPlayer : AModule
 	{
-		private bool fullScreen;
+		private int fullScreen;
 		private FileSystemBrowserList ctrl_browser;
 		private MetroidButton ctrl_full;
 		private MetroidButton ctrl_play;
@@ -149,142 +150,152 @@ namespace BeverDrive.Gui.Modules
 
 			VlcContext.CurrentTrack = playlist.CurrentIndex + 1;
 			this.ParentForm.IbusInstance.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_TrackStart(VlcContext.CurrentDisc, VlcContext.CurrentTrack));
-
-			//var m = VlcContext.Factory.CreateMedia<IMedia>(this.ctrl_browser.CurrentPath + "\\" + this.ctrl_browser.SelectedItem);
-			////VlcContext.AudioPlayer.Open(playlist.CurrentItem.VlcMedia);
-			////VlcContext.AudioPlayer.Open(m);
-			////VlcContext.AudioPlayer.Play();
-			//VlcContext.VideoPlayer.Open(m);
-			//VlcContext.VideoPlayer.Play();
 		}
 
 		private void SelectClick()
 		{
-			if (fullScreen)
+			// Fullscreen 0 = GUI visible
+			// Fullscreen 1 = normal zoom on video
+			// Fullscreen 2 = zoomed video
+			if (fullScreen == 1)
+			{
+				this.fullScreen = 2;
+				VlcContext.VideoPlayer.CropGeometry.CropArea = new Rectangle(0, 0, ctrl_vlc.Size.Width, ctrl_vlc.Size.Height);
+				VlcContext.VideoPlayer.CropGeometry.Enabled = true;
+				return;
+			}
+
+			if (fullScreen == 2) 
 			{
 				// Un-fullscreen
-				this.fullScreen = false;
-				BeverDriveContext.FullScreen = this.fullScreen;
+				this.fullScreen = 0;
+				BeverDriveContext.FullScreen = false;
 				this.AddControls();
 				return;
 			}
 
-			if (this.ctrl_browser.SelectedIndex == -3)
+			switch (this.ctrl_browser.SelectedIndex)
 			{
-				BeverDriveContext.SetActiveModule("MainMenu");
-				return;
-			}
-			else if (this.ctrl_browser.SelectedIndex == -2)
-			{
-				// Play
-				if (VlcContext.VideoPlayer.IsPlaying)
-					VlcContext.VideoPlayer.Pause();
-				else
-					VlcContext.VideoPlayer.Play();
-				return;
-			}
-			else if (this.ctrl_browser.SelectedIndex == -1)
-			{
-				// Full screen
-				this.fullScreen = !this.fullScreen;
-				BeverDriveContext.FullScreen = this.fullScreen;
-				this.SetVlcControl();
-				return;
-			}
-			else
-			{
-				if (this.ctrl_browser.SelectedItem.StartsWith("\\"))
-				{
-					this.ctrl_browser.Select();
-					vlcPopulated = false;
-				}
-				else
-				{
-					if (!vlcPopulated)
+				case -3:
+					BeverDriveContext.SetActiveModule("MainMenu");
+					break;
+
+				case -2:
+					// Play
+					if (VlcContext.VideoPlayer.IsPlaying)
+						VlcContext.VideoPlayer.Pause();
+					else
+						VlcContext.VideoPlayer.Play();
+					break;
+
+				case -1:
+					// Full screen
+					this.fullScreen = 1;
+					BeverDriveContext.FullScreen = true;
+					VlcContext.VideoPlayer.CropGeometry.Enabled = false;
+					this.SetVlcControl();
+					break;
+
+				default:
+					if (this.ctrl_browser.SelectedItem.StartsWith("\\"))
 					{
-						this.playlist.Clear();
-
-						// Add stuff to list
-						foreach (var f in ctrl_browser.Files)
-							playlist.AddFile(ctrl_browser.CurrentPath + "\\" + f.Name);
+						this.ctrl_browser.Select();
+						vlcPopulated = false;
 					}
+					else
+					{
+						if (!vlcPopulated)
+						{
+							this.playlist.Clear();
 
-					vlcPopulated = true;
+							// Add stuff to list
+							foreach (var f in ctrl_browser.Files)
+								playlist.AddFile(ctrl_browser.CurrentPath + "\\" + f.Name);
+						}
 
-					playlist.CurrentIndex = this.ctrl_browser.SelectedIndex - this.ctrl_browser.Directories.Count - 1;
-					this.PlayTrack();
-				}
+						vlcPopulated = true;
+
+						playlist.CurrentIndex = this.ctrl_browser.SelectedIndex - this.ctrl_browser.Directories.Count - 1;
+						this.PlayTrack();
+					}
+					break;
 			}
 		}
 
 		private void SelectNext()
 		{
 			// Do nothing if we are full screened
-			if (fullScreen)
+			if (fullScreen > 0)
 				return;
 
 			if (this.ctrl_browser.SelectedIndex != this.ctrl_browser.Items.Count - 1)
 				this.ctrl_browser.SelectedIndex++;
 
-			if (this.ctrl_browser.SelectedIndex == -2)
+			// Do stuff depending on position
+			switch (this.ctrl_browser.SelectedIndex)
 			{
-				BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
-				BeverDriveContext.CurrentCoreGui.BackButton.Invalidate();
-				this.ctrl_play.Selected = true;
-				this.ctrl_play.Invalidate();
-			}
+				case -2:
+					BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
+					BeverDriveContext.CurrentCoreGui.BackButton.Invalidate();
+					this.ctrl_play.Selected = true;
+					this.ctrl_play.Invalidate();
+					break;
 
-			if (this.ctrl_browser.SelectedIndex == -1)
-			{
-				this.ctrl_play.Selected = false;
-				this.ctrl_play.Invalidate();
-				this.ctrl_full.Selected = true;
-				this.ctrl_full.Invalidate();
-			}
+				case -1:
+					this.ctrl_play.Selected = false;
+					this.ctrl_play.Invalidate();
+					this.ctrl_full.Selected = true;
+					this.ctrl_full.Invalidate();
+					break;
 
-			if (this.ctrl_browser.SelectedIndex == 0)
-			{
-				this.ctrl_full.Selected = false;
-				this.ctrl_full.Invalidate();
-			}
+				case 0:
+					this.ctrl_full.Selected = false;
+					this.ctrl_full.Invalidate();
+					break;
 
-			if (this.ctrl_browser.SelectedIndex > -1)
-				this.ctrl_browser.Invalidate();
+				default:
+					if (this.ctrl_browser.SelectedIndex > -1)
+						this.ctrl_browser.Invalidate();
+					break;
+			}
 		}
 
 		private void SelectPrevious()
 		{
 			// Do nothing if we are full screened
-			if (fullScreen)
+			if (fullScreen > 0)
 				return;
 
 			if (this.ctrl_browser.SelectedIndex > -3)
 				this.ctrl_browser.SelectedIndex--;
 
-			if (this.ctrl_browser.SelectedIndex == -1)
+			// Do stuff depending on position
+			switch (this.ctrl_browser.SelectedIndex)
 			{
-				this.ctrl_full.Selected = true;
-				this.ctrl_full.Invalidate();
-			}
+				case -3:
+					BeverDriveContext.CurrentCoreGui.BackButton.Selected = true;
+					BeverDriveContext.CurrentCoreGui.BackButton.Invalidate();
+					this.ctrl_play.Selected = false;
+					this.ctrl_play.Invalidate();
+					break;
 
-			if (this.ctrl_browser.SelectedIndex == -2)
-			{
-				this.ctrl_full.Selected = false;
-				this.ctrl_full.Invalidate();
-				this.ctrl_play.Selected = true;
-				this.ctrl_play.Invalidate();
-			}
+				case -2:
+					this.ctrl_full.Selected = false;
+					this.ctrl_full.Invalidate();
+					this.ctrl_play.Selected = true;
+					this.ctrl_play.Invalidate();
+					break;
 
-			if (this.ctrl_browser.SelectedIndex == -3)
-			{
-				BeverDriveContext.CurrentCoreGui.BackButton.Selected = true;
-				BeverDriveContext.CurrentCoreGui.BackButton.Invalidate();
-				this.ctrl_play.Selected = false;
-				this.ctrl_play.Invalidate();
-			}
+				case -1:
+					this.ctrl_full.Selected = true;
+					this.ctrl_full.Invalidate();
+					break;
 
-			if (this.ctrl_browser.SelectedIndex > -2)
-				this.ctrl_browser.Invalidate();
+				default:
+					if (this.ctrl_browser.SelectedIndex > -2)
+						this.ctrl_browser.Invalidate();
+					break;
+			}
 		}
 
 		private void Show()
@@ -316,7 +327,7 @@ namespace BeverDrive.Gui.Modules
 		{
 			var vlcx = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2 - 210;
 
-			if (this.fullScreen)
+			if (this.fullScreen > 0)
 			{
 				this.ctrl_vlc.BackColor = System.Drawing.Color.Black;
 				this.ctrl_vlc.Location = new System.Drawing.Point(0, 0);
