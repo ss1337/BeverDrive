@@ -27,8 +27,6 @@ namespace BeverDrive.Gui.Modules
 {
 	public class AModule : IModule
 	{
-		public MainForm ParentForm { get { return BeverDriveContext.CurrentMainForm; } }
-
 		public virtual void Init() { }
 
 		public virtual void OnCommand(ModuleCommandEventArgs e) { }

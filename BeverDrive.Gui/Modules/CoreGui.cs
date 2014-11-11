@@ -33,7 +33,7 @@ namespace BeverDrive.Gui.Modules
 		public Panel BaseContainer;								// Adjust this to fit everything to screen
 		public Label BaseClock;									// Shows current time
 		public Label BaseDate;									// Shows current date
-		public MetroidButton BackButton;							// Ambigous back button
+		public MetroidButton BackButton;						// Ambigous back button
 		public Panel ClockContainer;
 		public Panel ModuleContainer;							// All module controls goes into here
 
@@ -52,7 +52,7 @@ namespace BeverDrive.Gui.Modules
 					this.BaseContainer.Controls.Clear();
 					break;
 				case ModuleCommands.Show:
-					ParentForm.Controls.Add(this.BaseContainer);
+					BeverDriveContext.CurrentMainForm.Controls.Add(this.BaseContainer);
 					this.ClockContainer.Controls.Add(this.BaseClock);
 					this.ClockContainer.Controls.Add(this.BaseDate);
 					this.BaseContainer.Controls.Add(this.ClockContainer);

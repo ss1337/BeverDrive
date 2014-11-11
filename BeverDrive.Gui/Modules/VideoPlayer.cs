@@ -149,7 +149,7 @@ namespace BeverDrive.Gui.Modules
 			VlcContext.VideoPlayer.Play();
 
 			VlcContext.CurrentTrack = playlist.CurrentIndex + 1;
-			this.ParentForm.IbusInstance.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_TrackStart(VlcContext.CurrentDisc, VlcContext.CurrentTrack));
+			BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_TrackStart(VlcContext.CurrentDisc, VlcContext.CurrentTrack));
 		}
 
 		private void SelectClick()

@@ -161,10 +161,12 @@ namespace BeverDrive.Gui.Controls
 
 		private void Center()
 		{
-			if (this.ParentForm != null)
+			var form = BeverDriveContext.CurrentMainForm;
+
+			if (form != null)
 			{
-				var x = (this.ParentForm.Width - this.Width)/2;
-				var y = (this.ParentForm.Height - this.Height)/2;
+				var x = (form.Width - this.Width)/2;
+				var y = (form.Height - this.Height)/2;
 				this.Location = new Point(x, y);
 			}
 		}

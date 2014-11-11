@@ -27,7 +27,6 @@ namespace BeverDrive.Gui.Modules
 {
 	public abstract class AOverlayedModule : IModule
 	{
-		public MainForm ParentForm { get { return BeverDriveContext.CurrentMainForm; } }
 		public bool Visible { get; set; }
 
 		public abstract void Paint(System.Drawing.Graphics graphic);

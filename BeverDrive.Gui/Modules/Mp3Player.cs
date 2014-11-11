@@ -271,10 +271,10 @@ namespace BeverDrive.Gui.Modules
 			VlcContext.AudioPlayer.Play();
 
 			VlcContext.CurrentTrack = playlist.CurrentIndex + 1;
-			this.ParentForm.IbusInstance.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_TrackStart(VlcContext.CurrentDisc, VlcContext.CurrentTrack));
+			BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_TrackStart(VlcContext.CurrentDisc, VlcContext.CurrentTrack));
 
-			if (this.ParentForm.InvokeRequired)
-				this.ParentForm.Invoke(new Action(() => this.PopulateGui()));
+			if (BeverDriveContext.CurrentMainForm.InvokeRequired)
+				BeverDriveContext.CurrentMainForm.Invoke(new Action(() => this.PopulateGui()));
 			else
 				this.PopulateGui();
 		}

@@ -33,7 +33,6 @@ namespace BeverDrive.Gui
 	public partial class MainForm : Form
 	{
 		public Timer Timer1hz;
-		public IbusContext IbusInstance;
 
 		public MainForm()
 		{
@@ -55,9 +54,8 @@ namespace BeverDrive.Gui
 				BeverDriveContext.LoadedModules.Add(new BeverDrive.Gui.Modules.Bluetooth());
 
 			// Init ibus
-			this.IbusInstance = new BeverDrive.Ibus.IbusContext(BeverDriveContext.Settings.ComPort);
-			this.IbusInstance.OnValidMessage += new BeverDrive.Ibus.ValidMessageEventHandler(Ibus_OnValidMessage);
-			this.IbusInstance.Send(BeverDrive.Ibus.Messages.Other.Cdc_Announce);
+			BeverDriveContext.Ibus.OnValidMessage += new BeverDrive.Ibus.ValidMessageEventHandler(Ibus_OnValidMessage);
+			BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Other.Cdc_Announce);
 
 			BeverDriveContext.CurrentCoreGui.BaseClock.Text = DateTime.Now.ToShortTimeString();
 			BeverDriveContext.CurrentCoreGui.BaseDate.Text = DateTime.Now.ToString("yyyy-MM-dd");

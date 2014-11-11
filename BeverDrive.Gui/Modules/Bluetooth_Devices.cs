@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using InTheHand.Net.Sockets;
+using BeverDrive.Gui.Core;
 
 namespace BeverDrive.Gui.Modules
 {
@@ -34,6 +35,7 @@ namespace BeverDrive.Gui.Modules
 		{
 			bool foundDevice = false;
 			string deviceName = "";
+			var form = BeverDriveContext.CurrentMainForm;
 
 			BluetoothDeviceInfo[] peers = btClient.DiscoverDevices();
 			if (peers.Count() > 0)
@@ -46,8 +48,8 @@ namespace BeverDrive.Gui.Modules
 				}
 			}
 
-			if (this.ParentForm.InvokeRequired)
-				this.ParentForm.Invoke(new Action<string, bool>(UpdateDeviceName), new object[] { deviceName, foundDevice });
+			if (form.InvokeRequired)
+				form.Invoke(new Action<string, bool>(UpdateDeviceName), new object[] { deviceName, foundDevice });
 			else
 				this.UpdateDeviceName(deviceName, foundDevice);
 

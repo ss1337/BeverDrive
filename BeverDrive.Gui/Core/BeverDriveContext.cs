@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BeverDrive.Gui.Modules;
+using BeverDrive.Ibus;
 
 namespace BeverDrive.Gui.Core
 {
@@ -31,12 +32,13 @@ namespace BeverDrive.Gui.Core
 		private static bool fullScreen;
 
 		public static CoreGui CurrentCoreGui { get { if (currentCoreGui == null) { currentCoreGui = LoadedModules.OfType<CoreGui>().FirstOrDefault(); } return currentCoreGui; } }
-		public static MainForm CurrentMainForm { get; set; }
+		public static System.Windows.Forms.Form CurrentMainForm { get; set; }
 		public static bool RtsEnabled { get; set; }
 		public static BeverDriveSettings Settings { get; set; }
 		public static IModule ActiveModule { get; set; }
 		public static IModule PlaybackModule { get; set; }
 		public static List<IModule> LoadedModules { get; set; }
+		public static IbusContext Ibus { get; set; }
 
 		static BeverDriveContext()
 		{
@@ -46,6 +48,7 @@ namespace BeverDrive.Gui.Core
 		{
 			LoadedModules = new List<IModule>();
 			Settings = new BeverDriveSettings();
+			Ibus = new BeverDrive.Ibus.IbusContext(Settings.ComPort);
 		}
 
 		public static bool FullScreen
