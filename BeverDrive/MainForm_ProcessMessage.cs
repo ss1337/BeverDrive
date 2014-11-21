@@ -22,11 +22,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using BeverDrive.Controls;
 using BeverDrive.Core;
-using BeverDrive.Modules;
 using BeverDrive.Ibus;
 using BeverDrive.Ibus.Extensions;
+using BeverDrive.Modules;
 
 namespace BeverDrive
 {

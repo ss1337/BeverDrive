@@ -52,7 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\FileSystemBrowserListTests.cs" />
-    <Compile Include="Controls\ListControlPartTests.cs" />
+    <Compile Include="Controls\ListControlTests.cs" />
     <Compile Include="Core\FileSystemBrowserTests.cs" />
     <Compile Include="Core\PlaylistTests.cs" />
     <Compile Include="IbusTests.cs" />
@@ -64,6 +64,12 @@
       <Project>{07B0F930-F4ED-443D-8BCB-19AD1E3813BB}</Project>
       <Name>BeverDrive</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Config.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

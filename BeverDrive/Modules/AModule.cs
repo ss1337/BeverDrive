@@ -22,6 +22,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BeverDrive.Core;
+using System.Reflection;
+using BeverDrive.Gui.Controls;
 
 namespace BeverDrive.Modules
 {
@@ -30,6 +32,25 @@ namespace BeverDrive.Modules
 		public virtual void Init() { }
 
 		public virtual void OnCommand(ModuleCommandEventArgs e) { }
+
+		public void ShowControls()
+		{
+			// Reflection to show all the controls, oh yes
+			FieldInfo[] fieldInfos;
+			Type t = this.GetType();
+			fieldInfos = t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+
+			foreach (var fi in fieldInfos)
+			{
+				if (fi.FieldType.IsSubclassOf(typeof(AGraphicsControl)))
+				{
+					var field = t.GetField(fi.Name, BindingFlags.NonPublic | BindingFlags.Instance);
+					var ctrl = (AGraphicsControl)field.GetValue(this);
+					if (ctrl != null)
+						BeverDriveContext.CurrentCoreGui.AddControl(ctrl);
+				}
+			}
+		}
 
 		public virtual void Update1Hz() { }
 	}

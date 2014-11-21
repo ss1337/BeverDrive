@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using BeverDrive.Controls;
 using BeverDrive.Core;
 using BeverDrive.Modules;
 using BeverDrive.Ibus;
@@ -47,18 +46,18 @@ namespace BeverDrive
 			BeverDriveContext.CurrentMainForm = this;
 			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.CoreGui());
 			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.MainMenu());
-			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.Mp3Player());
-			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.VideoPlayer());
+			//BeverDriveContext.LoadedModules.Add(new BeverDrive.OldModules.Mp3Player());
+			//BeverDriveContext.LoadedModules.Add(new BeverDrive.OldModules.VideoPlayer());
 
 			if (BeverDriveContext.Settings.EnableBluetooth)
-				BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.Bluetooth());
+				//BeverDriveContext.LoadedModules.Add(new BeverDrive.OldModules.Bluetooth());
 
 			// Init ibus
 			BeverDriveContext.Ibus.OnValidMessage += new BeverDrive.Ibus.ValidMessageEventHandler(Ibus_OnValidMessage);
 			BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Other.Cdc_Announce);
 
-			BeverDriveContext.CurrentCoreGui.BaseClock.Text = DateTime.Now.ToShortTimeString();
-			BeverDriveContext.CurrentCoreGui.BaseDate.Text = DateTime.Now.ToString("yyyy-MM-dd");
+			BeverDriveContext.CurrentCoreGui.ClockContainer.Time = DateTime.Now.ToShortTimeString();
+			BeverDriveContext.CurrentCoreGui.ClockContainer.Date = DateTime.Now.ToString("yyyy-MM-dd");
 			BeverDriveContext.CurrentCoreGui.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.Show });
 			BeverDriveContext.SetActiveModule("MainMenu");
 
@@ -92,8 +91,8 @@ namespace BeverDrive
 			base.OnPaint(e);
 
 			// Paint any AOverlayModules visible
-			if (BeverDriveContext.LoadedModules != null)
-				BeverDriveContext.LoadedModules.OfType<AOverlayedModule>().Any(x => { if (x.Visible) { x.Paint(e.Graphics); } return false; });
+			/*if (BeverDriveContext.LoadedModules != null)
+				BeverDriveContext.LoadedModules.OfType<AOverlayedModule>().Any(x => { if (x.Visible) { x.Paint(e.Graphics); } return false; });*/
 		}
 
 		protected override void OnPaintBackground(PaintEventArgs e)

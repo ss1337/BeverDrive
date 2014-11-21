@@ -37,22 +37,14 @@ namespace BeverDrive.Core
 
 		public IMedia VlcMedia { get; private set; }
 
-		public PlaylistItem(string filename) : this(filename, true)
+		public PlaylistItem(string filename)
 		{
-		}
-
-		public PlaylistItem(string filename, bool addToVlc)
-		{
-		this.Album = string.Empty;
+			this.Album = string.Empty;
 			this.Artist = string.Empty;
 			this.Title = string.Empty;
 			this.Filename = filename.Substring(filename.LastIndexOf("\\") + 1);
-
-			if (addToVlc)
-			{
-				this.VlcMedia = VlcContext.Factory.CreateMedia<IMedia>(filename);
-				this.VlcMedia.Parse(true);
-			}
+			this.VlcMedia = VlcContext.Factory.CreateMedia<IMedia>(filename);
+			this.VlcMedia.Parse(true);
 			
 			if (filename.EndsWith(".mp3"))
 			{

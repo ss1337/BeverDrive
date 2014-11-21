@@ -19,18 +19,34 @@
 // ============================================================================
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
+using BeverDrive.Gui.Controls;
+using NUnit.Framework;
 
-namespace BeverDrive.Core.Styles
+namespace BeverDrive.Tests.Controls
 {
-	public struct Colors
+	[TestFixture]
+	public class ListControlTests
 	{
-		public static Color BackColor { get { return BeverDriveContext.Settings.BackColor; } }
-		public static Color ForeColor { get { return BeverDriveContext.Settings.ForeColor; } }
-		public static Color SelectedColor { get { return BeverDriveContext.Settings.SelectedColor; } }
-		public static Color ClockBackgroundColor { get { return BeverDriveContext.Settings.ClockBackgroundColor; } }
-		public static Color ClockForegroundColor { get { return BeverDriveContext.Settings.ClockForegroundColor; } }
+		public ListControlTests()
+		{
+		}
+
+		[Test]
+		public void Scrolling_never_kills_it()
+		{
+			var part = new ListControl();
+			part.HeightInItems = 7;
+			
+			for(int i = 0; i < 15; i++)
+				part.Items.Add("Item" + i);
+
+			// Scroll down
+			for(int i = 0; i < 20; i++)
+				part.SelectedIndex++;
+
+			Assert.False(part.SelectedIndex > 15);
+		}
 	}
 }

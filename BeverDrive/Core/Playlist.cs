@@ -66,12 +66,7 @@ namespace BeverDrive.Core
 
 		public void AddFile(string filename)
 		{
-			this.AddFile(filename, true);
-		}
-
-		public void AddFile(string filename, bool addToVlc)
-		{
-			var item = new PlaylistItem(filename, addToVlc);
+			var item = new PlaylistItem(filename);
 			this.Add(item);
 			this.filenames.Add(item.Filename);
 		}

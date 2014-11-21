@@ -19,13 +19,13 @@
 // ============================================================================
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using BeverDrive.Controls;
 using BeverDrive.Core;
-using BeverDrive.Core.Styles;
+using BeverDrive.Gui.Controls;
+using BeverDrive.Gui.Styles;
 using nVlc.LibVlcWrapper.Declarations.Media;
-using System.Drawing;
 
 namespace BeverDrive.Modules
 {
@@ -34,9 +34,11 @@ namespace BeverDrive.Modules
 	public class VideoPlayer : AModule
 	{
 		private int fullScreen;
-		private FileSystemBrowserList ctrl_browser;
-		private MetroidButton ctrl_full;
-		private MetroidButton ctrl_play;
+		private FileSystemBrowserListControl ctrl_browser;
+		private WebdingsButton ctrl_prev;
+		private WebdingsButton ctrl_play;
+		private WebdingsButton ctrl_next;
+		private WebdingsButton ctrl_full;
 		private Panel ctrl_vlc;
 
 		private Playlist playlist;
@@ -44,27 +46,28 @@ namespace BeverDrive.Modules
 
 		public VideoPlayer()
 		{
-			this.ctrl_browser = new BeverDrive.Controls.FileSystemBrowserList(BeverDriveContext.Settings.VideoRoot);
+			this.ctrl_browser = new FileSystemBrowserListControl(BeverDriveContext.Settings.VideoRoot);
 			this.ctrl_browser.HeightInItems = 7;
 			this.ctrl_browser.Name = "ctrl_browser";
 			this.ctrl_browser.Width = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width;
 			this.ctrl_browser.Location = new System.Drawing.Point(0, BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Height - this.ctrl_browser.Height);
-			this.ctrl_browser.TabIndex = 0;
 
 			var btnx = (BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2 - 338) / 2;
-			this.ctrl_play = new BeverDrive.Controls.MetroidButton("Resources\\play.png", "Resources\\play_s.png");
-			this.ctrl_play.Name = "ctrl_play";
-			this.ctrl_play.Location = new System.Drawing.Point(btnx, 65);
-			this.ctrl_play.TabIndex = 0;
 
-			this.ctrl_full = new BeverDrive.Controls.MetroidButton("Resources\\fullscreen.png", "Resources\\fullscreen_s.png");
-			this.ctrl_full.Name = "ctrl_full";
-			this.ctrl_full.Location = new System.Drawing.Point(btnx, 155);
-			this.ctrl_full.TabIndex = 0;
+			this.ctrl_prev = new WebdingsButton(0x39);
+			this.ctrl_prev.Location = new System.Drawing.Point(70, 30);
+
+			this.ctrl_play = new WebdingsButton(0x34);
+			this.ctrl_play.Location = new System.Drawing.Point(70, 80);
+
+			this.ctrl_next = new WebdingsButton(0x3A);
+			this.ctrl_next.Location = new System.Drawing.Point(70, 130);
+
+			this.ctrl_full = new WebdingsButton(0x32);
+			this.ctrl_full.Location = new System.Drawing.Point(70, 180);
 
 			this.ctrl_vlc = new Panel();
 			this.ctrl_vlc.Name = "ctrl_vlc";
-			this.ctrl_vlc.TabIndex = 0;
 
 			VlcContext.VideoPlayer.WindowHandle = this.ctrl_vlc.Handle;
 			VlcContext.VideoPlayer.Events.MediaEnded += new EventHandler(Events_MediaEnded);
@@ -109,6 +112,8 @@ namespace BeverDrive.Modules
 					this.PreviousTrack();
 					break;
 			}
+
+			BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
 		}
 
 		#region Command methods
@@ -145,9 +150,9 @@ namespace BeverDrive.Modules
 
 		private void PlayTrack()
 		{
+			this.ctrl_play.Selected = true;
 			VlcContext.VideoPlayer.Open(playlist.CurrentItem.VlcMedia);
 			VlcContext.VideoPlayer.Play();
-
 			VlcContext.CurrentTrack = playlist.CurrentIndex + 1;
 			BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_TrackStart(VlcContext.CurrentDisc, VlcContext.CurrentTrack));
 		}
@@ -176,16 +181,24 @@ namespace BeverDrive.Modules
 
 			switch (this.ctrl_browser.SelectedIndex)
 			{
-				case -3:
+				case -5:
 					BeverDriveContext.SetActiveModule("MainMenu");
 					break;
-
-				case -2:
+				
+				case -4:
+					// TODO: Play previous video...
+					break;
+				
+				case -3:
 					// Play
 					if (VlcContext.VideoPlayer.IsPlaying)
 						VlcContext.VideoPlayer.Pause();
 					else
 						VlcContext.VideoPlayer.Play();
+					break;
+
+				case -2:
+					// TODO: Play next video...
 					break;
 
 				case -1:
@@ -234,28 +247,31 @@ namespace BeverDrive.Modules
 			// Do stuff depending on position
 			switch (this.ctrl_browser.SelectedIndex)
 			{
-				case -2:
+				case -4:
 					BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
-					BeverDriveContext.CurrentCoreGui.BackButton.Invalidate();
+					this.ctrl_prev.Selected = true;
+					break;
+
+				case -3:
+					this.ctrl_prev.Selected = false;
 					this.ctrl_play.Selected = true;
-					this.ctrl_play.Invalidate();
+					break;
+
+				case -2:
+					this.ctrl_play.Selected = VlcContext.VideoPlayer.IsPlaying;
+					this.ctrl_next.Selected = true;
 					break;
 
 				case -1:
-					this.ctrl_play.Selected = false;
-					this.ctrl_play.Invalidate();
+					this.ctrl_next.Selected = false;
 					this.ctrl_full.Selected = true;
-					this.ctrl_full.Invalidate();
 					break;
 
 				case 0:
 					this.ctrl_full.Selected = false;
-					this.ctrl_full.Invalidate();
 					break;
 
 				default:
-					if (this.ctrl_browser.SelectedIndex > -1)
-						this.ctrl_browser.Invalidate();
 					break;
 			}
 		}
@@ -266,36 +282,40 @@ namespace BeverDrive.Modules
 			if (fullScreen > 0)
 				return;
 
-			if (this.ctrl_browser.SelectedIndex > -3)
+			if (this.ctrl_browser.SelectedIndex > -5)
 				this.ctrl_browser.SelectedIndex--;
 
 			// Do stuff depending on position
 			switch (this.ctrl_browser.SelectedIndex)
 			{
-				case -3:
+				case -5:
 					BeverDriveContext.CurrentCoreGui.BackButton.Selected = true;
-					BeverDriveContext.CurrentCoreGui.BackButton.Invalidate();
-					this.ctrl_play.Selected = false;
-					this.ctrl_play.Invalidate();
+					this.ctrl_prev.Selected = false;
+					break;
+
+				case -4:
+					this.ctrl_prev.Selected = true;
+					this.ctrl_play.Selected = VlcContext.VideoPlayer.IsPlaying;
+					break;
+
+				case -3:
+					this.ctrl_play.Selected = true;
+					this.ctrl_next.Selected = false;
 					break;
 
 				case -2:
+					this.ctrl_next.Selected = true;
 					this.ctrl_full.Selected = false;
-					this.ctrl_full.Invalidate();
-					this.ctrl_play.Selected = true;
-					this.ctrl_play.Invalidate();
 					break;
 
 				case -1:
 					this.ctrl_full.Selected = true;
-					this.ctrl_full.Invalidate();
 					break;
 
 				default:
-					if (this.ctrl_browser.SelectedIndex > -2)
-						this.ctrl_browser.Invalidate();
 					break;
 			}
+
 		}
 
 		private void Show()
@@ -317,9 +337,7 @@ namespace BeverDrive.Modules
 		private void AddControls()
 		{
 			BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
-			BeverDriveContext.CurrentCoreGui.AddControl(ctrl_browser);
-			BeverDriveContext.CurrentCoreGui.AddControl(ctrl_full);
-			BeverDriveContext.CurrentCoreGui.AddControl(ctrl_play);
+			this.ShowControls();
 			this.SetVlcControl();
 		}
 
@@ -339,7 +357,7 @@ namespace BeverDrive.Modules
 				this.ctrl_vlc.BackColor = System.Drawing.Color.Black;
 				this.ctrl_vlc.Location = new System.Drawing.Point(vlcx, 0);
 				this.ctrl_vlc.Size = new System.Drawing.Size(420, 240);
-				BeverDriveContext.CurrentCoreGui.AddControl(ctrl_vlc);
+				BeverDriveContext.CurrentCoreGui.ModuleContainer.Controls.Add(ctrl_vlc);
 			}
 
 			this.ctrl_vlc.Visible = true;

@@ -77,61 +77,48 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\CustomPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\GraphicBrowser.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Core\BeverDriveContext.cs" />
     <Compile Include="Core\BeverDriveSettings.cs" />
     <Compile Include="Core\Playlist.cs" />
     <Compile Include="Core\PlaylistItem.cs" />
-    <Compile Include="Core\Styles\Brushes.cs" />
-    <Compile Include="Core\Styles\Colors.cs" />
-    <Compile Include="Core\Styles\Fonts.cs" />
-    <Compile Include="Controls\AControlPart.cs" />
-    <Compile Include="Controls\AModuleControl.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="Gui\Controls\BackButton.cs">
+      <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\APaintControl.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="Gui\Controls\ClockPanel.cs">
+      <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\DirectoryPicker.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="Gui\Controls\FileSystemBrowserListControl.cs">
+      <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\EventArgs.cs" />
-    <Compile Include="Controls\FileSystemBrowserList.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="Gui\Controls\Label.cs">
+      <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\FileSystemBrowserPart.cs" />
-    <Compile Include="Controls\ListControlPart.cs" />
-    <Compile Include="Controls\MenuOption.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="Gui\Controls\ListControl.cs">
+      <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\MenuOptionList.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\MetroidButton.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ProgressBar.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\Separator.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="Gui\Controls\MetroidButton.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Core\FileSystemBrowser.cs" />
     <Compile Include="Core\Logger.cs" />
     <Compile Include="Core\VlcContext.cs" />
     <Compile Include="Extensions\GraphicsExtensions.cs" />
     <Compile Include="Extensions\RectangleExtensions.cs" />
-    <Compile Include="Gui\GraphicsControl.cs">
+    <Compile Include="Gui\Controls\AGraphicsControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Gui\GraphicsPanel.cs">
+    <Compile Include="Gui\Controls\GraphicsPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Gui\Controls\ProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Gui\Controls\WebDingsButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Gui\Styles\Brushes.cs" />
+    <Compile Include="Gui\Styles\Colors.cs" />
+    <Compile Include="Gui\Styles\Fonts.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -144,20 +131,16 @@
     <Compile Include="MainForm_Splash.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\AModule.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Modules\AOverlayedModule.cs" />
+    <Compile Include="Modules\AModule.cs" />
     <Compile Include="Modules\Attributes.cs" />
     <Compile Include="Modules\Bluetooth.cs" />
     <Compile Include="Modules\Bluetooth_Devices.cs" />
     <Compile Include="Modules\CoreGui.cs" />
-    <Compile Include="Modules\GraphicBrowserTest.cs" />
-    <Compile Include="Modules\ModuleCommands.cs" />
-    <Compile Include="Modules\VideoPlayer.cs" />
     <Compile Include="Modules\IModule.cs" />
     <Compile Include="Modules\MainMenu.cs" />
+    <Compile Include="Modules\ModuleCommands.cs" />
     <Compile Include="Modules\Mp3Player.cs" />
+    <Compile Include="Modules\VideoPlayer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainForm.resx">
@@ -222,13 +205,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Resources\back.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Resources\background.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\back_s.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\bluetooth.png">
@@ -259,12 +236,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\settings_s.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\shuffle.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\shuffle_s.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\video.png">

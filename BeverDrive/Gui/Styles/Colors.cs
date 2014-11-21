@@ -18,19 +18,20 @@
 //
 // ============================================================================
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Text;
 using BeverDrive.Core;
 
-namespace BeverDrive.Core.Styles
+namespace BeverDrive.Gui.Styles
 {
-	public struct Brushes
+	public struct Colors
 	{
-		private static Brush backBrush;
-		private static Brush foreBrush;
-		private static Brush selectedBrush;
-
-		public static Brush BackBrush { get { if (backBrush == null) { backBrush = new SolidBrush(Colors.BackColor); } return backBrush; } }
-		public static Brush ForeBrush { get { if (foreBrush == null) { foreBrush = new SolidBrush(Colors.ForeColor); } return foreBrush; } }
-		public static Brush SelectedBrush { get { if (selectedBrush == null) { selectedBrush = new SolidBrush(Colors.SelectedColor); } return selectedBrush; } }
+		public static Color BackColor { get { return BeverDriveContext.Settings.BackColor; } }
+		public static Color ForeColor { get { return BeverDriveContext.Settings.ForeColor; } }
+		public static Color SelectedColor { get { return BeverDriveContext.Settings.SelectedColor; } }
+		public static Color ClockBackgroundColor { get { return BeverDriveContext.Settings.ClockBackgroundColor; } }
+		public static Color ClockForegroundColor { get { return BeverDriveContext.Settings.ClockForegroundColor; } }
 	}
 }

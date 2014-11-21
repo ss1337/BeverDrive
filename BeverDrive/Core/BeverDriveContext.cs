@@ -51,6 +51,12 @@ namespace BeverDrive.Core
 			Ibus = new BeverDrive.Ibus.IbusContext(Settings.ComPort);
 		}
 
+		public static void InitializeWithoutIbus()
+		{
+			LoadedModules = new List<IModule>();
+			Settings = new BeverDriveSettings();
+		}
+
 		public static bool FullScreen
 		{
 			get { return fullScreen; }
@@ -101,6 +107,7 @@ namespace BeverDrive.Core
 
 			BeverDriveContext.ActiveModule = module;
 			BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.Show });
+			BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
 
 			// If this module controls playback (ie should react to for example steering wheel buttons
 			// set PlaybackModule here
@@ -111,7 +118,7 @@ namespace BeverDrive.Core
 			if (backButtonVisible)
 			{
 				currentCoreGui.BackButton.Visible = true;
-				currentCoreGui.ModuleContainer.Controls.Add(currentCoreGui.BackButton);
+				currentCoreGui.ModuleContainer.GraphicControls.Add(currentCoreGui.BackButton);
 			}
 			else
 			{

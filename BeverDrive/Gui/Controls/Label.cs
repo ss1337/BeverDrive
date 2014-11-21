@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2014 Sebastian Sjödin
+// Copyright 2014 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -21,21 +21,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BeverDrive.Core;
+using System.Drawing;
 
-namespace BeverDrive.Modules
+namespace BeverDrive.Gui.Controls
 {
-	public abstract class AOverlayedModule : IModule
+	public class Label : AGraphicsControl
 	{
-		public bool Visible { get; set; }
+		public ContentAlignment TextAlign { get; set; }
 
-		public abstract void Paint(System.Drawing.Graphics graphic);
+		public Label()
+		{
+		}
 
-		public virtual void Init() { }
+		public override void PaintToBuffer(Graphics graphic)
+		{
+			StringFormat cFormat = new StringFormat();
+			Int32 lNum = (Int32)Math.Log((Double)this.TextAlign, 2);
+			cFormat.LineAlignment = (StringAlignment)(lNum / 4);
+			cFormat.Alignment = (StringAlignment)(lNum % 4);
 
-		public virtual void OnCommand(ModuleCommandEventArgs e) { }
-
-		public virtual void Update1Hz() { }
-
+			graphic.DrawString(this.Text, this.Font, new SolidBrush(this.ForeColor), this.Location, cFormat);
+		}
 	}
 }

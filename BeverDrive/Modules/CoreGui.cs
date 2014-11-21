@@ -22,21 +22,18 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using BeverDrive.Controls;
+using BeverDrive.Gui.Controls;
 using BeverDrive.Core;
-using BeverDrive.Core.Styles;
+using BeverDrive.Gui.Styles;
 
 namespace BeverDrive.Modules
 {
 	public class CoreGui : AModule
 	{
 		public Panel BaseContainer;								// Adjust this to fit everything to screen
-		public Label BaseClock;									// Shows current time
-		public Label BaseDate;									// Shows current date
-		public Label BaseText;									// Shows text in the lower white portion
-		public MetroidButton BackButton;						// Ambigous back button
-		public Panel ClockContainer;
-		public Panel ModuleContainer;							// All module controls goes into here
+		public BackButton BackButton;
+		public ClockPanel ClockContainer;						// Contains lower portion with date/time and maybe text
+		public GraphicsPanel ModuleContainer;					// All module controls goes into here
 
 		public Size ModuleAreaSize { get { return this.ModuleContainer.Size; } }
 
@@ -54,9 +51,6 @@ namespace BeverDrive.Modules
 					break;
 				case ModuleCommands.Show:
 					BeverDriveContext.CurrentMainForm.Controls.Add(this.BaseContainer);
-					this.ClockContainer.Controls.Add(this.BaseClock);
-					this.ClockContainer.Controls.Add(this.BaseDate);
-					this.ClockContainer.Controls.Add(this.BaseText);
 					this.BaseContainer.Controls.Add(this.ClockContainer);
 					this.BaseContainer.Controls.Add(this.ModuleContainer);
 					break;
@@ -74,7 +68,7 @@ namespace BeverDrive.Modules
 		/// <param name="ctrl"></param>
 		public void AddControl(Control ctrl)
 		{
-			this.ModuleContainer.Controls.Add(ctrl);
+			this.ModuleContainer.GraphicControls.Add((AGraphicsControl)ctrl);
 		}
 
 		/// <summary>
@@ -90,7 +84,7 @@ namespace BeverDrive.Modules
 		/// </summary>
 		public void ClearModuleContainer()
 		{
-			this.ModuleContainer.Controls.Clear();
+			this.ModuleContainer.GraphicControls.Clear();
 		}
 
 		private void CreateControls()
@@ -98,77 +92,35 @@ namespace BeverDrive.Modules
 			int width = 800 - BeverDriveContext.Settings.OffsetLeft - BeverDriveContext.Settings.OffsetRight;
 			int height = 600 - BeverDriveContext.Settings.OffsetTop - BeverDriveContext.Settings.OffsetBottom;
 
+			this.BackButton = new BackButton();
+			this.BackButton.Location = new System.Drawing.Point(0, 5);
+
 			// Adjust this to fit to screen
 			this.BaseContainer = new Panel();
 			this.BaseContainer.BackColor = Colors.BackColor;
-			//this.BaseContainer.BackgroundImage = System.Drawing.Image.FromFile("Resources\\background.png");
 			this.BaseContainer.Location = new System.Drawing.Point(BeverDriveContext.Settings.OffsetLeft, BeverDriveContext.Settings.OffsetTop);
 			this.BaseContainer.Name = "BaseContainer";
 			this.BaseContainer.Size = new System.Drawing.Size(width, height);
 			this.BaseContainer.TabIndex = 0;
 
-			this.ClockContainer = new Panel();
+			this.ClockContainer = new ClockPanel();
 			this.ClockContainer.BackColor = Colors.ClockBackgroundColor;
-			this.ClockContainer.Location = new System.Drawing.Point(0, this.BaseContainer.Size.Height - 48);
+			this.ClockContainer.ForeColor = Colors.ClockForegroundColor;
+			this.ClockContainer.TextColor = Colors.SelectedColor;
+			this.ClockContainer.Font = Fonts.GuiFont24;
+			this.ClockContainer.Location = new System.Drawing.Point(0, this.BaseContainer.Size.Height - 40);
+			this.ClockContainer.Size = new System.Drawing.Size(this.BaseContainer.Size.Width, 40);
 			this.ClockContainer.Name = "ClockContainer";
-			this.ClockContainer.Size = new System.Drawing.Size(this.BaseContainer.Size.Width, 48);
 			this.ClockContainer.TabIndex = 0;
 
-			int clkBottomY = this.ClockContainer.Size.Height - 40;
-			int clkHeight = 37;
-
-			this.BaseClock = new System.Windows.Forms.Label();
-			this.BaseClock.AutoSize = false;
-			this.BaseClock.BackColor = System.Drawing.Color.Transparent;
-			this.BaseClock.Font = Fonts.GuiFont24;
-			this.BaseClock.ForeColor = Colors.ClockForegroundColor;
-			this.BaseClock.Location = new System.Drawing.Point(this.ClockContainer.Size.Width - 106, clkBottomY);
-			this.BaseClock.Name = "BaseClock";
-			this.BaseClock.Size = new System.Drawing.Size(106, clkHeight);
-			this.BaseClock.TabIndex = 0;
-			this.BaseClock.Text = "";
-			this.BaseClock.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-
-			this.BaseDate = new System.Windows.Forms.Label();
-			this.BaseDate.AutoSize = false;
-			this.BaseDate.BackColor = System.Drawing.Color.Transparent;
-			this.BaseDate.Font = Fonts.GuiFont24;
-			this.BaseDate.ForeColor = Colors.ClockForegroundColor;
-			this.BaseDate.Location = new System.Drawing.Point(5, clkBottomY);
-			this.BaseDate.Name = "BaseDate";
-			this.BaseDate.Size = new System.Drawing.Size(184, clkHeight);
-			this.BaseDate.TabIndex = 0;
-			this.BaseDate.Text = "";
-			this.BaseDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-
-			int baseTextWidth = this.ClockContainer.Size.Width - this.BaseClock.Size.Width - this.BaseDate.Size.Width;
-			int baseTextX = this.BaseDate.Size.Width;
-
-			this.BaseText = new System.Windows.Forms.Label();
-			this.BaseText.AutoSize = false;
-			this.BaseText.BackColor = System.Drawing.Color.Transparent;
-			this.BaseText.Font = Fonts.GuiFont24;
-			this.BaseText.ForeColor = Colors.SelectedColor;
-			this.BaseText.Location = new System.Drawing.Point(baseTextX, clkBottomY);
-			this.BaseText.Name = "BaseText";
-			this.BaseText.Size = new System.Drawing.Size(baseTextWidth, clkHeight);
-			this.BaseText.TabIndex = 0;
-			this.BaseText.Text = "";
-			this.BaseText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-
-			this.BackButton = new MetroidButton("Resources\\back.png", "Resources\\back_s.png");
-			this.BackButton.Name = "BackButton";
-			this.BackButton.Location = new System.Drawing.Point(5, 5);
-			this.BackButton.TabIndex = 0;
-			this.BackButton.Visible = false;
-
 			// This panel is were everything ends up
-			this.ModuleContainer = new Panel();
+			this.ModuleContainer = new GraphicsPanel();
 			this.ModuleContainer.BackColor = Colors.BackColor;
 			this.ModuleContainer.Location = new System.Drawing.Point(0, 0);
 			this.ModuleContainer.Name = "ModuleContainer";
 			this.ModuleContainer.Size = new System.Drawing.Size(this.BaseContainer.Size.Width, this.BaseContainer.Size.Height - 40);
 			this.ModuleContainer.TabIndex = 0;
+			this.ModuleContainer.GraphicControls.Add(BackButton);
 
 #if DEBUG
 			//this.BaseContainer.BackColor = System.Drawing.Color.Chartreuse;
@@ -178,8 +130,9 @@ namespace BeverDrive.Modules
 
 		public override void Update1Hz()
 		{
-			BeverDriveContext.CurrentCoreGui.BaseClock.Text = DateTime.Now.ToShortTimeString();
-			BeverDriveContext.CurrentCoreGui.BaseDate.Text = DateTime.Now.ToString("yyyy-MM-dd");
+			BeverDriveContext.CurrentCoreGui.ClockContainer.Time = DateTime.Now.ToShortTimeString();
+			BeverDriveContext.CurrentCoreGui.ClockContainer.Date = DateTime.Now.ToString("yyyy-MM-dd");
+			BeverDriveContext.CurrentCoreGui.ClockContainer.Invalidate();
 		}
 	}
 }

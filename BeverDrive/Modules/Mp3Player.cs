@@ -19,11 +19,11 @@
 // ============================================================================
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
-using System.Windows.Forms;
-using BeverDrive.Controls;
 using BeverDrive.Core;
-using BeverDrive.Core.Styles;
+using BeverDrive.Gui.Controls;
+using BeverDrive.Gui.Styles;
 using nVlc.LibVlcWrapper.Declarations;
 using nVlc.LibVlcWrapper.Declarations.Events;
 using nVlc.LibVlcWrapper.Declarations.Media;
@@ -39,12 +39,15 @@ namespace BeverDrive.Modules
 		/// <summary>
 		/// Controls...
 		/// </summary>
-		private FileSystemBrowserList ctrl_browser;
+		private FileSystemBrowserListControl ctrl_browser;
 		private Label ctrl_album;
 		private Label ctrl_filename;
 		private Label ctrl_title;
-		private BeverDrive.Controls.ProgressBar ctrl_pb;
-		private MetroidButton ctrl_shuffle;
+		private ProgressBar ctrl_pb;
+		private WebdingsButton ctrl_prev;
+		private WebdingsButton ctrl_play;
+		private WebdingsButton ctrl_next;
+		private WebdingsButton ctrl_shuffle;
 
 		private Playlist playlist;
 		private bool vlcPopulated;
@@ -96,6 +99,8 @@ namespace BeverDrive.Modules
 					this.PreviousTrack();
 					break;
 			}
+
+			BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
 		}
 
 		public override void Update1Hz()
@@ -106,7 +111,7 @@ namespace BeverDrive.Modules
 				var t = VlcContext.AudioPlayer.Time;
 				this.ctrl_pb.Maximum = (int)d;
 				this.ctrl_pb.Value = (int)t;
-				this.ctrl_pb.Invalidate();
+				BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
 			}
 		}
 		#endregion
@@ -114,31 +119,43 @@ namespace BeverDrive.Modules
 		#region Command methods
 		private void Hide()
 		{
-			BeverDriveContext.CurrentCoreGui.ModuleContainer.Controls.Clear();
+			BeverDriveContext.CurrentCoreGui.ClearModuleContainer();
 		}
 
 		private void SelectClick()
 		{
-			if (this.ctrl_browser.SelectedIndex == -2)
+			switch (this.ctrl_browser.SelectedIndex)
 			{
-				BeverDriveContext.SetActiveModule("MainMenu");
-				return;
+				case -5:
+					BeverDriveContext.SetActiveModule("MainMenu");
+					break;
+				case -4:
+					this.PreviousTrack();
+					break;
+				case -3:
+					break;
+				case -2:
+					this.NextTrack();
+					break;
+				case -1:
+					// Enable/disable shuffle
+					if (this.shuffle)
+					{
+						this.shuffle = false;
+						playlist.Unshuffle();
+					}
+					else
+					{
+						this.shuffle = true;
+						playlist.Shuffle();
+					}
+
+					break;
+				default:
+					break;
 			}
-			else if (this.ctrl_browser.SelectedIndex == -1)
-			{
-				// Enable/disable shuffle
-				if (this.shuffle)
-				{
-					this.shuffle = false;
-					playlist.Unshuffle();
-				}
-				else
-				{
-					this.shuffle = true;
-					playlist.Shuffle();
-				}
-			}
-			else
+
+			if (this.ctrl_browser.SelectedIndex > -1)
 			{
 				this.ctrl_browser.Select();
 
@@ -146,7 +163,6 @@ namespace BeverDrive.Modules
 				{
 					vlcPopulated = false;
 					shuffle = false;
-					ctrl_shuffle.Selected = false;
 				}
 				else
 				{
@@ -164,66 +180,76 @@ namespace BeverDrive.Modules
 					playlist.CurrentIndex = this.ctrl_browser.SelectedIndex - this.ctrl_browser.Directories.Count - 1;
 					this.PlayTrack();
 				}
-
-				ctrl_shuffle.Invalidate();
 			}
 		}
 
 		private void SelectNext()
 		{
-			if (this.ctrl_browser.SelectedIndex == -2)
-			{
-				BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
-				BeverDriveContext.CurrentCoreGui.BackButton.Invalidate();
-				this.ctrl_shuffle.Selected = true;
-				this.ctrl_shuffle.Invalidate();
-			}
-
-			if (this.ctrl_browser.SelectedIndex == -1)
-			{
-				this.ctrl_shuffle.Selected = this.shuffle;
-				this.ctrl_shuffle.Invalidate();
-			}
-
 			if (this.ctrl_browser.SelectedIndex != this.ctrl_browser.Items.Count - 1)
-			{
 				this.ctrl_browser.SelectedIndex++;
-				this.ctrl_browser.Invalidate();
+
+			switch (this.ctrl_browser.SelectedIndex)
+			{
+				case -4:
+					BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
+					ctrl_prev.Selected = true;
+					break;
+				case -3:
+					ctrl_prev.Selected = false;
+					ctrl_play.Selected = true;
+					break;
+				case -2:
+					ctrl_play.Selected = false;
+					ctrl_next.Selected = true;
+					break;
+				case -1:
+					ctrl_next.Selected = false;
+					ctrl_shuffle.Selected = true;
+					break;
+				case 0:
+					ctrl_shuffle.Selected = this.shuffle;
+					break;
+				default:
+					break;
 			}
 		}
 
 		private void SelectPrevious()
 		{
-			if (this.ctrl_browser.SelectedIndex > -2)
+			if (this.ctrl_browser.SelectedIndex > -5)
 				this.ctrl_browser.SelectedIndex--;
 
-			if (this.ctrl_browser.SelectedIndex == -2)
+			switch (this.ctrl_browser.SelectedIndex)
 			{
-				BeverDriveContext.CurrentCoreGui.BackButton.Selected = true;
-				BeverDriveContext.CurrentCoreGui.BackButton.Invalidate();
-				this.ctrl_shuffle.Selected = this.shuffle;
-				this.ctrl_shuffle.Invalidate();
+				case -5:
+					BeverDriveContext.CurrentCoreGui.BackButton.Selected = true;
+					ctrl_prev.Selected = false;
+					break;
+				case -4:
+					ctrl_prev.Selected = true;
+					ctrl_play.Selected = false;
+					break;
+				case -3:
+					ctrl_play.Selected = true;
+					ctrl_next.Selected = false;
+					break;
+				case -2:
+					ctrl_next.Selected = true;
+					ctrl_shuffle.Selected = this.shuffle;
+					break;
+				case -1:
+					ctrl_shuffle.Selected = true;
+					break;
+				default:
+					break;
 			}
-
-			if (this.ctrl_browser.SelectedIndex == -1)
-			{
-				this.ctrl_shuffle.Selected = true;
-				this.ctrl_shuffle.Invalidate();
-			}
-
-			this.ctrl_browser.Invalidate();
 		}
 
 		private void Show()
 		{
 			this.ctrl_browser.SelectedIndex = 0;
+			this.ShowControls();
 			BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
-			BeverDriveContext.CurrentCoreGui.AddControl(ctrl_browser);
-			BeverDriveContext.CurrentCoreGui.AddControl(ctrl_album);
-			BeverDriveContext.CurrentCoreGui.AddControl(ctrl_filename);
-			BeverDriveContext.CurrentCoreGui.AddControl(ctrl_title);
-			BeverDriveContext.CurrentCoreGui.AddControl(ctrl_pb);
-			BeverDriveContext.CurrentCoreGui.AddControl(ctrl_shuffle);
 		}
 
 		private void StartPlayback()
@@ -252,18 +278,6 @@ namespace BeverDrive.Modules
 
 		#endregion
 
-		#region Event handlers
-		// TODO: Används dessa?
-		void BaseVlc_MediaChanged(/*Vlc.DotNet.Forms.VlcControl sender, VlcEventArgs<EventArgs> e*/)
-		{
-		}
-
-		void ctrl_browser_ItemSelected(object sender, BeverDrive.Controls.ItemSelectedEventArgs e)
-		{
-			//throw new NotImplementedException();
-		}
-		#endregion
-
 		private void PlayTrack()
 		{
 			VlcContext.AudioPlayer.Stop();
@@ -285,29 +299,24 @@ namespace BeverDrive.Modules
 			this.ctrl_title.Text = playlist.CurrentItem.Artist + " - " + playlist.CurrentItem.Title;
 			this.ctrl_album.Text = playlist.CurrentItem.Album;
 			this.ctrl_filename.Text = playlist.CurrentItem.Filename;
-			this.ctrl_title.Invalidate();
-			this.ctrl_album.Invalidate();
-			this.ctrl_filename.Invalidate();
 		}
 
 		private void CreateControls()
 		{
 			var width = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width;
 
-			this.ctrl_browser = new FileSystemBrowserList(BeverDriveContext.Settings.MusicRoot);
+			this.ctrl_browser = new FileSystemBrowserListControl(BeverDriveContext.Settings.MusicRoot);
 			this.ctrl_browser.HeightInItems = 7;
 			this.ctrl_browser.Name = "list1";
 			this.ctrl_browser.Width = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width;
 			this.ctrl_browser.Location = new System.Drawing.Point(0, BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Height - this.ctrl_browser.Height);
 			this.ctrl_browser.TabIndex = 0;
-			this.ctrl_browser.ItemSelected += new MenuOptionList.ItemSelectedEventHandler(ctrl_browser_ItemSelected);
 
 			this.ctrl_title = new Label();
 			this.ctrl_title.AutoSize = false;
 			this.ctrl_title.Font = Fonts.GuiFont32;
-			this.ctrl_title.BackColor = System.Drawing.Color.Transparent;
 			this.ctrl_title.ForeColor = Colors.ForeColor;
-			this.ctrl_title.Location = new System.Drawing.Point(42, 16);
+			this.ctrl_title.Location = new System.Drawing.Point(width / 2, 16);
 			this.ctrl_title.Size = new System.Drawing.Size(width - 84, 50);
 			this.ctrl_title.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.ctrl_title.Text = "";
@@ -315,9 +324,8 @@ namespace BeverDrive.Modules
 			this.ctrl_album = new Label();
 			this.ctrl_album.AutoSize = false;
 			this.ctrl_album.Font = Fonts.GuiFont24;
-			this.ctrl_album.BackColor = System.Drawing.Color.Transparent;
 			this.ctrl_album.ForeColor = Colors.ForeColor;
-			this.ctrl_album.Location = new System.Drawing.Point(0, 66);
+			this.ctrl_album.Location = new System.Drawing.Point(width / 2, 66);
 			this.ctrl_album.Size = new System.Drawing.Size(width, 38);
 			this.ctrl_album.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.ctrl_album.Text = "";
@@ -325,14 +333,13 @@ namespace BeverDrive.Modules
 			this.ctrl_filename = new Label();
 			this.ctrl_filename.AutoSize = false;
 			this.ctrl_filename.Font = Fonts.GuiFont14;
-			this.ctrl_filename.BackColor = System.Drawing.Color.Transparent;
 			this.ctrl_filename.ForeColor = Colors.ForeColor;
-			this.ctrl_filename.Location = new System.Drawing.Point(0, 104);
+			this.ctrl_filename.Location = new System.Drawing.Point(width / 2, 104);
 			this.ctrl_filename.Size = new System.Drawing.Size(width, 26);
 			this.ctrl_filename.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.ctrl_filename.Text = "";
 
-			this.ctrl_pb = new BeverDrive.Controls.ProgressBar();
+			this.ctrl_pb = new ProgressBar();
 			this.ctrl_pb.BackColor = Colors.BackColor;
 			this.ctrl_pb.Location = new System.Drawing.Point(15, 140);
 			this.ctrl_pb.Height = 25;
@@ -340,12 +347,19 @@ namespace BeverDrive.Modules
 			this.ctrl_pb.Maximum = 100;
 			this.ctrl_pb.Value = 0;
 
-			var btnx = (BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2 - 338) / 2;
+			var x = width / 2 - 120;
 
-			this.ctrl_shuffle = new MetroidButton("Resources\\shuffle.png", "Resources\\shuffle_s.png");
-			this.ctrl_shuffle.Name = "ctrl_shuffle";
-			this.ctrl_shuffle.Location = new System.Drawing.Point(15, 185);
-			this.ctrl_shuffle.TabIndex = 0;
+			this.ctrl_prev = new WebdingsButton(0x39);
+			this.ctrl_prev.Location = new System.Drawing.Point(x, 180);
+
+			this.ctrl_play = new WebdingsButton(0x34);
+			this.ctrl_play.Location = new System.Drawing.Point(x + 60, 180);
+
+			this.ctrl_next = new WebdingsButton(0x3A);
+			this.ctrl_next.Location = new System.Drawing.Point(x + 120, 180);
+
+			this.ctrl_shuffle = new WebdingsButton(0x71);
+			this.ctrl_shuffle.Location = new System.Drawing.Point(x + 180, 180);
 		}
 	}
 }

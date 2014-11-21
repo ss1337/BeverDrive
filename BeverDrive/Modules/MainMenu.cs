@@ -22,10 +22,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
-using BeverDrive.Controls;
+using BeverDrive.Gui.Controls;
 using BeverDrive.Core;
-using BeverDrive.Core.Styles;
+using BeverDrive.Gui.Styles;
 
 namespace BeverDrive.Modules
 {
@@ -151,22 +150,17 @@ namespace BeverDrive.Modules
 					break;
 			}
 
-			mb1.Invalidate();
-			mb2.Invalidate();
-			mb3.Invalidate();
+			BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
 		}
 
 		private void CreateControls()
 		{
 			this.lbl_title = new Label();
-			this.lbl_title.AutoSize = false;
-			this.lbl_title.BackColor = Color.Transparent;
-			this.lbl_title.Font = Fonts.GuiFont28;
+			this.lbl_title.Font = Fonts.GuiFont36;
 			this.lbl_title.ForeColor = Colors.SelectedColor;
-			this.lbl_title.Location = new System.Drawing.Point(0, 16);
+			this.lbl_title.Location = new System.Drawing.Point(BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2, 48);
 			this.lbl_title.Name = "Title";
-			this.lbl_title.Size = new System.Drawing.Size(BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width, 50);
-			this.lbl_title.TabIndex = 0;
+			this.lbl_title.Size = new System.Drawing.Size(100, 50);
 			this.lbl_title.Text = "BeverDrive";
 			this.lbl_title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 
@@ -174,7 +168,6 @@ namespace BeverDrive.Modules
 			this.mb1.Name = "mm_mb1";
 			this.mb1.GridLeft = 1;
 			this.mb1.GridTop = 2;
-			this.mb1.TabIndex = 0;
 			this.mb1.Text = "Music";
 			this.mb1.Click += new EventHandler(mb1_Click);
 
@@ -182,7 +175,6 @@ namespace BeverDrive.Modules
 			this.mb2.Name = "mm_mb2";
 			this.mb2.GridLeft = 7;
 			this.mb2.GridTop = 2;
-			this.mb2.TabIndex = 0;
 			this.mb2.Text = "Video";
 			this.mb2.Click += new EventHandler(mb2_Click);
 
@@ -190,7 +182,6 @@ namespace BeverDrive.Modules
 			this.mb3.Name = "mm_mb3";
 			this.mb3.GridLeft = 13;
 			this.mb3.GridTop = 2;
-			this.mb3.TabIndex = 0;
 			this.mb3.Text = "Bluetooth";
 			this.mb3.Click += new EventHandler(mb3_Click);
 		}

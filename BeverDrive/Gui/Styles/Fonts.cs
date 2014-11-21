@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 
-namespace BeverDrive.Core.Styles
+namespace BeverDrive.Gui.Styles
 {
 	public struct Fonts
 	{

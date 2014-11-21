@@ -22,10 +22,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
-using BeverDrive.Controls;
 using BeverDrive.Core;
-using BeverDrive.Core.Styles;
+using BeverDrive.Gui.Controls;
+using BeverDrive.Gui.Styles;
 
 namespace BeverDrive.Modules
 {
@@ -74,6 +73,8 @@ namespace BeverDrive.Modules
 					this.Hide();
 					break;
 			}
+
+			BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
 		}
 
 		private void SelectClick()
@@ -97,10 +98,7 @@ namespace BeverDrive.Modules
 				selectedIndex++;
 
 				if (selectedIndex == 0)
-				{
 					BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
-					BeverDriveContext.CurrentCoreGui.BackButton.Invalidate();
-				}
 			}
 
 			this.Update();
@@ -115,12 +113,8 @@ namespace BeverDrive.Modules
 				selectedIndex--;
 
 				if (selectedIndex == -1)
-				{
 					BeverDriveContext.CurrentCoreGui.BackButton.Selected = true;
-					BeverDriveContext.CurrentCoreGui.BackButton.Invalidate();
-				}
 			}
-
 
 			this.Update();
 		}
@@ -152,38 +146,26 @@ namespace BeverDrive.Modules
 			int labelWidth = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2;
 
 			this.lbl_title = new Label();
-			this.lbl_title.AutoSize = false;
-			this.lbl_title.BackColor = Color.Transparent;
-			this.lbl_title.Font = Fonts.GuiFont28;
+			this.lbl_title.Font = Fonts.GuiFont36;
 			this.lbl_title.ForeColor = Colors.SelectedColor;
-			this.lbl_title.Location = new System.Drawing.Point(42, 16);
-			this.lbl_title.Name = "Title";
-			this.lbl_title.Size = new System.Drawing.Size(width - 84, 50);
-			this.lbl_title.TabIndex = 0;
-			this.lbl_title.Text = "BlueTooth";
+			this.lbl_title.Location = new System.Drawing.Point(BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2, 48);
+			this.lbl_title.Size = new System.Drawing.Size(100, 50);
+			this.lbl_title.Text = "Bluetooth";
 			this.lbl_title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 
 			this.lbl_bt1 = new Label();
-			this.lbl_bt1.AutoSize = false;
-			this.lbl_bt1.BackColor = Color.Transparent;
 			this.lbl_bt1.Font = Fonts.GuiFont18;
 			this.lbl_bt1.ForeColor = Colors.ForeColor;
-			this.lbl_bt1.Location = new System.Drawing.Point(0, 100);
-			this.lbl_bt1.Name = "lblDiscover";
-			this.lbl_bt1.Size = new System.Drawing.Size(labelWidth, 36);
-			this.lbl_bt1.TabIndex = 0;
+			this.lbl_bt1.Location = new System.Drawing.Point(BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2 - 100, 100);
+			this.lbl_bt1.Size = new System.Drawing.Size(150, 36);
 			this.lbl_bt1.Text = "Connected device: ";
-			this.lbl_bt1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lbl_bt1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 
 			this.lbl_bt2 = new Label();
-			this.lbl_bt2.AutoSize = false;
-			this.lbl_bt2.BackColor = Color.Transparent;
 			this.lbl_bt2.Font = Fonts.GuiFont18;
 			this.lbl_bt2.ForeColor = Colors.ForeColor;
-			this.lbl_bt2.Location = new System.Drawing.Point(0, 336);
-			this.lbl_bt2.Name = "lblDiscover";
-			this.lbl_bt2.Size = new System.Drawing.Size(width, 36);
-			this.lbl_bt2.TabIndex = 0;
+			this.lbl_bt2.Location = new System.Drawing.Point(BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2, 336);
+			this.lbl_bt2.Size = new System.Drawing.Size(150, 36);
 			this.lbl_bt2.Text = "Connect device now";
 			this.lbl_bt2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 		}

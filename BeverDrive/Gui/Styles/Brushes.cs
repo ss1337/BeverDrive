@@ -18,41 +18,19 @@
 //
 // ============================================================================
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Drawing;
 using BeverDrive.Core;
-using BeverDrive.Gui.Controls;
-using NUnit.Framework;
 
-namespace BeverDrive.Tests.Controls
+namespace BeverDrive.Gui.Styles
 {
-	[TestFixture]
-	public class FileSystemBrowserListTests
+	public struct Brushes
 	{
-		private FileSystemBrowserListControl control;
+		private static Brush backBrush;
+		private static Brush foreBrush;
+		private static Brush selectedBrush;
 
-		public FileSystemBrowserListTests()
-		{
-			BeverDriveContext.InitializeWithoutIbus();
-			this.control = new FileSystemBrowserListControl();
-			this.control.HeightInItems = 1;
-		}
-
-		[Test]
-		public void Control_populates()
-		{
-			Assert.True(this.control.Items.Count > 0);
-		}
-
-		[Test]
-		public void Select_doesnt_break_on_invalid_indices()
-		{
-			this.control.SelectedIndex = -2;
-			this.control.Select();
-
-			this.control.SelectedIndex = this.control.Items.Count;
-			this.control.Select();
-		}
+		public static Brush BackBrush { get { if (backBrush == null) { backBrush = new SolidBrush(Colors.BackColor); } return backBrush; } }
+		public static Brush ForeBrush { get { if (foreBrush == null) { foreBrush = new SolidBrush(Colors.ForeColor); } return foreBrush; } }
+		public static Brush SelectedBrush { get { if (selectedBrush == null) { selectedBrush = new SolidBrush(Colors.SelectedColor); } return selectedBrush; } }
 	}
 }

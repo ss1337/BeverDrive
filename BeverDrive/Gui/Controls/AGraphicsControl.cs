@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2014 Sebastian Sjödin
+// Copyright 2014 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -21,32 +21,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BeverDrive.Controls;
-using NUnit.Framework;
+using System.Windows.Forms;
+using System.Drawing;
 
-namespace BeverDrive.Tests.Controls
+namespace BeverDrive.Gui.Controls
 {
-	[TestFixture]
-	public class ListControlPartTests
+	public abstract class AGraphicsControl : Control
 	{
-		public ListControlPartTests()
+		public AGraphicsControl()
 		{
 		}
 
-		[Test]
-		public void Scrolling_never_kills_it()
+		protected override void OnPaintBackground(PaintEventArgs pevent)
 		{
-			var part = new ListControlPart();
-			part.HeightInItems = 7;
-			
-			for(int i = 0; i < 15; i++)
-				part.Items.Add("Item" + i);
-
-			// Scroll down
-			for(int i = 0; i < 20; i++)
-				part.SelectedIndex++;
-
-			Assert.False(part.SelectedIndex > 15);
+			// Dont draw here
+			//base.OnPaintBackground(pevent);
 		}
+
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			// Dont draw here
+			//base.OnPaint(e);
+		}
+
+		public abstract void PaintToBuffer(Graphics graphic);
 	}
 }

@@ -31,6 +31,8 @@ namespace BeverDrive.Tests.Core
 	{
 		public PlaylistTests()
 		{
+			BeverDriveContext.InitializeWithoutIbus();
+			VlcContext.Initialize(BeverDriveContext.Settings.VlcPath);
 		}
 
 		[Test]
@@ -42,7 +44,7 @@ namespace BeverDrive.Tests.Core
 			var pl = new Playlist();
 			for (i = 1; i < num; i++)
 			{
-				pl.AddFile(string.Format(format, i), false);
+				pl.AddFile(string.Format(format, i));
 			}
 
 			Assert.AreEqual(num - 1, pl.Count);
