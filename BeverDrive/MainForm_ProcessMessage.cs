@@ -28,7 +28,7 @@ using BeverDrive.Gui.Modules;
 using BeverDrive.Ibus;
 using BeverDrive.Ibus.Extensions;
 
-namespace BeverDrive.Gui
+namespace BeverDrive
 {
 	public partial class MainForm : Form
 	{

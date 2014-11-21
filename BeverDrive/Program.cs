@@ -23,7 +23,7 @@ using System.IO;
 using System.Windows.Forms;
 using BeverDrive.Gui.Core;
 
-namespace BeverDrive.Gui
+namespace BeverDrive
 {
 	static class Program
 	{
@@ -36,7 +36,7 @@ namespace BeverDrive.Gui
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Logger.Clear();
-			Application.Run(new MainForm());
+			//Application.Run(new MainForm());
 		}
 	}
 }

@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using BeverDrive.Gui.Core;
 using InTheHand.Net.Sockets;
 
-namespace BeverDrive.Gui
+namespace BeverDrive
 {
 	/// <summary>
 	/// Code for the splash screen part

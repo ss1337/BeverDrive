@@ -1,4 +1,4 @@
-namespace BeverDrive.Gui
+namespace BeverDrive
 {
 	partial class MainForm
 	{

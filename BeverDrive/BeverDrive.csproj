@@ -5,10 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{00AF57B8-633F-49ED-93E9-0D7BB76508C1}</ProjectGuid>
+    <ProjectGuid>{07B0F930-F4ED-443D-8BCB-19AD1E3813BB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BeverDrive.Gui</RootNamespace>
+    <RootNamespace>BeverDrive</RootNamespace>
     <AssemblyName>BeverDrive</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -31,6 +31,8 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -78,6 +80,9 @@
     <Compile Include="Controls\CustomPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\GraphicBrowser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Core\BeverDriveContext.cs" />
     <Compile Include="Core\BeverDriveSettings.cs" />
     <Compile Include="Core\Playlist.cs" />
@@ -121,6 +126,12 @@
     <Compile Include="Core\VlcContext.cs" />
     <Compile Include="Extensions\GraphicsExtensions.cs" />
     <Compile Include="Extensions\RectangleExtensions.cs" />
+    <Compile Include="Gui\GraphicsControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Gui\GraphicsPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -141,6 +152,7 @@
     <Compile Include="Modules\Bluetooth.cs" />
     <Compile Include="Modules\Bluetooth_Devices.cs" />
     <Compile Include="Modules\CoreGui.cs" />
+    <Compile Include="Modules\GraphicBrowserTest.cs" />
     <Compile Include="Modules\ModuleCommands.cs" />
     <Compile Include="Modules\VideoPlayer.cs" />
     <Compile Include="Modules\IModule.cs" />
@@ -149,8 +161,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainForm.resx">
-      <SubType>Designer</SubType>
       <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
