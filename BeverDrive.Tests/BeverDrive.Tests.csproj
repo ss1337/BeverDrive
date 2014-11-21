@@ -60,15 +60,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BeverDrive.Gui\BeverDrive.Gui.csproj">
-      <Project>{00AF57B8-633F-49ED-93E9-0D7BB76508C1}</Project>
-      <Name>BeverDrive.Gui</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\BeverDrive.Gui\BeverDrive.Gui.csproj">
-      <Project>{00AF57B8-633F-49ED-93E9-0D7BB76508C1}</Project>
-      <Name>BeverDrive.Gui</Name>
+    <ProjectReference Include="..\BeverDrive\BeverDrive.csproj">
+      <Project>{07B0F930-F4ED-443D-8BCB-19AD1E3813BB}</Project>
+      <Name>BeverDrive</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

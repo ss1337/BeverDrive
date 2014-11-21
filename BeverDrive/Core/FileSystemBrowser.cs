@@ -23,8 +23,62 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace BeverDrive.Gui.Core
+namespace BeverDrive.Core
 {
+	/// <summary>
+	/// Character codes for various symbols in WebDings
+	/// </summary>
+	public enum FileType
+	{
+		Directory = 0xCC,
+		DotDot = 0x31,
+		Drive = 0xC0,
+		Music = 0xB2,
+		Video = 0xB4,
+		Unknown = 0x9D
+	}
+
+	public class FileSystemItem
+	{
+		public System.Drawing.Image CoverImage { get; set; }
+		public string Name { get; set; }
+		public FileType FileType { get; set; }
+
+		public FileSystemItem(string name) : this(name, string.Empty)
+		{
+		}
+
+		public FileSystemItem(string name, string coverImageFile)
+		{
+			if (!string.IsNullOrEmpty(coverImageFile))
+				this.CoverImage = System.Drawing.Image.FromFile(coverImageFile);
+
+			this.Name = name;
+			this.FileType = FileType.Unknown;
+
+			if (name.StartsWith("\\"))
+			{
+				if (name.Equals("\\.."))
+					this.FileType = FileType.DotDot;
+				else
+					this.FileType = FileType.Directory;
+			}
+			else
+			{
+				int index = this.Name.LastIndexOf(".");
+				if (index > 0)
+				{
+					string extension = this.Name.Substring(index + 1);
+					if (BeverDriveContext.Settings.MusicFileTypes.Contains(extension))
+						this.FileType = FileType.Music;
+
+					if (BeverDriveContext.Settings.VideoFileTypes.Contains(extension))
+						this.FileType = FileType.Video;
+				}
+			}
+		}
+	}
+
 	public class FileSystemBrowser
 	{
 		private bool chrootBehavior;
@@ -35,7 +89,7 @@ namespace BeverDrive.Gui.Core
 		public DirectoryInfo CurrentDirectory { get; private set; }
 		public List<DirectoryInfo> Directories { get; private set; }
 		public List<FileInfo> Files { get; private set; }
-		public List<string> Items { get; private set; }
+		public List<FileSystemItem> Items { get; private set; }
 		public bool ShowDirectories { get { return showDirectories; } set { showDirectories = value; this.ReadDirectory(); } }
 		public bool ShowFiles { get { return showFiles; } set { showFiles = value; this.ReadDirectory(); } }
 
@@ -46,7 +100,7 @@ namespace BeverDrive.Gui.Core
 			this.CurrentDirectory = new DirectoryInfo(startPath);
 			this.Directories = new List<DirectoryInfo>();
 			this.Files = new List<FileInfo>();
-			this.Items = new List<string>();
+			this.Items = new List<FileSystemItem>();
 			this.ShowDirectories = true;
 			this.ShowFiles = true;
 			this.ReadDirectory();
@@ -99,21 +153,21 @@ namespace BeverDrive.Gui.Core
 			var item = this.Items[index];
 
 			// Cd up if we should
-			if (item == "\\..")
+			if (item.Name == "\\..")
 			{
 				this.CdUp();
 				return this.CurrentDirectory.Name;
 			}
 
 			// Cd to subdirectory if we should
-			if (item.StartsWith("\\"))
+			if (item.Name.StartsWith("\\"))
 			{
-				this.Cd(item);
+				this.Cd(item.Name);
 				return this.CurrentDirectory.Name;
 			}
 
 			// Seems to be a file, return it
-			return item;
+			return item.Name;
 		}
 
 		private void ReadDirectory()
@@ -124,7 +178,7 @@ namespace BeverDrive.Gui.Core
 
 			// Decide whether we should show .. or not
 			if (!((this.chrootBehavior) && this.CurrentDirectory.FullName == this.chrootPath.FullName) || (this.CurrentDirectory.Parent != null))
-				this.Items.Add("\\..");
+				this.Items.Add(new FileSystemItem("\\.."));
 
 			// TODO: We are on top, enumerate drives instead...
 			if (this.CurrentDirectory.Parent != null)
@@ -137,11 +191,32 @@ namespace BeverDrive.Gui.Core
 			this.Files.OrderBy(x => x.Name);
 
 			if (this.ShowDirectories)
-				this.Directories.Any(x => { this.Items.Add("\\" + x.Name); return false; });
+				this.Directories.Any(x => {
+					string cover = this.FindCoverImage(this.CurrentDirectory.FullName + "\\" + x.Name);
+					this.Items.Add(new FileSystemItem("\\" + x.Name, cover)); return false; 
+				});
 
 			if (this.ShowFiles)
-				this.Files.Any(x => { this.Items.Add(x.Name); return false; });
+				this.Files.Any(x => { this.Items.Add(new FileSystemItem(x.Name)); return false; });
 
+		}
+
+		private string FindCoverImage(string path)
+		{
+			var di = new System.IO.DirectoryInfo(path);
+			FileInfo[] fi;
+			
+			try { fi = di.GetFiles("*.png"); }
+			catch(UnauthorizedAccessException) { return string.Empty; }
+
+			if (fi.Count() > 0)
+				return fi[0].FullName;
+
+			fi = di.GetFiles("*.jpg");
+			if (fi.Count() > 0)
+				return fi[0].FullName;
+
+			return string.Empty;
 		}
 	}
 }

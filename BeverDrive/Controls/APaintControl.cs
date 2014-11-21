@@ -20,9 +20,9 @@
 using System;
 using System.Windows.Forms;
 using System.Drawing;
-using BeverDrive.Gui.Core.Styles;
+using BeverDrive.Core.Styles;
 
-namespace BeverDrive.Gui.Controls
+namespace BeverDrive.Controls
 {
 	public class APaintControl : UserControl
 	{

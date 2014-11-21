@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using BeverDrive.Gui.Core;
+using BeverDrive.Core;
 using NUnit.Framework;
 
 namespace BeverDrive.Tests.Core
@@ -73,8 +73,8 @@ namespace BeverDrive.Tests.Core
 		{
 			var browser = new FileSystemBrowser("C:\\Windows", false);
 			browser.ShowDirectories = false;
-			Assert.AreEqual(1, browser.Items.Where(x => x.StartsWith("\\")).Count());
-			Assert.Greater(browser.Items.Where(x => !x.StartsWith("\\")).Count(), 1);
+			Assert.AreEqual(1, browser.Items.Where(x => x.Name.StartsWith("\\")).Count());
+			Assert.Greater(browser.Items.Where(x => !x.Name.StartsWith("\\")).Count(), 1);
 		}
 
 		[Test]

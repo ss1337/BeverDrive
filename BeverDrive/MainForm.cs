@@ -22,9 +22,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using BeverDrive.Gui.Controls;
-using BeverDrive.Gui.Core;
-using BeverDrive.Gui.Modules;
+using BeverDrive.Controls;
+using BeverDrive.Core;
+using BeverDrive.Modules;
 using BeverDrive.Ibus;
 using BeverDrive.Ibus.Extensions;
 
@@ -45,13 +45,13 @@ namespace BeverDrive
 			BeverDriveContext.Initialize();
 			VlcContext.Initialize(BeverDriveContext.Settings.VlcPath);
 			BeverDriveContext.CurrentMainForm = this;
-			BeverDriveContext.LoadedModules.Add(new BeverDrive.Gui.Modules.CoreGui());
-			BeverDriveContext.LoadedModules.Add(new BeverDrive.Gui.Modules.MainMenu());
-			BeverDriveContext.LoadedModules.Add(new BeverDrive.Gui.Modules.Mp3Player());
-			BeverDriveContext.LoadedModules.Add(new BeverDrive.Gui.Modules.VideoPlayer());
+			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.CoreGui());
+			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.MainMenu());
+			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.Mp3Player());
+			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.VideoPlayer());
 
 			if (BeverDriveContext.Settings.EnableBluetooth)
-				BeverDriveContext.LoadedModules.Add(new BeverDrive.Gui.Modules.Bluetooth());
+				BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.Bluetooth());
 
 			// Init ibus
 			BeverDriveContext.Ibus.OnValidMessage += new BeverDrive.Ibus.ValidMessageEventHandler(Ibus_OnValidMessage);

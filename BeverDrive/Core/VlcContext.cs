@@ -26,7 +26,7 @@ using nVlc.LibVlcWrapper.Declarations.Players;
 using nVlc.LibVlcWrapper.Implementation;
 using System.IO;
 
-namespace BeverDrive.Gui.Core
+namespace BeverDrive.Core
 {
 	public static class VlcContext
 	{

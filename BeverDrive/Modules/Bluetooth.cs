@@ -23,11 +23,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using BeverDrive.Gui.Controls;
-using BeverDrive.Gui.Core;
-using BeverDrive.Gui.Core.Styles;
+using BeverDrive.Controls;
+using BeverDrive.Core;
+using BeverDrive.Core.Styles;
 
-namespace BeverDrive.Gui.Modules
+namespace BeverDrive.Modules
 {
 	[BackButtonVisible(true)]
 	public partial class Bluetooth : AModule

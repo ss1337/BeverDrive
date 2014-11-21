@@ -21,7 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BeverDrive.Gui.Core;
+using BeverDrive.Core;
 using NUnit.Framework;
 
 namespace BeverDrive.Tests.Core

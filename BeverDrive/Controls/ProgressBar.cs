@@ -23,10 +23,10 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using BeverDrive.Gui.Core.Styles;
-using BeverDrive.Gui.Extensions;
+using BeverDrive.Core.Styles;
+using BeverDrive.Extensions;
 
-namespace BeverDrive.Gui.Controls
+namespace BeverDrive.Controls
 {
 	public class ProgressBar : APaintControl
 	{
@@ -80,8 +80,8 @@ namespace BeverDrive.Gui.Controls
 			using (var g = Graphics.FromImage(this.backBuffer))
 			{
 				// Draw borders
-				g.FillHollowRectangle(BeverDrive.Gui.Core.Styles.Brushes.ForeBrush, oRect, this.BorderWidth);
-				g.FillRectangle(BeverDrive.Gui.Core.Styles.Brushes.SelectedBrush, iRect.Left, iRect.Top, valueWidth, iRect.Height);
+				g.FillHollowRectangle(BeverDrive.Core.Styles.Brushes.ForeBrush, oRect, this.BorderWidth);
+				g.FillRectangle(BeverDrive.Core.Styles.Brushes.SelectedBrush, iRect.Left, iRect.Top, valueWidth, iRect.Height);
 			}
 
 			graphic.DrawImageUnscaled(this.backBuffer, this.ClientRectangle);

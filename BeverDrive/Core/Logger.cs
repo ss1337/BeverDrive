@@ -24,7 +24,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace BeverDrive.Gui.Core
+namespace BeverDrive.Core
 {
 	public class Logger
 	{

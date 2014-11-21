@@ -21,7 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BeverDrive.Gui.Modules
+namespace BeverDrive.Modules
 {
 	public interface IModule
 	{

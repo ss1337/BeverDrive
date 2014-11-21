@@ -24,7 +24,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace BeverDrive.Gui.Controls
+namespace BeverDrive.Controls
 {
 	public class MetroidButton : APaintControl
 	{
@@ -52,11 +52,11 @@ namespace BeverDrive.Gui.Controls
 			OnClick(EventArgs.Empty);
 		}
 
-		//protected override void OnClick(EventArgs e)
-		//{
-		//    this.Selected = !this.Selected;
-		//    this.Invalidate();
-		//}
+		protected override void OnPaintBackground(PaintEventArgs e)
+		{
+			// Don't draw the background for transparency
+			base.OnPaintBackground(e);
+		}
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
@@ -65,6 +65,7 @@ namespace BeverDrive.Gui.Controls
 
 		protected override void OnPaintToBuffer(Graphics graphic, Rectangle clientRectangle)
 		{
+			graphic.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
 			graphic.DrawImage(this.Selected ? selectedIcon : icon, clientRectangle);
 
 #if DEBUG

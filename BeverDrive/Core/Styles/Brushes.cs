@@ -19,9 +19,9 @@
 // ============================================================================
 using System;
 using System.Drawing;
-using BeverDrive.Gui.Core;
+using BeverDrive.Core;
 
-namespace BeverDrive.Gui.Core.Styles
+namespace BeverDrive.Core.Styles
 {
 	public struct Brushes
 	{

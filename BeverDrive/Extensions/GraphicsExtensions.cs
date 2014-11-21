@@ -23,7 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 
-namespace BeverDrive.Gui.Extensions
+namespace BeverDrive.Extensions
 {
 	public static class GraphicsExtensions
 	{

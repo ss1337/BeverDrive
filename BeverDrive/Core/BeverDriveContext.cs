@@ -21,10 +21,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BeverDrive.Gui.Modules;
+using BeverDrive.Modules;
 using BeverDrive.Ibus;
 
-namespace BeverDrive.Gui.Core
+namespace BeverDrive.Core
 {
 	public static class BeverDriveContext
 	{

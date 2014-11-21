@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BeverDrive.Gui.Modules
+namespace BeverDrive.Modules
 {
 	public class ModuleCommandEventArgs : EventArgs
 	{

@@ -24,7 +24,7 @@ using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace BeverDrive.Gui.Controls
+namespace BeverDrive.Controls
 {
 	public class AControlPart
 	{

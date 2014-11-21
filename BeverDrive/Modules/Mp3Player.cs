@@ -21,16 +21,16 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-using BeverDrive.Gui.Controls;
-using BeverDrive.Gui.Core;
-using BeverDrive.Gui.Core.Styles;
+using BeverDrive.Controls;
+using BeverDrive.Core;
+using BeverDrive.Core.Styles;
 using nVlc.LibVlcWrapper.Declarations;
 using nVlc.LibVlcWrapper.Declarations.Events;
 using nVlc.LibVlcWrapper.Declarations.Media;
 using nVlc.LibVlcWrapper.Declarations.Players;
 using nVlc.LibVlcWrapper.Implementation;
 
-namespace BeverDrive.Gui.Modules
+namespace BeverDrive.Modules
 {
 	[BackButtonVisible(true)]
 	[PlaybackModule]
@@ -39,11 +39,11 @@ namespace BeverDrive.Gui.Modules
 		/// <summary>
 		/// Controls...
 		/// </summary>
-		private BeverDrive.Gui.Controls.FileSystemBrowserList ctrl_browser;
+		private FileSystemBrowserList ctrl_browser;
 		private Label ctrl_album;
 		private Label ctrl_filename;
 		private Label ctrl_title;
-		private BeverDrive.Gui.Controls.ProgressBar ctrl_pb;
+		private BeverDrive.Controls.ProgressBar ctrl_pb;
 		private MetroidButton ctrl_shuffle;
 
 		private Playlist playlist;
@@ -258,7 +258,7 @@ namespace BeverDrive.Gui.Modules
 		{
 		}
 
-		void ctrl_browser_ItemSelected(object sender, BeverDrive.Gui.Controls.ItemSelectedEventArgs e)
+		void ctrl_browser_ItemSelected(object sender, BeverDrive.Controls.ItemSelectedEventArgs e)
 		{
 			//throw new NotImplementedException();
 		}
@@ -294,13 +294,13 @@ namespace BeverDrive.Gui.Modules
 		{
 			var width = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width;
 
-			this.ctrl_browser = new BeverDrive.Gui.Controls.FileSystemBrowserList(BeverDriveContext.Settings.MusicRoot);
+			this.ctrl_browser = new FileSystemBrowserList(BeverDriveContext.Settings.MusicRoot);
 			this.ctrl_browser.HeightInItems = 7;
 			this.ctrl_browser.Name = "list1";
 			this.ctrl_browser.Width = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width;
 			this.ctrl_browser.Location = new System.Drawing.Point(0, BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Height - this.ctrl_browser.Height);
 			this.ctrl_browser.TabIndex = 0;
-			this.ctrl_browser.ItemSelected += new BeverDrive.Gui.Controls.MenuOptionList.ItemSelectedEventHandler(ctrl_browser_ItemSelected);
+			this.ctrl_browser.ItemSelected += new MenuOptionList.ItemSelectedEventHandler(ctrl_browser_ItemSelected);
 
 			this.ctrl_title = new Label();
 			this.ctrl_title.AutoSize = false;
@@ -332,7 +332,7 @@ namespace BeverDrive.Gui.Modules
 			this.ctrl_filename.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.ctrl_filename.Text = "";
 
-			this.ctrl_pb = new BeverDrive.Gui.Controls.ProgressBar();
+			this.ctrl_pb = new BeverDrive.Controls.ProgressBar();
 			this.ctrl_pb.BackColor = Colors.BackColor;
 			this.ctrl_pb.Location = new System.Drawing.Point(15, 140);
 			this.ctrl_pb.Height = 25;

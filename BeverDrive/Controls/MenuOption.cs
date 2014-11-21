@@ -22,8 +22,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using BeverDrive.Gui.Core.Styles;
-using BeverDrive.Gui.Extensions;
+using BeverDrive.Core.Styles;
+using BeverDrive.Extensions;
 
 namespace BeverDrive.Gui.Controls
 {
@@ -49,15 +49,15 @@ namespace BeverDrive.Gui.Controls
 
 			if (this.Selected)
 			{
-				g.FillRectangle(BeverDrive.Gui.Core.Styles.Brushes.SelectedBrush, rect);
-				g.FillRectangle(BeverDrive.Gui.Core.Styles.Brushes.BackBrush, innerRect);
+				g.FillRectangle(BeverDrive.Core.Styles.Brushes.SelectedBrush, rect);
+				g.FillRectangle(BeverDrive.Core.Styles.Brushes.BackBrush, innerRect);
 			}
 			else
 			{
-				g.Clear(BeverDrive.Gui.Core.Styles.Colors.BackColor);
+				g.Clear(BeverDrive.Core.Styles.Colors.BackColor);
 			}
 
-			g.DrawString(this.Text, this.Font, BeverDrive.Gui.Core.Styles.Brushes.ForeBrush, rect.Shrink(3));
+			g.DrawString(this.Text, this.Font, BeverDrive.Core.Styles.Brushes.ForeBrush, rect.Shrink(3));
 			g.Dispose();
 		}
 	}

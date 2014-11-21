@@ -22,9 +22,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using BeverDrive.Gui.Controls;
-using BeverDrive.Gui.Core;
-using BeverDrive.Gui.Modules;
+using BeverDrive.Controls;
+using BeverDrive.Core;
+using BeverDrive.Modules;
 using BeverDrive.Ibus;
 using BeverDrive.Ibus.Extensions;
 

@@ -22,9 +22,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using InTheHand.Net.Sockets;
-using BeverDrive.Gui.Core;
+using BeverDrive.Core;
 
-namespace BeverDrive.Gui.Modules
+namespace BeverDrive.Modules
 {
 	public partial class Bluetooth : AModule
 	{

@@ -21,7 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using BeverDrive.Gui.Core;
+using BeverDrive.Core;
 
 namespace BeverDrive
 {
@@ -36,7 +36,7 @@ namespace BeverDrive
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Logger.Clear();
-			//Application.Run(new MainForm());
+			Application.Run(new MainForm());
 		}
 	}
 }

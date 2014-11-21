@@ -21,13 +21,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-using BeverDrive.Gui.Controls;
-using BeverDrive.Gui.Core;
-using BeverDrive.Gui.Core.Styles;
+using BeverDrive.Controls;
+using BeverDrive.Core;
+using BeverDrive.Core.Styles;
 using nVlc.LibVlcWrapper.Declarations.Media;
 using System.Drawing;
 
-namespace BeverDrive.Gui.Modules
+namespace BeverDrive.Modules
 {
 	[BackButtonVisible(true)]
 	//[PlaybackModule] // Nexting track in main menu causes a reboot
@@ -44,7 +44,7 @@ namespace BeverDrive.Gui.Modules
 
 		public VideoPlayer()
 		{
-			this.ctrl_browser = new BeverDrive.Gui.Controls.FileSystemBrowserList(BeverDriveContext.Settings.VideoRoot);
+			this.ctrl_browser = new BeverDrive.Controls.FileSystemBrowserList(BeverDriveContext.Settings.VideoRoot);
 			this.ctrl_browser.HeightInItems = 7;
 			this.ctrl_browser.Name = "ctrl_browser";
 			this.ctrl_browser.Width = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width;
@@ -52,12 +52,12 @@ namespace BeverDrive.Gui.Modules
 			this.ctrl_browser.TabIndex = 0;
 
 			var btnx = (BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2 - 338) / 2;
-			this.ctrl_play = new BeverDrive.Gui.Controls.MetroidButton("Resources\\play.png", "Resources\\play_s.png");
+			this.ctrl_play = new BeverDrive.Controls.MetroidButton("Resources\\play.png", "Resources\\play_s.png");
 			this.ctrl_play.Name = "ctrl_play";
 			this.ctrl_play.Location = new System.Drawing.Point(btnx, 65);
 			this.ctrl_play.TabIndex = 0;
 
-			this.ctrl_full = new BeverDrive.Gui.Controls.MetroidButton("Resources\\fullscreen.png", "Resources\\fullscreen_s.png");
+			this.ctrl_full = new BeverDrive.Controls.MetroidButton("Resources\\fullscreen.png", "Resources\\fullscreen_s.png");
 			this.ctrl_full.Name = "ctrl_full";
 			this.ctrl_full.Location = new System.Drawing.Point(btnx, 155);
 			this.ctrl_full.TabIndex = 0;

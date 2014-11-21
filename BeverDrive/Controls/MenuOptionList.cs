@@ -22,10 +22,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using BeverDrive.Gui.Core.Styles;
-using BeverDrive.Gui.Extensions;
+using BeverDrive.Core.Styles;
+using BeverDrive.Extensions;
 
-namespace BeverDrive.Gui.Controls
+namespace BeverDrive.Controls
 {
 	public class ItemSelectedEventArgs : EventArgs
 	{

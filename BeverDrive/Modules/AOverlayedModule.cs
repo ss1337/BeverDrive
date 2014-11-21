@@ -21,9 +21,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BeverDrive.Gui.Core;
+using BeverDrive.Core;
 
-namespace BeverDrive.Gui.Modules
+namespace BeverDrive.Modules
 {
 	public abstract class AOverlayedModule : IModule
 	{

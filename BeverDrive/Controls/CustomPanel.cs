@@ -22,14 +22,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Drawing;
 
-namespace BeverDrive.Gui.Controls
+namespace BeverDrive.Controls
 {
 	public class CustomPanel : Panel
 	{
 		public CustomPanel()
 		{
 			this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
+		}
+
+		protected override void OnPaintBackground(PaintEventArgs e)
+		{
+			//base.OnPaintBackground(e);
+		}
+
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			e.Graphics.FillRectangle(new SolidBrush(this.BackColor), e.ClipRectangle);
+
+			if (this.BackgroundImage != null)
+				e.Graphics.DrawImage(this.BackgroundImage, new System.Drawing.Point(0,0));
+			//else
+			//	base.OnPaint(e);
 		}
 	}
 }

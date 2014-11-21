@@ -22,9 +22,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using BeverDrive.Gui.Core;
+using BeverDrive.Core;
 
-namespace BeverDrive.Gui.Controls
+namespace BeverDrive.Controls
 {
 	public class FileSystemBrowserList : MenuOptionList
 	{
@@ -52,14 +52,14 @@ namespace BeverDrive.Gui.Controls
 			{
 				var item = this.browser.Items[this.SelectedIndex];
 
-				if (item.StartsWith("\\"))
+				if (item.Name.StartsWith("\\"))
 				{
 					var childName = "\\" + browser.CurrentDirectory.Name;
 					this.browser.Select(this.SelectedIndex);
 					this.PopulateBrowser();
 					this.Invalidate();
 
-					if (item == "\\..") {
+					if (item.Name == "\\..") {
 						int newIndex = this.Items.IndexOf(childName);
 						this.ScrollToCenter(newIndex);
 						this.SelectedIndex = newIndex;
@@ -72,7 +72,7 @@ namespace BeverDrive.Gui.Controls
 		{
 			this.SelectedIndex = 0;
 			this.Items.Clear();
-			this.browser.Items.Any(x => { this.Items.Add(x); return false; });
+			this.browser.Items.Any(x => { this.Items.Add(x.Name); return false; });
 		}
 	}
 }

@@ -24,12 +24,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using BeverDrive.Gui.Core;
-using BeverDrive.Gui.Core.Styles;
-using BeverDrive.Gui.Extensions;
-using BeverDrive.Gui.Modules;
+using BeverDrive.Core;
+using BeverDrive.Core.Styles;
+using BeverDrive.Extensions;
+using BeverDrive.Modules;
 
-namespace BeverDrive.Gui.Controls
+namespace BeverDrive.Controls
 {
 	public enum DirectoryPickerStatus
 	{
@@ -124,25 +124,25 @@ namespace BeverDrive.Gui.Controls
 			g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
 			
 			// Draw border
-			g.FillHollowRectangle(BeverDrive.Gui.Core.Styles.Brushes.ForeBrush, this.ClientRectangle, 3);
+			g.FillHollowRectangle(BeverDrive.Core.Styles.Brushes.ForeBrush, this.ClientRectangle, 3);
 
 			// Draw current directory name
-			g.DrawString(this.browser.CurrentDirectory.Name, this.Font, BeverDrive.Gui.Core.Styles.Brushes.ForeBrush, 0, 4);
+			g.DrawString(this.browser.CurrentDirectory.Name, this.Font, BeverDrive.Core.Styles.Brushes.ForeBrush, 0, 4);
 
 			// Draw select button
-			g.DrawString("Select", this.Font, BeverDrive.Gui.Core.Styles.Brushes.ForeBrush, this.Width - 230, 4);
+			g.DrawString("Select", this.Font, BeverDrive.Core.Styles.Brushes.ForeBrush, this.Width - 230, 4);
 			
 			if (this.SelectedIndex == -1)
-				g.FillHollowRectangle(BeverDrive.Gui.Core.Styles.Brushes.SelectedBrush, new Rectangle(this.Width - 230, 4, 110, 36), 3);
+				g.FillHollowRectangle(BeverDrive.Core.Styles.Brushes.SelectedBrush, new Rectangle(this.Width - 230, 4, 110, 36), 3);
 
 			// Draw cancel button with selected box if we should
-			g.DrawString("Cancel", this.Font, BeverDrive.Gui.Core.Styles.Brushes.ForeBrush, this.Width - 120, 4);
+			g.DrawString("Cancel", this.Font, BeverDrive.Core.Styles.Brushes.ForeBrush, this.Width - 120, 4);
 			
 			if (this.SelectedIndex == -2)
-				g.FillHollowRectangle(BeverDrive.Gui.Core.Styles.Brushes.SelectedBrush, new Rectangle(this.Width - 120, 4, 118, 36), 3);
+				g.FillHollowRectangle(BeverDrive.Core.Styles.Brushes.SelectedBrush, new Rectangle(this.Width - 120, 4, 118, 36), 3);
 
 			// Draw separator
-			g.FillRectangle(BeverDrive.Gui.Core.Styles.Brushes.ForeBrush, 0, 40, this.Width, this.BorderWidth);
+			g.FillRectangle(BeverDrive.Core.Styles.Brushes.ForeBrush, 0, 40, this.Width, this.BorderWidth);
 
 			// Draw list
 			this.listPart.SelectedIndex = this.SelectedIndex;
@@ -173,7 +173,7 @@ namespace BeverDrive.Gui.Controls
 
 		private void PopulateBrowser()
 		{
-			this.browser.Items.Any(x => { this.listPart.Items.Add(x); return false; });
+			this.browser.Items.Any(x => { this.listPart.Items.Add(x.Name); return false; });
 		}
 
 		private void SelectClick()

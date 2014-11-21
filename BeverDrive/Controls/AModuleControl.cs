@@ -22,9 +22,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using BeverDrive.Gui.Modules;
+using BeverDrive.Modules;
 
-namespace BeverDrive.Gui.Controls
+namespace BeverDrive.Controls
 {
 	public abstract class AModuleControl : UserControl
 	{

@@ -23,7 +23,7 @@ using System.Linq;
 using System.Text;
 using nVlc.LibVlcWrapper.Declarations.Media;
 
-namespace BeverDrive.Gui.Core
+namespace BeverDrive.Core
 {
 	public class PlaylistItem
 	{

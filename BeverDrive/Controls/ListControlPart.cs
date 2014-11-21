@@ -22,10 +22,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
-using BeverDrive.Gui.Core.Styles;
-using BeverDrive.Gui.Extensions;
+using BeverDrive.Core.Styles;
+using BeverDrive.Extensions;
 
-namespace BeverDrive.Gui.Controls
+namespace BeverDrive.Controls
 {
 	public class ListControlPart : AControlPart
 	{
@@ -99,14 +99,14 @@ namespace BeverDrive.Gui.Controls
 			// Draw selected box if this is selected
 			if (itemIndex + scrollIndex == this.SelectedIndex)
 			{
-				g.FillHollowRectangle(BeverDrive.Gui.Core.Styles.Brushes.SelectedBrush, outerRect, 3);
+				g.FillHollowRectangle(BeverDrive.Core.Styles.Brushes.SelectedBrush, outerRect, 3);
 			}
 
 			// Vertical centering
 			int height = outerRect.Height;
 			int fontHeight = this.Font.Height;
 			int offset = (height - fontHeight) / 2;
-			g.DrawString(text, this.Font, BeverDrive.Gui.Core.Styles.Brushes.ForeBrush, outerRect.X, outerRect.Y + offset);
+			g.DrawString(text, this.Font, BeverDrive.Core.Styles.Brushes.ForeBrush, outerRect.X, outerRect.Y + offset);
 		}
 	}
 }

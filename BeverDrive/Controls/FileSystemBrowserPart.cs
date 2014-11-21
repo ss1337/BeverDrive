@@ -22,9 +22,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using BeverDrive.Gui.Core;
+using BeverDrive.Core;
 
-namespace BeverDrive.Gui.Controls
+namespace BeverDrive.Controls
 {
 	public class FileSystemBrowserPart : ListControlPart
 	{

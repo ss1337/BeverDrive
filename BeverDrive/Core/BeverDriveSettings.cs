@@ -23,7 +23,7 @@ using System.Text;
 using System.Xml;
 using System.Drawing;
 
-namespace BeverDrive.Gui.Core
+namespace BeverDrive.Core
 {
 	public class BeverDriveSettings
 	{

@@ -24,7 +24,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace BeverDrive.Gui.Controls
+namespace BeverDrive.Controls
 {
 	public class Separator : UserControl
 	{
@@ -38,9 +38,9 @@ namespace BeverDrive.Gui.Controls
 		protected override void OnPaint(PaintEventArgs e)
 		{
 #if DEBUG
-			e.Graphics.FillRectangle(BeverDrive.Gui.Core.Styles.Brushes.SelectedBrush, e.ClipRectangle);
+			e.Graphics.FillRectangle(BeverDrive.Core.Styles.Brushes.SelectedBrush, e.ClipRectangle);
 #else
-			e.Graphics.FillRectangle(BeverDrive.Gui.Core.Styles.Brushes.ForeBrush, e.ClipRectangle);
+			e.Graphics.FillRectangle(BeverDrive.Core.Styles.Brushes.ForeBrush, e.ClipRectangle);
 #endif
 		}
 	}

@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BeverDrive.Gui.Core
+namespace BeverDrive.Core
 {
 	public class Playlist : List<PlaylistItem>
 	{

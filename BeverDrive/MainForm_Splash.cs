@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using BeverDrive.Gui.Core;
+using BeverDrive.Core;
 using InTheHand.Net.Sockets;
 
 namespace BeverDrive
@@ -55,7 +55,7 @@ namespace BeverDrive
 				try
 				{
 					lblSplash.Text += "Parsing Config.xml... ";
-					bs = new BeverDrive.Gui.Core.BeverDriveSettings();
+					bs = new BeverDrive.Core.BeverDriveSettings();
 				}
 				catch (Exception ex)
 				{
