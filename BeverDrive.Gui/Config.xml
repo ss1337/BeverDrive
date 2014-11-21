@@ -12,7 +12,11 @@
 		
 		<!-- Root directory of videos -->
 		<setting name="VideoRoot" value="D:\BeverDrive\Videos" />
-		
+
+		<!-- Which file types to recognize -->
+		<setting name="MusicFileTypes" value="mp3;flac;ogg" />
+		<setting name="VideoFileTypes" value="mp4;mkv;avi;mpg;m2v" />
+
 		<!-- Hide the cursor? Yes you almost always want this on -->
 		<setting name="HideCursor" value="true" />
 		

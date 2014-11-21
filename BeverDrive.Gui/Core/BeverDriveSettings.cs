@@ -29,6 +29,8 @@ namespace BeverDrive.Gui.Core
 	{
 		public string ComPort { get; private set; }
 		public bool EnableBluetooth { get; private set; }
+		public string MusicFileTypes { get; private set; }
+		public string VideoFileTypes { get; private set; }
 		public string MusicRoot { get; private set; }
 		public string VideoRoot { get; private set; }
 		public bool HideCursor { get; private set; }
@@ -59,6 +61,8 @@ namespace BeverDrive.Gui.Core
 			this.EnableBluetooth = this.ReadBoolSetting("EnableBluetooth", nodes);
 			this.MusicRoot = this.ReadStringSetting("MusicRoot", nodes);
 			this.VideoRoot = this.ReadStringSetting("VideoRoot", nodes);
+			this.MusicFileTypes = this.ReadStringSetting("MusicFileTypes", nodes);
+			this.VideoFileTypes = this.ReadStringSetting("VideoFileTypes", nodes);
 			
 			this.HideCursor = this.ReadBoolSetting("HideCursor", nodes);
 			this.OffsetBottom = this.ReadIntSetting("OffsetBottom", nodes);
