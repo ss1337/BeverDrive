@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 
-namespace BeverDrive.Extensions
+namespace BeverDrive.Core.Extensions
 {
 	public static class RectangleExtensions
 	{

@@ -23,7 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using BeverDrive.Gui.Styles;
-using BeverDrive.Extensions;
+using BeverDrive.Core.Extensions;
 
 namespace BeverDrive.Gui.Controls
 {
