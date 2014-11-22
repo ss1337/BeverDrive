@@ -124,9 +124,9 @@ namespace BeverDrive.Modules
 			VlcContext.AudioPlayer.Stop();
 			VlcContext.VideoPlayer.Stop();
 			isActive = true;
-			BeverDriveContext.CurrentCoreGui.AddControl(this.lbl_title);
-			BeverDriveContext.CurrentCoreGui.AddControl(this.lbl_bt1);
-			BeverDriveContext.CurrentCoreGui.AddControl(this.lbl_bt2);
+			selectedIndex = 0;
+			BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
+			this.ShowControls();
 			this.Update();
 		}
 
@@ -148,24 +148,24 @@ namespace BeverDrive.Modules
 			this.lbl_title = new Label();
 			this.lbl_title.Font = Fonts.GuiFont36;
 			this.lbl_title.ForeColor = Colors.SelectedColor;
-			this.lbl_title.Location = new System.Drawing.Point(BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2, 48);
-			this.lbl_title.Size = new System.Drawing.Size(100, 50);
+			this.lbl_title.Location = new System.Drawing.Point(BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2 - 150, 16);
+			this.lbl_title.Size = new System.Drawing.Size(300, 50);
 			this.lbl_title.Text = "Bluetooth";
 			this.lbl_title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 
 			this.lbl_bt1 = new Label();
 			this.lbl_bt1.Font = Fonts.GuiFont18;
 			this.lbl_bt1.ForeColor = Colors.ForeColor;
-			this.lbl_bt1.Location = new System.Drawing.Point(BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2 - 100, 100);
-			this.lbl_bt1.Size = new System.Drawing.Size(150, 36);
+			this.lbl_bt1.Location = new System.Drawing.Point(16, 100);
+			this.lbl_bt1.Size = new System.Drawing.Size(500, 36);
 			this.lbl_bt1.Text = "Connected device: ";
-			this.lbl_bt1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.lbl_bt1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 
 			this.lbl_bt2 = new Label();
 			this.lbl_bt2.Font = Fonts.GuiFont18;
 			this.lbl_bt2.ForeColor = Colors.ForeColor;
-			this.lbl_bt2.Location = new System.Drawing.Point(BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2, 336);
-			this.lbl_bt2.Size = new System.Drawing.Size(150, 36);
+			this.lbl_bt2.Location = new System.Drawing.Point(BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2 - 150, 336);
+			this.lbl_bt2.Size = new System.Drawing.Size(300, 36);
 			this.lbl_bt2.Text = "Connect device now";
 			this.lbl_bt2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 		}

@@ -39,8 +39,8 @@ namespace BeverDrive.Gui.Controls
 			Int32 lNum = (Int32)Math.Log((Double)this.TextAlign, 2);
 			cFormat.LineAlignment = (StringAlignment)(lNum / 4);
 			cFormat.Alignment = (StringAlignment)(lNum % 4);
-
-			graphic.DrawString(this.Text, this.Font, new SolidBrush(this.ForeColor), this.Location, cFormat);
+			var rectf = new RectangleF((PointF)this.Location, (SizeF)this.Size);
+			graphic.DrawString(this.Text, this.Font, new SolidBrush(this.ForeColor), rectf, cFormat);
 		}
 	}
 }

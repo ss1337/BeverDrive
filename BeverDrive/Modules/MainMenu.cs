@@ -158,9 +158,8 @@ namespace BeverDrive.Modules
 			this.lbl_title = new Label();
 			this.lbl_title.Font = Fonts.GuiFont36;
 			this.lbl_title.ForeColor = Colors.SelectedColor;
-			this.lbl_title.Location = new System.Drawing.Point(BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2, 48);
-			this.lbl_title.Name = "Title";
-			this.lbl_title.Size = new System.Drawing.Size(100, 50);
+			this.lbl_title.Location = new System.Drawing.Point(BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2 - 200, 16);
+			this.lbl_title.Size = new System.Drawing.Size(400, 50);
 			this.lbl_title.Text = "BeverDrive";
 			this.lbl_title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 

@@ -316,7 +316,7 @@ namespace BeverDrive.Modules
 			this.ctrl_title.AutoSize = false;
 			this.ctrl_title.Font = Fonts.GuiFont32;
 			this.ctrl_title.ForeColor = Colors.ForeColor;
-			this.ctrl_title.Location = new System.Drawing.Point(width / 2, 16);
+			this.ctrl_title.Location = new System.Drawing.Point(42, 16);
 			this.ctrl_title.Size = new System.Drawing.Size(width - 84, 50);
 			this.ctrl_title.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.ctrl_title.Text = "";
@@ -325,7 +325,7 @@ namespace BeverDrive.Modules
 			this.ctrl_album.AutoSize = false;
 			this.ctrl_album.Font = Fonts.GuiFont24;
 			this.ctrl_album.ForeColor = Colors.ForeColor;
-			this.ctrl_album.Location = new System.Drawing.Point(width / 2, 66);
+			this.ctrl_album.Location = new System.Drawing.Point(19, 66);
 			this.ctrl_album.Size = new System.Drawing.Size(width, 38);
 			this.ctrl_album.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.ctrl_album.Text = "";
@@ -334,7 +334,7 @@ namespace BeverDrive.Modules
 			this.ctrl_filename.AutoSize = false;
 			this.ctrl_filename.Font = Fonts.GuiFont14;
 			this.ctrl_filename.ForeColor = Colors.ForeColor;
-			this.ctrl_filename.Location = new System.Drawing.Point(width / 2, 104);
+			this.ctrl_filename.Location = new System.Drawing.Point(13, 104);
 			this.ctrl_filename.Size = new System.Drawing.Size(width, 26);
 			this.ctrl_filename.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.ctrl_filename.Text = "";
