@@ -28,6 +28,11 @@ namespace BeverDrive.Gui.Controls
 {
 	public abstract class AGraphicsControl : Control
 	{
+		public new RectangleF ClientRectangle
+		{
+			get { return new RectangleF((PointF)this.Location, (SizeF)this.Size); }
+		}
+
 		public AGraphicsControl()
 		{
 		}
