@@ -29,19 +29,6 @@ using BeverDrive.Core.Extensions;
 
 namespace BeverDrive.Gui.Controls
 {
-	public class GraphicsPanelBackgroundImage
-	{
-		public Image Background { get; set; }
-		public String Name { get; set; }
-
-		public GraphicsPanelBackgroundImage(Image background, string name)
-		{
-			this.Background = background;
-			this.Name = name;
-		}
-	}
-
-
 	/// <summary>
 	/// Control for drawing stuff with alpha channels.
 	/// Overlayed controls such as VLC players etc seem to work
@@ -81,6 +68,9 @@ namespace BeverDrive.Gui.Controls
 		public IList<AGraphicsControl> GraphicControls { get; set; }
 
 		private Bitmap buffer;
+#if DEBUG
+		double lastFrame;
+#endif
 
 		public GraphicsPanel()
 		{
@@ -100,6 +90,10 @@ namespace BeverDrive.Gui.Controls
 		{
 			if (this.buffer == null)
 				this.buffer = new Bitmap(this.Width, this.Height);
+
+#if DEBUG
+			System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
+#endif
 
 			using (var g = Graphics.FromImage(buffer))
 			{
@@ -125,6 +119,11 @@ namespace BeverDrive.Gui.Controls
 			}
 
 			e.Graphics.DrawImageUnscaled(this.buffer, new Point(0, 0));
+#if DEBUG
+			e.Graphics.DrawString(lastFrame.ToString(), BeverDrive.Gui.Styles.Fonts.GuiFont18, BeverDrive.Gui.Styles.Brushes.SelectedBrush, 650f, 15f);
+			sw.Stop();
+			lastFrame = sw.Elapsed.TotalMilliseconds;
+#endif
 		}
 
 		protected override void OnSizeChanged(EventArgs e)
@@ -136,23 +135,15 @@ namespace BeverDrive.Gui.Controls
 
 		private void DrawBackgroundImage(Graphics graphic, Image image, float fade)
 		{
-			float ratio = (float)((float)this.Width / (float)this.Height);
-			int iWidth = image.Width;
-			int iHeight = image.Height;
-			int srcX = 0;
-			int srcY = 0;
-			int srcHeight = image.Height;
-			int srcWidth = image.Width;
 			var destRect = new Rectangle(0, 0, this.Width, this.Height);
-
 			var srcRect = image.CalculateScaling(this.Width, this.Height);
 
 			// Skip fading stuff if the image should be opaque
-			if (fade == MAXFADE)
+			/*if (fade == MAXFADE)
 			{
-				graphic.DrawImage(image, destRect, srcX, srcY, srcWidth, srcHeight, GraphicsUnit.Pixel);
+				graphic.DrawImage(image, destRect, srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, GraphicsUnit.Pixel);
 				return;
-			}
+			}*/
 
 			// Initialize the color matrix. 
 			// Note the value 0.8 in row 4, column 4. 
@@ -176,11 +167,6 @@ namespace BeverDrive.Gui.Controls
 			   image,
 			   destRect,
 			   srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
-			   /*new Rectangle(0, 0, iWidth, iHeight),  // destination rectangle
-			   0.0f,                          // source rectangle x 
-			   0.0f,                          // source rectangle y
-			   iWidth,                        // source rectangle width
-			   iHeight,                       // source rectangle height*/
 			   GraphicsUnit.Pixel,
 			   imageAtt);
 		}
