@@ -22,34 +22,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace BeverDrive.Core.Extensions
 {
 	public static class GraphicsExtensions
 	{
-		public static void FillHollowRectangle(this Graphics graphic, Brush brush, Rectangle rectangle, int borderWidth)
-		{
-			if (rectangle.Height < borderWidth * 2 || rectangle.Width < borderWidth * 2)
-			{
-				// Draw a simple solid rectangle
-				graphic.FillRectangle(brush, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
-			}
-			else
-			{
-				// Draw top border
-				graphic.FillRectangle(brush, rectangle.X, rectangle.Y, rectangle.Width, borderWidth);
-
-				// Draw right border
-				graphic.FillRectangle(brush, rectangle.X + rectangle.Width - borderWidth, rectangle.Y + borderWidth, borderWidth, rectangle.Height - borderWidth * 2);
-
-				// Draw bottom border
-				graphic.FillRectangle(brush, rectangle.X, rectangle.Y + rectangle.Height - borderWidth, rectangle.Width, borderWidth);
-
-				// Draw left border
-				graphic.FillRectangle(brush, rectangle.X, rectangle.Y + borderWidth, borderWidth, rectangle.Height - borderWidth * 2);
-			}
-		}
-
+		/// <summary>
+		/// Scales and crops an image
+		/// </summary>
+		/// <param name="image"></param>
+		/// <param name="scaleToWidth"></param>
+		/// <param name="scaleToHeight"></param>
+		/// <returns></returns>
 		public static Rectangle CalculateScaling(this Image image, int scaleToWidth, int scaleToHeight)
 		{
 			float ratio = (float)((float)scaleToWidth / (float)scaleToHeight);
@@ -96,8 +81,68 @@ namespace BeverDrive.Core.Extensions
 			return result;
 		}
 
-		/*public static void DrawImageScaled()
+		/// <summary>
+		/// Draws an image faded with an alpha value
+		/// </summary>
+		/// <param name="graphic"></param>
+		/// <param name="dest"></param>
+		/// <param name="source"></param>
+		/// <param name="alpha">Alpha value, from 0f to 1f</param>
+		public static void DrawImageAlphaFaded(this Graphics graphic, Image image, Rectangle dest, Rectangle source, float alpha)
 		{
-		}*/
+			// Initialize the color matrix. 
+			float[][] matrixItems ={ 
+				new float[] {1, 0, 0, 0, 0},
+				new float[] {0, 1, 0, 0, 0},
+				new float[] {0, 0, 1, 0, 0},
+				new float[] {0, 0, 0, alpha, 0}, 
+				new float[] {0, 0, 0, 0, 1}};
+			ColorMatrix colorMatrix = new ColorMatrix(matrixItems);
+
+			// Create an ImageAttributes object and set its color matrix.
+			ImageAttributes imageAtt = new ImageAttributes();
+			imageAtt.SetColorMatrix(
+				colorMatrix,
+				ColorMatrixFlag.Default,
+				ColorAdjustType.Bitmap);
+
+			// Now draw the semitransparent bitmap image. 
+			graphic.DrawImage(
+				image,
+				dest,
+				source.X, source.Y, source.Width, source.Height,
+				GraphicsUnit.Pixel,
+				imageAtt);
+		}
+
+		/// <summary>
+		/// Draws a hollow rectangle
+		/// </summary>
+		/// <param name="graphic"></param>
+		/// <param name="brush"></param>
+		/// <param name="rectangle"></param>
+		/// <param name="borderWidth"></param>
+		public static void FillHollowRectangle(this Graphics graphic, Brush brush, Rectangle rectangle, int borderWidth)
+		{
+			if (rectangle.Height < borderWidth * 2 || rectangle.Width < borderWidth * 2)
+			{
+				// Draw a simple solid rectangle
+				graphic.FillRectangle(brush, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
+			}
+			else
+			{
+				// Draw top border
+				graphic.FillRectangle(brush, rectangle.X, rectangle.Y, rectangle.Width, borderWidth);
+
+				// Draw right border
+				graphic.FillRectangle(brush, rectangle.X + rectangle.Width - borderWidth, rectangle.Y + borderWidth, borderWidth, rectangle.Height - borderWidth * 2);
+
+				// Draw bottom border
+				graphic.FillRectangle(brush, rectangle.X, rectangle.Y + rectangle.Height - borderWidth, rectangle.Width, borderWidth);
+
+				// Draw left border
+				graphic.FillRectangle(brush, rectangle.X, rectangle.Y + borderWidth, borderWidth, rectangle.Height - borderWidth * 2);
+			}
+		}
 	}
 }

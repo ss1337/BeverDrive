@@ -38,9 +38,9 @@ namespace BeverDrive.Gui.Controls
 					selectedIndex = value;
 
 					if (browser.Items[value].CoverImage != null)
-						BeverDriveContext.CurrentCoreGui.ModuleContainer.BackgroundImage = browser.Items[value];
+						BeverDriveContext.CurrentCoreGui.ModuleContainer.SetBackgroundImage(browser.Items[value].Name, browser.Items[value].CoverImage);
 					else
-						BeverDriveContext.CurrentCoreGui.ModuleContainer.BackgroundImage = browser.CurrentItem;
+						BeverDriveContext.CurrentCoreGui.ModuleContainer.SetBackgroundImage(browser.CurrentItem.Name, browser.CurrentItem.CoverImage);
 
 					this.Invalidate();
 				}
@@ -56,7 +56,9 @@ namespace BeverDrive.Gui.Controls
 			this.browser = new FileSystemBrowser(rootPath, chrootBehavior);
 			this.textRect  = new System.Drawing.RectangleF();
 			this.SelectedIndex = 0;
-			BeverDriveContext.CurrentCoreGui.ModuleContainer.Text = this.browser.CurrentDirectory.Name;
+			BeverDriveContext.CurrentCoreGui.ClockContainer.Text = this.browser.CurrentDirectory.Name;
+
+			// Pre-render images?
 		}
 
 		protected override void OnSizeChanged(EventArgs e)
@@ -85,7 +87,7 @@ namespace BeverDrive.Gui.Controls
 						this.browser.Cd(item.Name);
 					}
 
-					BeverDriveContext.CurrentCoreGui.ModuleContainer.Text = this.browser.CurrentDirectory.Name;
+					BeverDriveContext.CurrentCoreGui.ClockContainer.Text = this.browser.CurrentDirectory.Name;
 					this.SelectedIndex = 0;
 					this.Invalidate();
 				}
@@ -94,8 +96,6 @@ namespace BeverDrive.Gui.Controls
 
 		public override void PaintToBuffer(System.Drawing.Graphics graphic)
 		{
-			//graphic.FillRectangle(Brushes.SelectedBrush, this.ClientRectangle);
-
 			if (this.SelectedIndex > -1)
 			{
 				graphic.DrawString(browser.Items[this.SelectedIndex].Name,

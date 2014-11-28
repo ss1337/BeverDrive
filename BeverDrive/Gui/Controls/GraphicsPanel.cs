@@ -35,49 +35,30 @@ namespace BeverDrive.Gui.Controls
 	/// </summary>
 	public class GraphicsPanel : Control
 	{
-		private const int MAXFADE = 6;
-		private int backgroundFade;
-		private FileSystemItem backgroundImage;
-
-		public new FileSystemItem BackgroundImage
-		{
-			get { return this.backgroundImage; }
-			set
-			{
-				if (value == null || value.CoverImage == null)
-				{
-					// Fade out background image if it exists, from -8 to 0
-					// and only if we are in fade in
-					if (backgroundImage != null && backgroundFade > 0)
-						backgroundFade = -MAXFADE;
-				}
-				else
-				{
-					if (backgroundImage == null || value.Name != backgroundImage.Name)
-					{
-						backgroundImage = value;
-						backgroundFade = 0;
-					}
-				}
-			}
-		}
-
 		/// <summary>
 		/// Add AGraphicControls here is order to have them rendered nicely
 		/// </summary>
 		public IList<AGraphicsControl> GraphicControls { get; set; }
 
 		private Bitmap buffer;
+		private Background background;
+
 #if DEBUG
+		// Frame timer
 		double lastFrame;
 #endif
 
 		public GraphicsPanel()
 		{
-			this.backgroundImage = new FileSystemItem("");
+			this.background = new Background();
 			this.GraphicControls = new List<AGraphicsControl>();
 			this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
 			this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+		}
+
+		public void SetBackgroundImage(string backgroundName, Image backgroundImage)
+		{
+			this.background.SetBackgroundImage(backgroundName, backgroundImage);
 		}
 
 		protected override void OnPaintBackground(PaintEventArgs pevent)
@@ -95,31 +76,18 @@ namespace BeverDrive.Gui.Controls
 			System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
 #endif
 
-			using (var g = Graphics.FromImage(buffer))
+			using (var gr = Graphics.FromImage(buffer))
 			{
-				g.Clear(this.BackColor);
-				g.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
-				g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-
-				if (backgroundImage != null && backgroundImage.CoverImage != null)
-				{
-					this.DrawBackgroundImage(g, this.backgroundImage.CoverImage, Math.Abs((float)this.backgroundFade / 10f));
-
-					// Fade in/out background
-					if (this.backgroundFade < MAXFADE)
-					{
-						this.backgroundFade += 1;
-						if (this.backgroundFade == 0)
-							this.backgroundImage = null;
-					}
-				}
+				background.Draw(gr, this.BackColor);
 
 				// Draw all the child controls using their respective PaintToBuffer function
-				this.GraphicControls.Any(x => { if (x.Visible) { x.PaintToBuffer(g); }  return false; });
+				this.GraphicControls.Any(x => { if (x.Visible) { x.PaintToBuffer(gr); }  return false; });
 			}
 
 			e.Graphics.DrawImageUnscaled(this.buffer, new Point(0, 0));
+
 #if DEBUG
+			// Draw frame timer
 			e.Graphics.DrawString(lastFrame.ToString(), BeverDrive.Gui.Styles.Fonts.GuiFont18, BeverDrive.Gui.Styles.Brushes.SelectedBrush, 650f, 15f);
 			sw.Stop();
 			lastFrame = sw.Elapsed.TotalMilliseconds;
@@ -130,45 +98,9 @@ namespace BeverDrive.Gui.Controls
 		{
 			// Clearing buffer, the old one is of the wrong size
 			this.buffer = null;
+			this.background.Width = this.Width;
+			this.background.Height = this.Height;
 			base.OnSizeChanged(e);
-		}
-
-		private void DrawBackgroundImage(Graphics graphic, Image image, float fade)
-		{
-			var destRect = new Rectangle(0, 0, this.Width, this.Height);
-			var srcRect = image.CalculateScaling(this.Width, this.Height);
-
-			// Skip fading stuff if the image should be opaque
-			/*if (fade == MAXFADE)
-			{
-				graphic.DrawImage(image, destRect, srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, GraphicsUnit.Pixel);
-				return;
-			}*/
-
-			// Initialize the color matrix. 
-			// Note the value 0.8 in row 4, column 4. 
-			float[][] matrixItems ={ 
-				new float[] {1, 0, 0, 0, 0},
-				new float[] {0, 1, 0, 0, 0},
-				new float[] {0, 0, 1, 0, 0},
-				new float[] {0, 0, 0, fade, 0}, 
-				new float[] {0, 0, 0, 0, 1}};
-			ColorMatrix colorMatrix = new ColorMatrix(matrixItems);
-
-			// Create an ImageAttributes object and set its color matrix.
-			ImageAttributes imageAtt = new ImageAttributes();
-			imageAtt.SetColorMatrix(
-				colorMatrix,
-				ColorMatrixFlag.Default,
-				ColorAdjustType.Bitmap);
-
-			// Now draw the semitransparent bitmap image. 
-			graphic.DrawImage(
-			   image,
-			   destRect,
-			   srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
-			   GraphicsUnit.Pixel,
-			   imageAtt);
 		}
 	}
 }

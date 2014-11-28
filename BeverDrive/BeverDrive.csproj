@@ -85,6 +85,7 @@
     <Compile Include="Gui\Controls\BackButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Gui\Controls\Background.cs" />
     <Compile Include="Gui\Controls\ClockPanel.cs">
       <SubType>Component</SubType>
     </Compile>
