@@ -134,5 +134,10 @@ namespace BeverDrive.Modules
 			BeverDriveContext.CurrentCoreGui.ClockContainer.Date = DateTime.Now.ToString("yyyy-MM-dd");
 			BeverDriveContext.CurrentCoreGui.ClockContainer.Invalidate();
 		}
+
+		public override void Update50Hz()
+		{
+			BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
+		}
 	}
 }

@@ -31,7 +31,8 @@ namespace BeverDrive
 {
 	public partial class MainForm : Form
 	{
-		public Timer Timer1hz;
+		public Timer Timer1Hz;
+		public Timer Timer50Hz;
 
 		public MainForm()
 		{
@@ -46,11 +47,11 @@ namespace BeverDrive
 			BeverDriveContext.CurrentMainForm = this;
 			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.CoreGui());
 			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.MainMenu());
-			//BeverDriveContext.LoadedModules.Add(new BeverDrive.OldModules.Mp3Player());
-			//BeverDriveContext.LoadedModules.Add(new BeverDrive.OldModules.VideoPlayer());
+			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.Mp3Player());
+			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.VideoPlayer());
 
 			if (BeverDriveContext.Settings.EnableBluetooth)
-				//BeverDriveContext.LoadedModules.Add(new BeverDrive.OldModules.Bluetooth());
+				BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.Bluetooth());
 
 			// Init ibus
 			BeverDriveContext.Ibus.OnValidMessage += new BeverDrive.Ibus.ValidMessageEventHandler(Ibus_OnValidMessage);
@@ -61,10 +62,15 @@ namespace BeverDrive
 			BeverDriveContext.CurrentCoreGui.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.Show });
 			BeverDriveContext.SetActiveModule("MainMenu");
 
-			this.Timer1hz = new Timer();
-			this.Timer1hz.Interval = 1000;
-			this.Timer1hz.Tick += new EventHandler(Timer1hz_Tick);
-			this.Timer1hz.Start();
+			this.Timer1Hz = new Timer();
+			this.Timer1Hz.Interval = 1000;
+			this.Timer1Hz.Tick += new EventHandler(Timer1Hz_Tick);
+			this.Timer1Hz.Start();
+
+			this.Timer50Hz = new Timer();
+			this.Timer50Hz.Interval = 20;
+			this.Timer50Hz.Tick += new EventHandler(Timer50Hz_Tick);
+			this.Timer50Hz.Start();
 
 			if (BeverDriveContext.Settings.HideCursor)
 				Cursor.Hide();
@@ -97,7 +103,7 @@ namespace BeverDrive
 
 		protected override void OnPaintBackground(PaintEventArgs e)
 		{
-			base.OnPaintBackground(e);
+			//base.OnPaintBackground(e);
 		}
 
 		protected void Ibus_OnValidMessage(object sender, BeverDrive.Ibus.ValidMessageRecievedEventArgs e)
@@ -108,12 +114,20 @@ namespace BeverDrive
 				this.ProcessMessage(e.Message);
 		}
 
-		protected void Timer1hz_Tick(object sender, EventArgs e)
+		protected void Timer1Hz_Tick(object sender, EventArgs e)
 		{
 			if (BeverDriveContext.ActiveModule != null)
 				BeverDriveContext.ActiveModule.Update1Hz();
 
 			BeverDriveContext.CurrentCoreGui.Update1Hz();
+		}
+
+		protected void Timer50Hz_Tick(object sender, EventArgs e)
+		{
+			//if (BeverDriveContext.ActiveModule != null)
+			//	BeverDriveContext.ActiveModule.Update50Hz();
+
+			BeverDriveContext.CurrentCoreGui.Update50Hz();
 		}
 
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)

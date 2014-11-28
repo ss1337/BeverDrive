@@ -53,5 +53,7 @@ namespace BeverDrive.Modules
 		}
 
 		public virtual void Update1Hz() { }
+
+		public virtual void Update50Hz() { }
 	}
 }
