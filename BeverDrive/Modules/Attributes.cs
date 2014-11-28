@@ -55,7 +55,7 @@ namespace BeverDrive.Modules
 	{
 		private bool playback;
 
-		public bool Playback { get { return Playback; } }
+		public bool Playback { get { return playback; } }
 
 		public PlaybackModuleAttribute()
 		{
