@@ -25,9 +25,29 @@ using System.Drawing;
 
 namespace BeverDrive.Gui.Controls
 {
+	/// <summary>
+	/// Works like the regular Label control except it draws itself to a buffer in order to speed up things
+	/// </summary>
 	public class Label : AGraphicsControl
 	{
+		private Image buffer;
+
 		public ContentAlignment TextAlign { get; set; }
+
+		public override string Text
+		{
+			get
+			{
+				return base.Text;
+			}
+			set
+			{
+				base.Text = value;
+
+				// Reset buffer when text is changed
+				buffer = null;
+			}
+		}
 
 		public Label()
 		{
@@ -35,12 +55,23 @@ namespace BeverDrive.Gui.Controls
 
 		public override void PaintToBuffer(Graphics graphic)
 		{
-			StringFormat cFormat = new StringFormat();
-			Int32 lNum = (Int32)Math.Log((Double)this.TextAlign, 2);
-			cFormat.LineAlignment = (StringAlignment)(lNum / 4);
-			cFormat.Alignment = (StringAlignment)(lNum % 4);
-			//var rectf = new RectangleF((PointF)this.Location, (SizeF)this.Size);
-			graphic.DrawString(this.Text, this.Font, new SolidBrush(this.ForeColor), this.ClientRectangle, cFormat);
+			// Draw string to a buffer at the first time to speed up stuff
+			if (buffer == null)
+			{
+				var rect = new RectangleF(0, 0, this.Width, this.Height);
+				buffer = new Bitmap(this.Width, this.Height);
+				StringFormat cFormat = new StringFormat();
+				Int32 lNum = (Int32)Math.Log((Double)this.TextAlign, 2);
+				cFormat.LineAlignment = (StringAlignment)(lNum / 4);
+				cFormat.Alignment = (StringAlignment)(lNum % 4);
+
+				using (var g = Graphics.FromImage(buffer))
+				{
+					g.DrawString(this.Text, this.Font, new SolidBrush(this.ForeColor), rect, cFormat);
+				}
+			}
+
+			graphic.DrawImage(buffer, this.ClientRectangle);
 		}
 	}
 }
