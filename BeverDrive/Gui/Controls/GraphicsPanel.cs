@@ -23,15 +23,58 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Drawing.Imaging;
+using BeverDrive.Core;
+using BeverDrive.Core.Extensions;
 
 namespace BeverDrive.Gui.Controls
 {
+	public class GraphicsPanelBackgroundImage
+	{
+		public Image Background { get; set; }
+		public String Name { get; set; }
+
+		public GraphicsPanelBackgroundImage(Image background, string name)
+		{
+			this.Background = background;
+			this.Name = name;
+		}
+	}
+
+
 	/// <summary>
 	/// Control for drawing stuff with alpha channels.
 	/// Overlayed controls such as VLC players etc seem to work
 	/// </summary>
 	public class GraphicsPanel : Control
 	{
+		private const int MAXFADE = 6;
+		private int backgroundFade;
+		private FileSystemItem backgroundImage;
+
+		public new FileSystemItem BackgroundImage
+		{
+			get { return this.backgroundImage; }
+			set
+			{
+				if (value == null || value.CoverImage == null)
+				{
+					// Fade out background image if it exists, from -8 to 0
+					// and only if we are in fade in
+					if (backgroundImage != null && backgroundFade > 0)
+						backgroundFade = -MAXFADE;
+				}
+				else
+				{
+					if (backgroundImage == null || value.Name != backgroundImage.Name)
+					{
+						backgroundImage = value;
+						backgroundFade = 0;
+					}
+				}
+			}
+		}
+
 		/// <summary>
 		/// Add AGraphicControls here is order to have them rendered nicely
 		/// </summary>
@@ -41,6 +84,7 @@ namespace BeverDrive.Gui.Controls
 
 		public GraphicsPanel()
 		{
+			this.backgroundImage = new FileSystemItem("");
 			this.GraphicControls = new List<AGraphicsControl>();
 			this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
 			this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
@@ -63,6 +107,19 @@ namespace BeverDrive.Gui.Controls
 				g.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
 				g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
 
+				if (backgroundImage != null && backgroundImage.CoverImage != null)
+				{
+					this.DrawBackgroundImage(g, this.backgroundImage.CoverImage, Math.Abs((float)this.backgroundFade / 10f));
+
+					// Fade in/out background
+					if (this.backgroundFade < MAXFADE)
+					{
+						this.backgroundFade += 1;
+						if (this.backgroundFade == 0)
+							this.backgroundImage = null;
+					}
+				}
+
 				// Draw all the child controls using their respective PaintToBuffer function
 				this.GraphicControls.Any(x => { if (x.Visible) { x.PaintToBuffer(g); }  return false; });
 			}
@@ -75,6 +132,57 @@ namespace BeverDrive.Gui.Controls
 			// Clearing buffer, the old one is of the wrong size
 			this.buffer = null;
 			base.OnSizeChanged(e);
+		}
+
+		private void DrawBackgroundImage(Graphics graphic, Image image, float fade)
+		{
+			float ratio = (float)((float)this.Width / (float)this.Height);
+			int iWidth = image.Width;
+			int iHeight = image.Height;
+			int srcX = 0;
+			int srcY = 0;
+			int srcHeight = image.Height;
+			int srcWidth = image.Width;
+			var destRect = new Rectangle(0, 0, this.Width, this.Height);
+
+			var srcRect = image.CalculateScaling(this.Width, this.Height);
+
+			// Skip fading stuff if the image should be opaque
+			if (fade == MAXFADE)
+			{
+				graphic.DrawImage(image, destRect, srcX, srcY, srcWidth, srcHeight, GraphicsUnit.Pixel);
+				return;
+			}
+
+			// Initialize the color matrix. 
+			// Note the value 0.8 in row 4, column 4. 
+			float[][] matrixItems ={ 
+				new float[] {1, 0, 0, 0, 0},
+				new float[] {0, 1, 0, 0, 0},
+				new float[] {0, 0, 1, 0, 0},
+				new float[] {0, 0, 0, fade, 0}, 
+				new float[] {0, 0, 0, 0, 1}};
+			ColorMatrix colorMatrix = new ColorMatrix(matrixItems);
+
+			// Create an ImageAttributes object and set its color matrix.
+			ImageAttributes imageAtt = new ImageAttributes();
+			imageAtt.SetColorMatrix(
+				colorMatrix,
+				ColorMatrixFlag.Default,
+				ColorAdjustType.Bitmap);
+
+			// Now draw the semitransparent bitmap image. 
+			graphic.DrawImage(
+			   image,
+			   destRect,
+			   srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height,
+			   /*new Rectangle(0, 0, iWidth, iHeight),  // destination rectangle
+			   0.0f,                          // source rectangle x 
+			   0.0f,                          // source rectangle y
+			   iWidth,                        // source rectangle width
+			   iHeight,                       // source rectangle height*/
+			   GraphicsUnit.Pixel,
+			   imageAtt);
 		}
 	}
 }

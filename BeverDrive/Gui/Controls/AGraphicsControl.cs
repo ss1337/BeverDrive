@@ -49,6 +49,10 @@ namespace BeverDrive.Gui.Controls
 			//base.OnPaint(e);
 		}
 
+		/// <summary>
+		/// Draws the control to a buffer
+		/// </summary>
+		/// <param name="graphic"></param>
 		public abstract void PaintToBuffer(Graphics graphic);
 	}
 }

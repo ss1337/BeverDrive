@@ -49,5 +49,55 @@ namespace BeverDrive.Core.Extensions
 				graphic.FillRectangle(brush, rectangle.X, rectangle.Y + borderWidth, borderWidth, rectangle.Height - borderWidth * 2);
 			}
 		}
+
+		public static Rectangle CalculateScaling(this Image image, int scaleToWidth, int scaleToHeight)
+		{
+			float ratio = (float)((float)scaleToWidth / (float)scaleToHeight);
+			int iWidth = image.Width;
+			int iHeight = image.Height;
+			int crop = 0;
+			var result = new Rectangle(0, 0, iWidth, iHeight);
+
+			// Check that image is ratio croppable
+			if (iHeight / ratio < iWidth)
+			{
+				if (iHeight < scaleToHeight && iWidth >= scaleToWidth)
+					crop = 2;
+				else
+					crop = 1;
+			}
+
+			if (iHeight / ratio > iWidth)
+			{
+				if (iWidth > scaleToWidth)
+					crop = 2;
+				else
+					crop = 1;
+			}
+
+			if (crop == 1)
+			{
+				// Crop top and bottom
+				result.Height = (int)((float)iWidth / ratio);
+				result.Width = iWidth;
+				result.X = 0;
+				result.Y = Math.Abs((iHeight - result.Height) / 2);
+			}
+
+			if (crop == 2)
+			{
+				// Crop sides
+				result.Height = iHeight;
+				result.Width = (int)((float)iHeight * ratio);
+				result.X = Math.Abs((iWidth - result.Width) / 2);
+				result.Y = 0;
+			}
+
+			return result;
+		}
+
+		/*public static void DrawImageScaled()
+		{
+		}*/
 	}
 }

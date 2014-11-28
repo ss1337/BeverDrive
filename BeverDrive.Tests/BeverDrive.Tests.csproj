@@ -40,6 +40,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -54,6 +55,7 @@
     <Compile Include="Controls\FileSystemBrowserListTests.cs" />
     <Compile Include="Controls\ListControlTests.cs" />
     <Compile Include="Core\FileSystemBrowserTests.cs" />
+    <Compile Include="Core\GraphicsExtensionsTests.cs" />
     <Compile Include="Core\PlaylistTests.cs" />
     <Compile Include="IbusTests.cs" />
     <Compile Include="Modules\MainMenuTests.cs" />
