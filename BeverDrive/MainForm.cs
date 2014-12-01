@@ -60,6 +60,9 @@ namespace BeverDrive
 				BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Other.Cdc_Announce);
 			}
 
+			if (BeverDriveContext.Settings.EnableIbusDebug)
+				BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.IbusDebug());
+
 			BeverDriveContext.CurrentCoreGui.ClockContainer.Time = DateTime.Now.ToShortTimeString();
 			BeverDriveContext.CurrentCoreGui.ClockContainer.Date = DateTime.Now.ToString("yyyy-MM-dd");
 			BeverDriveContext.CurrentCoreGui.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.Show });

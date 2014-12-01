@@ -8,6 +8,9 @@
 		     and want to navigate with LEFT/RIGHT/SPACE -->
 		<setting name="EnableIbus" value="true" />
 
+		<!-- Enable ibus debug module? Usually false -->
+		<setting name="EnableIbusDebug" value="true" />
+
 		<!-- Don't enable bluetooth if you don't have a bluetooth device -->
 		<setting name="EnableBluetooth" value="false" />
 

@@ -145,6 +145,7 @@ namespace BeverDrive
 					rtsEnable = false;
 
 			BeverDriveContext.Ibus.RtsEnable = rtsEnable;
+			BeverDriveContext.ActiveModule.ProcessMessage(message);
 		}
 	}
 }

@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2014 Sebastian Sjödin
+// Copyright 2014 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -19,16 +19,28 @@
 // ============================================================================
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using BeverDrive.Gui.Styles;
+using BeverDrive.Core.Extensions;
 
-namespace BeverDrive.Modules
+namespace BeverDrive.Gui.Controls
 {
-	public interface IModule
+	public class TextButton : AGraphicsControl
 	{
-		void Init();
-		void OnCommand(ModuleCommandEventArgs e);
-		void ProcessMessage(string message);
-		void Update1Hz();
-		void Update50Hz();
+		public bool Selected { get; set; }
+
+		public TextButton()
+		{
+		}
+
+		public override void PaintToBuffer(System.Drawing.Graphics graphic)
+		{
+			var rectangle = new System.Drawing.Rectangle(this.Location.X, this.Location.Y, this.Width, this.Height);
+			var brush = this.Selected ? Brushes.SelectedBrush : Brushes.ForeBrush;
+
+			graphic.FillHollowRectangle(brush, rectangle, 2);
+			graphic.DrawString(this.Text, this.Font, brush, rectangle);
+		}
 	}
 }

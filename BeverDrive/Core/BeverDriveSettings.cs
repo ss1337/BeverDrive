@@ -30,6 +30,7 @@ namespace BeverDrive.Core
 		public string ComPort { get; private set; }
 		public bool EnableBluetooth { get; private set; }
 		public bool EnableIbus { get; private set; }
+		public bool EnableIbusDebug { get; private set; }
 		public string MusicFileTypes { get; private set; }
 		public string VideoFileTypes { get; private set; }
 		public string MusicRoot { get; private set; }
@@ -61,6 +62,7 @@ namespace BeverDrive.Core
 			this.ComPort = this.ReadStringSetting("ComPort", nodes);
 			this.EnableBluetooth = this.ReadBoolSetting("EnableBluetooth", nodes);
 			this.EnableIbus = this.ReadBoolSetting("EnableIbus", nodes);
+			this.EnableIbusDebug = this.ReadBoolSetting("EnableIbusDebug", nodes);
 			this.MusicRoot = this.ReadStringSetting("MusicRoot", nodes);
 			this.VideoRoot = this.ReadStringSetting("VideoRoot", nodes);
 			this.MusicFileTypes = this.ReadStringSetting("MusicFileTypes", nodes);
