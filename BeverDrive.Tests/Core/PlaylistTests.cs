@@ -31,7 +31,7 @@ namespace BeverDrive.Tests.Core
 	{
 		public PlaylistTests()
 		{
-			BeverDriveContext.InitializeWithoutIbus();
+			BeverDriveContext.Initialize();
 			VlcContext.Initialize(BeverDriveContext.Settings.VlcPath);
 		}
 

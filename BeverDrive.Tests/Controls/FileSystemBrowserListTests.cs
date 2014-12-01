@@ -34,7 +34,7 @@ namespace BeverDrive.Tests.Controls
 
 		public FileSystemBrowserListTests()
 		{
-			BeverDriveContext.InitializeWithoutIbus();
+			BeverDriveContext.Initialize();
 			this.control = new FileSystemBrowserListControl();
 			this.control.HeightInItems = 1;
 		}

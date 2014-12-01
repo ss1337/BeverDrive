@@ -4,12 +4,16 @@
 		<!-- Which serial port is the IBUS interface connected to -->
 		<setting name="ComPort" value="COM1" />
 
+		<!-- Enable/disable Ibus, set this to false if you dont have a serial port
+		     and want to navigate with LEFT/RIGHT/SPACE -->
+		<setting name="EnableIbus" value="false" />
+
 		<!-- Don't enable bluetooth if you don't have a bluetooth device -->
 		<setting name="EnableBluetooth" value="false" />
 
 		<!-- Root directory of mp3's -->
 		<setting name="MusicRoot" value="D:\BeverDrive\Mp3" />
-		
+
 		<!-- Root directory of videos -->
 		<setting name="VideoRoot" value="D:\BeverDrive\Videos" />
 
@@ -19,22 +23,22 @@
 
 		<!-- Hide the cursor? Yes you almost always want this on -->
 		<setting name="HideCursor" value="true" />
-		
+
 		<!-- How many pixels from each direction should we offset the drawing area -->
-		<setting name="OffsetBottom" value="0" />
+		<setting name="OffsetBottom" value="20" />
 		<setting name="OffsetLeft" value="10" />
 		<setting name="OffsetRight" value="10" />
-		<setting name="OffsetTop" value="0" />
+		<setting name="OffsetTop" value="10" />
 
 		<!-- Path to VLC libraries -->
 		<setting name="VlcPath" value="C:\Program Files\Media\VLC" />
 
 		<!-- Background color -->
 		<setting name="BackgroundColor" value="#3E4382" />
-		
+
 		<!-- Foreground color -->
 		<setting name="ForegroundColor" value="#D3D3D3" />
-		
+
 		<!-- Color when selected -->
 		<setting name="SelectedColor" value="#FF4500" />
 
