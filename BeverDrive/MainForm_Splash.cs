@@ -134,7 +134,7 @@ namespace BeverDrive
 					}
 					catch (Exception ex)
 					{
-						lblSplash.Text += string.Format("failed ({0})... exiting\n", ex.Message);
+						lblSplash.Text += string.Format("failed\n({0})... exiting\n", ex.Message);
 						fail = true;
 						QuitWithError();
 					}
@@ -157,7 +157,7 @@ namespace BeverDrive
 		private void QuitWithError()
 		{
 			var t = new Timer();
-			t.Interval = 3000;
+			t.Interval = 4000;
 			t.Tick += new EventHandler(t_Tick);
 			t.Start();
 		}

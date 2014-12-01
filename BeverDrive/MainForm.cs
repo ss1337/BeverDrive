@@ -67,10 +67,10 @@ namespace BeverDrive
 			this.Timer1Hz.Tick += new EventHandler(Timer1Hz_Tick);
 			this.Timer1Hz.Start();
 
-			this.Timer50Hz = new Timer();
+			/*this.Timer50Hz = new Timer();
 			this.Timer50Hz.Interval = 20;
 			this.Timer50Hz.Tick += new EventHandler(Timer50Hz_Tick);
-			this.Timer50Hz.Start();
+			this.Timer50Hz.Start();*/
 
 			if (BeverDriveContext.Settings.HideCursor)
 				Cursor.Hide();
@@ -103,7 +103,7 @@ namespace BeverDrive
 
 		protected override void OnPaintBackground(PaintEventArgs e)
 		{
-			//base.OnPaintBackground(e);
+			base.OnPaintBackground(e);
 		}
 
 		protected void Ibus_OnValidMessage(object sender, BeverDrive.Ibus.ValidMessageRecievedEventArgs e)
