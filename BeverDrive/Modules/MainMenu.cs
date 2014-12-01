@@ -22,8 +22,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using BeverDrive.Gui.Controls;
 using BeverDrive.Core;
+using BeverDrive.Gui.Controls;
 using BeverDrive.Gui.Styles;
 
 namespace BeverDrive.Modules
@@ -31,18 +31,18 @@ namespace BeverDrive.Modules
 	[BackButtonVisible(false)]
 	public class MainMenu : AModule
 	{
-		private bool bluetoothEnabled;
+		private int gridLeft = 1;
+		private int gridTop = 2;
+		private int selectedIndex = 0;
+
 		private Label lbl_title;
-		private MetroidButton mb1;
-		private MetroidButton mb2;
-		private MetroidButton mb3;
-		private int selectedIndex;
+		private List<MetroidButton> buttons;
+		private List<string> buttonTypes;
 
 		public MainMenu()
 		{
-			this.bluetoothEnabled = BeverDriveContext.Settings.EnableBluetooth;
-			this.selectedIndex = 0;
-			this.CreateControls();
+			this.buttons = new List<MetroidButton>();
+			this.buttonTypes = new List<string>();
 		}
 
 		public override void OnCommand(ModuleCommandEventArgs e)
@@ -50,13 +50,19 @@ namespace BeverDrive.Modules
 			switch(e.Command)
 			{
 				case ModuleCommands.SelectClick:
-					this.SelectClick();
+					BeverDriveContext.SetActiveModule(this.buttonTypes[this.selectedIndex]);
 					break;
 				case ModuleCommands.SelectNext:
-					this.SelectNext();
+					if (selectedIndex < this.buttons.Count - 1)
+						selectedIndex++;
+
+					this.Update();
 					break;
 				case ModuleCommands.SelectPrevious:
-					this.SelectPrevious();
+					if (selectedIndex > 0)
+						selectedIndex--;
+
+					this.Update();
 					break;
 				case ModuleCommands.Show:
 					this.Show();
@@ -67,57 +73,15 @@ namespace BeverDrive.Modules
 			}
 		}
 
-		private void SelectClick()
-		{
-			switch (selectedIndex)
-			{
-				case 0:
-					mb1.PerformClick();
-					break;
-				case 1:
-					mb2.PerformClick();
-					break;
-				case 2:
-					mb3.PerformClick();
-					break;
-				default:
-					break;
-			}
-		}
-
-		private void SelectNext()
-		{
-			int maxIndex = 1;
-
-			if (bluetoothEnabled)
-				maxIndex = 2;
-
-			if (selectedIndex == maxIndex)
-				selectedIndex = maxIndex;
-			else
-				selectedIndex++;
-
-			this.Update();
-		}
-
-		private void SelectPrevious()
-		{
-			if (selectedIndex == 0)
-				selectedIndex = 0;
-			else
-				selectedIndex--;
-
-			this.Update();
-		}
-
 		private void Show()
 		{
+			// Check if there are any buttons loaded
+			if (this.buttons.Count == 0)
+				this.CreateControls();
+
+			// Add controls to the module container
+			this.buttons.Any(x => { BeverDriveContext.CurrentCoreGui.AddControl(x); return false; });
 			BeverDriveContext.CurrentCoreGui.AddControl(this.lbl_title);
-			BeverDriveContext.CurrentCoreGui.AddControl(this.mb1);
-			BeverDriveContext.CurrentCoreGui.AddControl(this.mb2);
-			
-			if (bluetoothEnabled)
-				BeverDriveContext.CurrentCoreGui.AddControl(this.mb3);
 
 			this.Update();
 		}
@@ -129,32 +93,46 @@ namespace BeverDrive.Modules
 
 		private void Update()
 		{
-			switch (selectedIndex)
-			{
-				case 0:
-					mb1.Selected = true;
-					mb2.Selected = false;
-					mb3.Selected = false;
-					break;
-				case 1:
-					mb1.Selected = false;
-					mb2.Selected = true;
-					mb3.Selected = false;
-					break;
-				case 2:
-					mb1.Selected = false;
-					mb2.Selected = false;
-					mb3.Selected = true;
-					break;
-				default:
-					break;
-			}
-
+			this.buttons.Any(x => { x.Selected = false; return false; });
+			this.buttons[this.selectedIndex].Selected = true;
+			BeverDriveContext.CurrentCoreGui.ClockContainer.Text = this.buttons[this.selectedIndex].Text;
+			BeverDriveContext.CurrentCoreGui.ClockContainer.Invalidate();
 			BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
+		}
+
+		private void CreateButton(string text, Type moduleType, string icon, string selectedIcon)
+		{
+			// Create and add button
+			var mb = new MetroidButton(icon, selectedIcon);
+			mb.GridLeft = gridLeft;
+			mb.GridTop = gridTop;
+			mb.Text = text;
+			this.buttons.Add(mb);
+			this.buttonTypes.Add(moduleType.Name);
+
+			// Increment grid
+			this.gridLeft += 6;
+			if (gridLeft > 13)
+			{
+				gridLeft = 1;
+				gridTop += 6;
+			}
 		}
 
 		private void CreateControls()
 		{
+			if (BeverDriveContext.LoadedModules.Any(x => x.GetType().Name == "Mp3Player"))
+				this.CreateButton("Music player", typeof(Mp3Player), "Resources\\music.png", "Resources\\music_s.png");
+
+			if (BeverDriveContext.LoadedModules.Any(x => x.GetType().Name == "VideoPlayer"))
+				this.CreateButton("Video player", typeof(VideoPlayer), "Resources\\video.png", "Resources\\video_s.png");
+
+			if (BeverDriveContext.LoadedModules.Any(x => x.GetType().Name == "Bluetooth"))
+				this.CreateButton("Video player", typeof(VideoPlayer), "Resources\\bluetooth.png", "Resources\\bluetooth_s.png");
+
+			if (BeverDriveContext.LoadedModules.Any(x => x.GetType().Name == "IbusDebug"))
+				this.CreateButton("Ibus debug", typeof(IbusDebug), "Resources\\bluetooth.png", "Resources\\bluetooth_s.png");
+
 			this.lbl_title = new Label();
 			this.lbl_title.Font = Fonts.GuiFont36;
 			this.lbl_title.ForeColor = Colors.SelectedColor;
@@ -162,42 +140,6 @@ namespace BeverDrive.Modules
 			this.lbl_title.Size = new System.Drawing.Size(400, 50);
 			this.lbl_title.Text = "BeverDrive";
 			this.lbl_title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-
-			this.mb1 = new MetroidButton("Resources\\music.png", "Resources\\music_s.png");
-			this.mb1.Name = "mm_mb1";
-			this.mb1.GridLeft = 1;
-			this.mb1.GridTop = 2;
-			this.mb1.Text = "Music";
-			this.mb1.Click += new EventHandler(mb1_Click);
-
-			this.mb2 = new MetroidButton("Resources\\video.png", "Resources\\video_s.png");
-			this.mb2.Name = "mm_mb2";
-			this.mb2.GridLeft = 7;
-			this.mb2.GridTop = 2;
-			this.mb2.Text = "Video";
-			this.mb2.Click += new EventHandler(mb2_Click);
-
-			this.mb3 = new MetroidButton("Resources\\bluetooth.png", "Resources\\bluetooth_s.png");
-			this.mb3.Name = "mm_mb3";
-			this.mb3.GridLeft = 13;
-			this.mb3.GridTop = 2;
-			this.mb3.Text = "Bluetooth";
-			this.mb3.Click += new EventHandler(mb3_Click);
-		}
-
-		protected void mb1_Click(object sender, EventArgs e)
-		{
-			BeverDriveContext.SetActiveModule("Mp3Player");
-		}
-
-		protected void mb2_Click(object sender, EventArgs e)
-		{
-			BeverDriveContext.SetActiveModule("VideoPlayer");
-		}
-
-		protected void mb3_Click(object sender, EventArgs e)
-		{
-			BeverDriveContext.SetActiveModule("Bluetooth");
 		}
 	}
 }
