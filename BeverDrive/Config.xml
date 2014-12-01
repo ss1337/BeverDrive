@@ -4,8 +4,12 @@
 		<!-- Which serial port is the IBUS interface connected to -->
 		<setting name="ComPort" value="COM1" />
 
+		<!-- Enable/disable Ibus, set this to false if you dont have a serial port
+		     and want to navigate with LEFT/RIGHT/SPACE -->
+		<setting name="EnableIbus" value="true" />
+
 		<!-- Don't enable bluetooth if you don't have a bluetooth device -->
-		<setting name="EnableBluetooth" value="true" />
+		<setting name="EnableBluetooth" value="false" />
 
 		<!-- Root directory of mp3's -->
 		<setting name="MusicRoot" value="D:\BeverDrive\Mp3" />

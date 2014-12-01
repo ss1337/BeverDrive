@@ -48,13 +48,8 @@ namespace BeverDrive.Core
 		{
 			LoadedModules = new List<IModule>();
 			Settings = new BeverDriveSettings();
-			Ibus = new BeverDrive.Ibus.IbusContext(Settings.ComPort);
-		}
-
-		public static void InitializeWithoutIbus()
-		{
-			LoadedModules = new List<IModule>();
-			Settings = new BeverDriveSettings();
+			if (Settings.EnableIbus)
+				Ibus = new BeverDrive.Ibus.IbusContext(Settings.ComPort);
 		}
 
 		public static bool FullScreen

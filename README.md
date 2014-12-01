@@ -3,6 +3,8 @@ BeverDrive
 
 Media application for BMWs, replacing the cd-changer menu. There are few pictures of it in action here: http://imgur.com/a/itsYs
 
+To try it out offline, use left/right arrows and space to simulate the right navigation knob
+
 In order to use it you need:
 * a BMW with Ibus (e38, e39, e46 for example) and navigation
 * a car PC

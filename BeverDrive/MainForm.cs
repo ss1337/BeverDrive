@@ -54,8 +54,11 @@ namespace BeverDrive
 				BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.Bluetooth());
 
 			// Init ibus
-			BeverDriveContext.Ibus.OnValidMessage += new BeverDrive.Ibus.ValidMessageEventHandler(Ibus_OnValidMessage);
-			BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Other.Cdc_Announce);
+			if (BeverDriveContext.Settings.EnableIbus)
+			{
+				BeverDriveContext.Ibus.OnValidMessage += new BeverDrive.Ibus.ValidMessageEventHandler(Ibus_OnValidMessage);
+				BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Other.Cdc_Announce);
+			}
 
 			BeverDriveContext.CurrentCoreGui.ClockContainer.Time = DateTime.Now.ToShortTimeString();
 			BeverDriveContext.CurrentCoreGui.ClockContainer.Date = DateTime.Now.ToString("yyyy-MM-dd");
@@ -76,36 +79,6 @@ namespace BeverDrive
 				Cursor.Hide();
 		}
 
-		//public void SetActiveModule(string moduleName)
-		//{
-		//    BeverDriveContext.SetActiveModule(moduleName);
-		//}
-
-		// Does not work with VLC
-		//protected override CreateParams CreateParams
-		//{
-		//    get
-		//    {
-		//        CreateParams cp = base.CreateParams;
-		//        cp.ExStyle |= 0x02000000;
-		//        return cp;
-		//    }
-		//}
-
-		protected override void OnPaint(PaintEventArgs e)
-		{
-			base.OnPaint(e);
-
-			// Paint any AOverlayModules visible
-			/*if (BeverDriveContext.LoadedModules != null)
-				BeverDriveContext.LoadedModules.OfType<AOverlayedModule>().Any(x => { if (x.Visible) { x.Paint(e.Graphics); } return false; });*/
-		}
-
-		protected override void OnPaintBackground(PaintEventArgs e)
-		{
-			base.OnPaintBackground(e);
-		}
-
 		protected void Ibus_OnValidMessage(object sender, BeverDrive.Ibus.ValidMessageRecievedEventArgs e)
 		{
 			if (this.InvokeRequired)
@@ -124,9 +97,6 @@ namespace BeverDrive
 
 		protected void Timer50Hz_Tick(object sender, EventArgs e)
 		{
-			//if (BeverDriveContext.ActiveModule != null)
-			//	BeverDriveContext.ActiveModule.Update50Hz();
-
 			BeverDriveContext.CurrentCoreGui.Update50Hz();
 		}
 
@@ -141,6 +111,20 @@ namespace BeverDrive
 
 			if (VlcContext.VizPlayer != null)
 				VlcContext.VideoPlayer.Dispose();
+		}
+
+		protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, Keys keyData)
+		{
+			if (keyData == Keys.Left)
+				BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectPrevious });
+
+			if (keyData == Keys.Right)
+				BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectNext });
+
+			if (keyData == Keys.Space)
+				BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectClick });
+
+			return base.ProcessCmdKey(ref msg, keyData);
 		}
 	}
 }
