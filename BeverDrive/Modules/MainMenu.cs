@@ -45,6 +45,13 @@ namespace BeverDrive.Modules
 			this.buttonTypes = new List<string>();
 		}
 
+		public override void Init()
+		{
+			// Check if there are any buttons loaded
+			if (this.buttons.Count == 0)
+				this.CreateControls();
+		}
+
 		public override void OnCommand(ModuleCommandEventArgs e)
 		{
 			switch(e.Command)
@@ -75,10 +82,6 @@ namespace BeverDrive.Modules
 
 		private void Show()
 		{
-			// Check if there are any buttons loaded
-			if (this.buttons.Count == 0)
-				this.CreateControls();
-
 			// Add controls to the module container
 			this.buttons.Any(x => { BeverDriveContext.CurrentCoreGui.AddControl(x); return false; });
 			BeverDriveContext.CurrentCoreGui.AddControl(this.lbl_title);
@@ -121,17 +124,29 @@ namespace BeverDrive.Modules
 
 		private void CreateControls()
 		{
-			if (BeverDriveContext.LoadedModules.Any(x => x.GetType().Name == "Mp3Player"))
-				this.CreateButton("Music player", typeof(Mp3Player), "Resources\\music.png", "Resources\\music_s.png");
+			foreach (var kvp in this.Settings)
+			{
+				if (kvp.Key.StartsWith("MenuItem"))
+					switch(kvp.Value)
+					{
+						case "BeverDrive.Modules.Mp3Player":
+							this.CreateButton("Music player", typeof(Mp3Player), "Resources\\music.png", "Resources\\music_s.png");
+							break;
 
-			if (BeverDriveContext.LoadedModules.Any(x => x.GetType().Name == "VideoPlayer"))
-				this.CreateButton("Video player", typeof(VideoPlayer), "Resources\\video.png", "Resources\\video_s.png");
+						case "BeverDrive.Modules.VideoPlayer":
+							this.CreateButton("Video player", typeof(VideoPlayer), "Resources\\video.png", "Resources\\video_s.png");
+							break;
 
-			if (BeverDriveContext.LoadedModules.Any(x => x.GetType().Name == "Bluetooth"))
-				this.CreateButton("Video player", typeof(VideoPlayer), "Resources\\bluetooth.png", "Resources\\bluetooth_s.png");
+						case "BeverDrive.Modules.Bluetooth":
+							this.CreateButton("Bluetooth", typeof(Bluetooth), "Resources\\bluetooth.png", "Resources\\bluetooth_s.png");
+							break;
 
-			if (BeverDriveContext.LoadedModules.Any(x => x.GetType().Name == "IbusDebug"))
-				this.CreateButton("Ibus debug", typeof(IbusDebug), "Resources\\bluetooth.png", "Resources\\bluetooth_s.png");
+						default:
+							Type t = Type.GetType(kvp.Value);
+							this.CreateButton(t.Name, t, "Resources\\bluetooth.png", "Resources\\bluetooth_s.png");
+							break;
+					}
+			}
 
 			this.lbl_title = new Label();
 			this.lbl_title.Font = Fonts.GuiFont36;

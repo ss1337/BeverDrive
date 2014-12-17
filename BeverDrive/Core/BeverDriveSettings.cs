@@ -28,9 +28,7 @@ namespace BeverDrive.Core
 	public class BeverDriveSettings
 	{
 		public string ComPort { get; private set; }
-		public bool EnableBluetooth { get; private set; }
 		public bool EnableIbus { get; private set; }
-		public bool EnableIbusDebug { get; private set; }
 		public string MusicFileTypes { get; private set; }
 		public string VideoFileTypes { get; private set; }
 		public string MusicRoot { get; private set; }
@@ -49,6 +47,8 @@ namespace BeverDrive.Core
 		public Color ClockBackgroundColor { get; set; }
 		public Color ClockForegroundColor { get; set; }
 
+		public List<string> Modules { get; set; }
+
 		public int DebugTrack { get; set; }
 
 		public BeverDriveSettings()
@@ -59,10 +59,9 @@ namespace BeverDrive.Core
 			xdoc.Load(xmlFile);
 			XmlNodeList nodes = xdoc.SelectNodes("//config/settings/setting");
 
+			this.Modules = new List<string>();
 			this.ComPort = this.ReadStringSetting("ComPort", nodes);
-			this.EnableBluetooth = this.ReadBoolSetting("EnableBluetooth", nodes);
 			this.EnableIbus = this.ReadBoolSetting("EnableIbus", nodes);
-			this.EnableIbusDebug = this.ReadBoolSetting("EnableIbusDebug", nodes);
 			this.MusicRoot = this.ReadStringSetting("MusicRoot", nodes);
 			this.VideoRoot = this.ReadStringSetting("VideoRoot", nodes);
 			this.MusicFileTypes = this.ReadStringSetting("MusicFileTypes", nodes);
@@ -82,6 +81,50 @@ namespace BeverDrive.Core
 			this.SelectedColor = this.ReadColorSetting("SelectedColor", nodes);
 			this.ClockBackgroundColor = this.ReadColorSetting("ClockBackgroundColor", nodes);
 			this.ClockForegroundColor = this.ReadColorSetting("ClockForegroundColor", nodes);
+
+			// Parse module list
+			XmlNodeList moduleNodes = xdoc.SelectNodes("//config/modules/module");
+			foreach (XmlNode xn in moduleNodes)
+			{
+				var mn = (XmlAttribute)xn.Attributes.GetNamedItem("name");
+				this.Modules.Add(mn.Value);
+			}
+		}
+
+		/// <summary>
+		/// Reads settings for a module, if they exist
+		/// </summary>
+		/// <param name="moduleName">Complete type name of module, e g BeverDrive.Modules.MainModule</param>
+		/// <returns></returns>
+		public IEnumerable<KeyValuePair<string, string>> ReadModuleSettings(string moduleName)
+		{
+			var result = new List<KeyValuePair<string, string>>();
+
+			String xmlFile = "Config.xml";
+			XmlDocument xdoc = new XmlDocument();
+			xdoc.Load(xmlFile);
+
+			XmlNodeList moduleNodes = xdoc.SelectNodes("//config/modules/module");
+			foreach (XmlNode xn in moduleNodes)
+			{
+				var mn = (XmlAttribute)xn.Attributes.GetNamedItem("name");
+				if (mn.Value == moduleName)
+				{
+					foreach (XmlNode xs in xn.ChildNodes)
+					{
+						if (xs.Name.ToLower() == "setting")
+						{
+							XmlAttribute attrName = (XmlAttribute)xs.Attributes.GetNamedItem("name");
+							XmlAttribute attrValue = (XmlAttribute)xs.Attributes.GetNamedItem("value");
+							result.Add(new KeyValuePair<string, string>(attrName.Value, attrValue.Value));
+						}
+					}
+
+					break;
+				}
+			}
+
+			return result;
 		}
 
 		private bool ReadBoolSetting(String name, XmlNodeList nodes)

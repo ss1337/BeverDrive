@@ -141,8 +141,10 @@ namespace BeverDrive
 				}
 			}
 
+			// TODO: Check modules loaded here...
+
 			// Check bluetooth support if it's enabled
-			if (!fail)
+			/*if (!fail)
 			{
 				if (bs.EnableBluetooth)
 				{
@@ -160,7 +162,7 @@ namespace BeverDrive
 				}
 				else
 					lblSplash.Text += "done\nBluetooth disabled";
-			}
+			}*/
 
 			this.Invalidate();
 

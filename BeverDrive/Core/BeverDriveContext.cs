@@ -69,6 +69,22 @@ namespace BeverDrive.Core
 			}
 		}
 
+		public static void LoadModules()
+		{
+			if (BeverDriveContext.Settings == null)
+				throw new Exception("Run Initialize first");
+
+			// Load modules according to the ones defined in Config.xml
+			foreach (var modName in BeverDriveContext.Settings.Modules)
+			{
+				Type modType = Type.GetType(modName);
+				AModule mod = (AModule)Activator.CreateInstance(modType);
+				mod.Settings = BeverDriveContext.Settings.ReadModuleSettings(modName);
+				mod.Init();
+				BeverDriveContext.LoadedModules.Add(mod);
+			}
+		}
+
 		public static void SetActiveModule(string moduleName)
 		{
 			bool backButtonVisible = false;

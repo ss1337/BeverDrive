@@ -1,5 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <config>
+	<modules>
+		<!-- Modules to load, some modules are dependent on others 
+		     They are loaded in the order which they appear here
+		     CoreGui and MainMenu are essential, should not be removed -->
+		<module name="BeverDrive.Modules.CoreGui" />
+		<module name="BeverDrive.Modules.MainMenu">
+			<!-- Main menu items goes here -->
+			<setting name ="MenuItem1" value="BeverDrive.Modules.Mp3Player" />
+			<setting name ="MenuItem2" value="BeverDrive.Modules.VideoPlayer" />
+			<setting name ="MenuItem3" value="BeverDrive.Modules.NubblesModule" />
+		</module>
+		<module name="BeverDrive.Modules.Mp3Player" />
+		<module name="BeverDrive.Modules.VideoPlayer" />
+		<module name="BeverDrive.Modules.NubblesModule" />
+
+		<!-- The bluetooth module requires a bluetooth interface -->
+		<!-- <module name="BeverDrive.Modules.Bluetooth" /> -->
+
+		<!-- This module is not necessary for normal operation -->
+		<module name="BeverDrive.Modules.IbusDebug" />
+	</modules>
+
 	<settings>
 		<!-- Which serial port is the IBUS interface connected to -->
 		<setting name="ComPort" value="COM1" />
@@ -7,12 +29,6 @@
 		<!-- Enable/disable Ibus, set this to false if you dont have a serial port
 		     and want to navigate with LEFT/RIGHT/SPACE -->
 		<setting name="EnableIbus" value="true" />
-
-		<!-- Enable ibus debug module? Usually false -->
-		<setting name="EnableIbusDebug" value="true" />
-
-		<!-- Don't enable bluetooth if you don't have a bluetooth device -->
-		<setting name="EnableBluetooth" value="false" />
 
 		<!-- Root directory of mp3's -->
 		<setting name="MusicRoot" value="D:\BeverDrive\Mp3" />

@@ -45,14 +45,7 @@ namespace BeverDrive
 			BeverDriveContext.Initialize();
 			VlcContext.Initialize(BeverDriveContext.Settings.VlcPath);
 			BeverDriveContext.CurrentMainForm = this;
-			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.CoreGui());
-			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.MainMenu());
-			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.Mp3Player());
-			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.VideoPlayer());
-			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.NubblesModule());
-
-			if (BeverDriveContext.Settings.EnableBluetooth)
-				BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.Bluetooth());
+			BeverDriveContext.LoadModules();
 
 			// Init ibus
 			if (BeverDriveContext.Settings.EnableIbus)
@@ -60,9 +53,6 @@ namespace BeverDrive
 				BeverDriveContext.Ibus.OnValidMessage += new BeverDrive.Ibus.ValidMessageEventHandler(Ibus_OnValidMessage);
 				BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Other.Cdc_Announce);
 			}
-
-			if (BeverDriveContext.Settings.EnableIbusDebug)
-				BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.IbusDebug());
 
 			BeverDriveContext.CurrentCoreGui.ClockContainer.Time = DateTime.Now.ToShortTimeString();
 			BeverDriveContext.CurrentCoreGui.ClockContainer.Date = DateTime.Now.ToString("yyyy-MM-dd");
@@ -119,6 +109,9 @@ namespace BeverDrive
 
 		protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, Keys keyData)
 		{
+			if (BeverDriveContext.ActiveModule == null)
+				return base.ProcessCmdKey(ref msg, keyData);
+
 			// Emulating volume knob, probably isn't used that often
 			if (keyData == Keys.A)
 				BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { IbusData = BeverDrive.Ibus.Messages.Predefined.BordMonitor.LeftKnobLeft(1).ToString() });
