@@ -100,6 +100,7 @@ namespace BeverDrive.Modules
 						this.ctrlGame.GameState.Player1.TurnRight();
 						break;
 					case ModuleCommands.Show:
+						BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
 						this.ShowControls();
 						this.ctrlGame.Visible = true;
 						this.SelectedIndex = 0;
