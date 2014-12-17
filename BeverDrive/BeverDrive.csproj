@@ -226,9 +226,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Resources\background.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Resources\bluetooth.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
