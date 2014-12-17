@@ -247,6 +247,12 @@
     <Content Include="Resources\music_s.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\nubbles.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\nubbles_s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\play.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
