@@ -152,7 +152,6 @@
     <Compile Include="Modules\CoreGui.cs" />
     <Compile Include="Modules\GraphicBrowserTest.cs" />
     <Compile Include="Modules\IbusDebug.cs" />
-    <Compile Include="Modules\IModule.cs" />
     <Compile Include="Modules\MainMenu.cs" />
     <Compile Include="Modules\ModuleCommands.cs" />
     <Compile Include="Modules\Mp3Player.cs" />

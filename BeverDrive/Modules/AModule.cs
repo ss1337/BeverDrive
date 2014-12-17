@@ -27,8 +27,11 @@ using BeverDrive.Gui.Controls;
 
 namespace BeverDrive.Modules
 {
-	public class AModule : IModule
+	public class AModule
 	{
+		/// <summary>
+		/// Settings for this module
+		/// </summary>
 		public IEnumerable<KeyValuePair<string, string>> Settings { get; set; }
 
 		/// <summary>
@@ -38,8 +41,15 @@ namespace BeverDrive.Modules
 		/// </summary>
 		public virtual void Init() { }
 
+		/// <summary>
+		/// Command event handler
+		/// </summary>
+		/// <param name="e"></param>
 		public virtual void OnCommand(ModuleCommandEventArgs e) { }
 
+		/// <summary>
+		/// Shows all AGraphicControl
+		/// </summary>
 		public void ShowControls()
 		{
 			// Reflection to show all the controls, oh yes
@@ -61,8 +71,14 @@ namespace BeverDrive.Modules
 
 		public virtual void ProcessMessage(string message) { }
 
+		/// <summary>
+		/// Is executed every tick of the 1Hz timer
+		/// </summary>
 		public virtual void Update1Hz() { }
 
+		/// <summary>
+		/// Is executed every tick of the 50Hz timer
+		/// </summary>
 		public virtual void Update50Hz() { }
 	}
 }

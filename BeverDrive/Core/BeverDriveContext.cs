@@ -35,9 +35,9 @@ namespace BeverDrive.Core
 		public static System.Windows.Forms.Form CurrentMainForm { get; set; }
 		public static bool RtsEnabled { get; set; }
 		public static BeverDriveSettings Settings { get; set; }
-		public static IModule ActiveModule { get; set; }
-		public static IModule PlaybackModule { get; set; }
-		public static List<IModule> LoadedModules { get; set; }
+		public static AModule ActiveModule { get; set; }
+		public static AModule PlaybackModule { get; set; }
+		public static List<AModule> LoadedModules { get; set; }
 		public static IbusContext Ibus { get; set; }
 
 		static BeverDriveContext()
@@ -46,7 +46,7 @@ namespace BeverDrive.Core
 
 		public static void Initialize()
 		{
-			LoadedModules = new List<IModule>();
+			LoadedModules = new List<AModule>();
 			Settings = new BeverDriveSettings();
 			if (Settings.EnableIbus)
 				Ibus = new BeverDrive.Ibus.IbusContext(Settings.ComPort);
@@ -58,14 +58,11 @@ namespace BeverDrive.Core
 			set
 			{
 				fullScreen = value;
+
 				if (fullScreen)
-				{
 					BeverDriveContext.CurrentCoreGui.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.Hide });
-				}
 				else
-				{
 					BeverDriveContext.CurrentCoreGui.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.Show });
-				}
 			}
 		}
 
@@ -91,7 +88,7 @@ namespace BeverDrive.Core
 			bool playbackModule = false;
 			var currentCoreGui = LoadedModules.OfType<CoreGui>().FirstOrDefault();
 
-			IModule module = BeverDriveContext.LoadedModules.Find(x => { return x.GetType().Name.Equals(moduleName); });
+			AModule module = BeverDriveContext.LoadedModules.Find(x => { return x.GetType().Name.Equals(moduleName); });
 
 			if (module == null)
 				return;
@@ -101,20 +98,14 @@ namespace BeverDrive.Core
 			foreach (object attrib in module.GetType().GetCustomAttributes(false))
 			{
 				if (attrib is BackButtonVisibleAttribute)
-				{
 					backButtonVisible = ((BackButtonVisibleAttribute)attrib).BackButtonVisible;
-				}
 
 				if (attrib is PlaybackModuleAttribute)
-				{
 					playbackModule = true;
-				}
 			}
 
 			if (BeverDriveContext.ActiveModule != null)
-			{
 				BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.Hide });
-			}
 
 			BeverDriveContext.ActiveModule = module;
 			BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.Show });
@@ -124,7 +115,6 @@ namespace BeverDrive.Core
 			// set PlaybackModule here
 			if (playbackModule)
 				BeverDriveContext.PlaybackModule = module;
-
 
 			if (backButtonVisible)
 			{
