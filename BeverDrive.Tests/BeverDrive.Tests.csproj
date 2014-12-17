@@ -59,6 +59,10 @@
     <Compile Include="Core\PlaylistTests.cs" />
     <Compile Include="IbusTests.cs" />
     <Compile Include="Modules\MainMenuTests.cs" />
+    <Compile Include="Modules\Nubbles\GameStateTests.cs" />
+    <Compile Include="Modules\Nubbles\LevelLibraryTests.cs" />
+    <Compile Include="Modules\Nubbles\NubblesModuleTests.cs" />
+    <Compile Include="Modules\Nubbles\PlayerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

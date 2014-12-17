@@ -115,6 +115,12 @@
     <Compile Include="Gui\Controls\GraphicsPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Gui\Controls\NubblesControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Gui\Controls\OverlayedMenu.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Gui\Controls\ProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -150,6 +156,12 @@
     <Compile Include="Modules\MainMenu.cs" />
     <Compile Include="Modules\ModuleCommands.cs" />
     <Compile Include="Modules\Mp3Player.cs" />
+    <Compile Include="Modules\NubblesModule.cs" />
+    <Compile Include="Modules\Nubbles\Level.cs" />
+    <Compile Include="Modules\Nubbles\LevelLibrary.cs" />
+    <Compile Include="Modules\Nubbles\Player.cs" />
+    <Compile Include="Modules\Nubbles\GameState.cs" />
+    <Compile Include="Modules\Nubbles_Controls.cs" />
     <Compile Include="Modules\VideoPlayer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

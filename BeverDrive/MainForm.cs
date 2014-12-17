@@ -49,6 +49,7 @@ namespace BeverDrive
 			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.MainMenu());
 			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.Mp3Player());
 			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.VideoPlayer());
+			BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.NubblesModule());
 
 			if (BeverDriveContext.Settings.EnableBluetooth)
 				BeverDriveContext.LoadedModules.Add(new BeverDrive.Modules.Bluetooth());
@@ -118,6 +119,17 @@ namespace BeverDrive
 
 		protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, Keys keyData)
 		{
+			// Emulating volume knob, probably isn't used that often
+			if (keyData == Keys.A)
+				BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { IbusData = BeverDrive.Ibus.Messages.Predefined.BordMonitor.LeftKnobLeft(1).ToString() });
+
+			if (keyData == Keys.S)
+				BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { IbusData = BeverDrive.Ibus.Messages.Predefined.BordMonitor.LeftKnobPush().ToString() });
+
+			if (keyData == Keys.D)
+				BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { IbusData = BeverDrive.Ibus.Messages.Predefined.BordMonitor.LeftKnobRight(1).ToString() });
+
+			// Emulating right knob using left arrow/right arrow/space
 			if (keyData == Keys.Left)
 				BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectPrevious });
 

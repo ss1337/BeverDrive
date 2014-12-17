@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2014 Sebastian Sjödin
+// Copyright 2014 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -19,28 +19,23 @@
 // ============================================================================
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
-namespace BeverDrive.Modules
+namespace BeverDrive.Modules.Nubbles
 {
-	public class ModuleCommandEventArgs : EventArgs
+	public class Level
 	{
-		public ModuleCommands Command { get; set; }
-		public string IbusData { get; set; }
-	}
+		public string Name { get; set; }
+		public List<Point> Walls { get; set; }
+		public int Player1Heading { get; set; }
+		public int Player2Heading { get; set; }
+		public Point Player1Start { get; set; }
+		public Point Player2Start { get; set; }
 
-	public enum ModuleCommands : int
-	{
-		Show = 1,
-		Hide = 2,
-		NextTrack = 3,
-		PreviousTrack = 4,
-		SelectClick = 5,
-		SelectNext = 6,
-		SelectPrevious = 7,
-		StartPlayback = 8,
-		StopPlayback = 9,
-		Update = 10
+		public Level()
+		{
+		}
 	}
 }
