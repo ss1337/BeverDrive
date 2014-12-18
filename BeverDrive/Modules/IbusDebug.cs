@@ -30,13 +30,13 @@ namespace BeverDrive.Modules
 	[BackButtonVisible(true)]
 	public class IbusDebug : AModule
 	{
-		private bool logging;
-		private bool rts;
+		public bool Logging;
+		public bool Rts;
 
-		private Label title;
-		private Label log;
-		private TextButton button1;
-		private TextButton button2;
+		public Label title;
+		public Label log;
+		public TextButton button1;
+		public TextButton button2;
 
 		public int SelectedIndex { get; set; }
 
@@ -66,7 +66,7 @@ namespace BeverDrive.Modules
 			this.button1.ForeColor = Colors.ForeColor;
 			this.button1.Location = new System.Drawing.Point(16, 90);
 			this.button1.Size = new System.Drawing.Size(200, 24);
-			this.button1.Text = "Start/stop logging";
+			this.button1.Text = "Start/stop Logging";
 
 			this.button2 = new TextButton();
 			this.button2.Font = Fonts.GuiFont14;
@@ -128,7 +128,7 @@ namespace BeverDrive.Modules
 
 		public override void ProcessMessage(string message)
 		{
-			if (logging)
+			if (this.Logging)
 			{
 				this.log.Text += message + Environment.NewLine;
 			}
@@ -148,10 +148,10 @@ namespace BeverDrive.Modules
 					break;
 
 				case 0:
-					this.logging = !this.logging;
+					this.Logging = !this.Logging;
 
-					// Clear log on start of logging
-					if (this.logging)
+					// Clear log on start of Logging
+					if (this.Logging)
 						this.log.Text = "";
 
 					break;
@@ -167,8 +167,8 @@ namespace BeverDrive.Modules
 		{
 			BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
 			this.button1.Selected = true;
-			this.logging = false;
-			this.rts = false;
+			this.Logging = false;
+			this.Rts = false;
 			this.SelectedIndex = 0;
 			this.ShowControls();
 		}
@@ -176,7 +176,7 @@ namespace BeverDrive.Modules
 		private void Hide()
 		{
 			BeverDriveContext.CurrentCoreGui.ClearModuleContainer();
-			this.logging = false;
+			this.Logging = false;
 		}
 	}
 }

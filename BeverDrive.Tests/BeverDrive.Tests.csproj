@@ -58,6 +58,7 @@
     <Compile Include="Core\GraphicsExtensionsTests.cs" />
     <Compile Include="Core\PlaylistTests.cs" />
     <Compile Include="IbusTests.cs" />
+    <Compile Include="Modules\IbusDebugTests.cs" />
     <Compile Include="Modules\MainMenuTests.cs" />
     <Compile Include="Modules\Nubbles\GameStateTests.cs" />
     <Compile Include="Modules\Nubbles\LevelLibraryTests.cs" />
