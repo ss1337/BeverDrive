@@ -21,9 +21,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NUnit.Framework;
 using BeverDrive.Core;
 using BeverDrive.Modules;
+using NUnit.Framework;
 
 namespace BeverDrive.Tests.Modules.Nubbles
 {
