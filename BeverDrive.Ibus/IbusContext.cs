@@ -91,8 +91,6 @@ namespace BeverDrive.Ibus
 
 				this.ms = new Sender(this.comport);
 
-				// Fire init event
-				//this.OnInit(this, new EventArgs());
 				this.CurrentMode = Mode.Tape;
 			}
 		}
@@ -122,18 +120,6 @@ namespace BeverDrive.Ibus
 		{
 			this.Send(m.GetMessageAsByteArray());
 			return m.ToString();
-			//if (this.comport != null)
-			//{
-			//    this.comport.Write(m.GetMessageByteArray(), 0, m.Length + 2);
-
-			//    // Retry?
-			//    while (this.comport.BytesToWrite > 0)
-			//        this.comport.Write(m.GetMessageByteArray(), 0, m.Length + 2);
-
-			//    return m.ToString();
-			//}
-			//else
-			//    return "No COM port initialized";
 		}
 
 		public String Send(byte[] msg)
@@ -150,19 +136,6 @@ namespace BeverDrive.Ibus
 			}
 			else
 				return "No COM port initialized";
-
-			//if (this.comport != null)
-			//{
-			//    this.comport.Write(msg, 0, msg.Length);
-
-			//    // Retry?
-			//    while (this.comport.BytesToWrite > 0)
-			//        this.comport.Write(msg, 0, msg.Length);
-
-			//    return Strings.ByteArrayToString(msg, msg.Length);
-			//}
-			//else
-			//    return "No COM port initialized";
 		}
 
 		public void SendInvalidData()
@@ -191,7 +164,13 @@ namespace BeverDrive.Ibus
 				this.MessageLog.RemoveAt(0);
 
 			this.MessageLog.Add(new KeyValuePair<long, string>(DateTime.Now.Ticks, e.Message));
-			this.OnValidMessage(this, new ValidMessageRecievedEventArgs(this.CurrentMode, e.Message));
+			
+			// Don't fire event if there isn't an event handler associated
+			if (this.OnValidMessage != null)
+			{
+				this.OnValidMessage(this, new ValidMessageRecievedEventArgs(this.CurrentMode, e.Message));
+			}
+
 			this.mr.Reset();
 		}
 	}
