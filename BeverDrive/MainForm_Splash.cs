@@ -84,6 +84,35 @@ namespace BeverDrive
 				}
 			}
 
+			// Check for Webdings
+			if (!fail)
+			{
+				lblSplash.Text += "done\nChecking for Webdings font... ";
+				Font f = new Font("Webdings", 28f, FontStyle.Bold);
+
+				if (f.Name != "Webdings")
+				{
+					lblSplash.Text += string.Format("does not exist ({0})... exiting\n");
+					fail = true;
+					QuitWithError();
+				}
+			}
+
+			// Check for Wingdings 3
+			if (!fail)
+			{
+				lblSplash.Text += "done\nChecking for Wingdings 3 font... ";
+				Font f = new Font("Wingdings 3", 28f, FontStyle.Bold);
+
+				if (f.Name != "Wingdings 3")
+				{
+					lblSplash.Text += string.Format("does not exist ({0})... exiting\n");
+					fail = true;
+					QuitWithError();
+				}
+			}
+
+
 			// Check com port
 			if (!fail)
 			{
