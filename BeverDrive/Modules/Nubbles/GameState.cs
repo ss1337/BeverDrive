@@ -218,7 +218,7 @@ namespace BeverDrive.Modules.Nubbles
 			Player1.Reset("Player 1");
 			Player1.Reset("Player 2");
 			NumberOfPlayers = numPlayers;
-			this.StartLevel(BeverDrive.Modules.Nubbles.LevelLibrary.GetLevel9());
+			this.StartLevel(BeverDrive.Modules.Nubbles.LevelLibrary.GetLevel1());
 		}
 
 		public void WaitForClick(string text)
