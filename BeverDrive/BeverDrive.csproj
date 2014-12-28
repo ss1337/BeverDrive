@@ -130,6 +130,7 @@
     <Compile Include="Gui\Controls\WebDingsButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Gui\CoreGui.cs" />
     <Compile Include="Gui\Styles\Brushes.cs" />
     <Compile Include="Gui\Styles\Colors.cs" />
     <Compile Include="Gui\Styles\Fonts.cs" />
@@ -149,7 +150,6 @@
     <Compile Include="Modules\Attributes.cs" />
     <Compile Include="Modules\Bluetooth.cs" />
     <Compile Include="Modules\Bluetooth_Devices.cs" />
-    <Compile Include="Modules\CoreGui.cs" />
     <Compile Include="Modules\GraphicBrowserTest.cs" />
     <Compile Include="Modules\IbusDebug.cs" />
     <Compile Include="Modules\MainMenu.cs" />

@@ -3,8 +3,8 @@
 	<modules>
 		<!-- Modules to load, some modules are dependent on others 
 		     They are loaded in the order which they appear here
-		     CoreGui and MainMenu are essential, should not be removed -->
-		<module name="BeverDrive.Modules.CoreGui" />
+		     MainMenu is essential, should not be removed -->
+		<module name="BeverDrive.Modules.ASdf" />
 		<module name="BeverDrive.Modules.MainMenu">
 			<!-- Main menu items goes here -->
 			<setting name ="MenuItem1" value="BeverDrive.Modules.Mp3Player" />
@@ -50,7 +50,7 @@
 		<setting name="OffsetTop" value="10" />
 
 		<!-- Path to VLC libraries -->
-		<setting name="VlcPath" value="C:\Program Files\Media\VLC" />
+		<setting name="VlcPath" value="C:\Program Files\Media\vlc-2.1.5" />
 
 		<!-- Background color -->
 		<setting name="BackgroundColor" value="#3E4382" />

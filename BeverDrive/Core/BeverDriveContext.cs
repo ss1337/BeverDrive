@@ -28,10 +28,11 @@ namespace BeverDrive.Core
 {
 	public static class BeverDriveContext
 	{
-		private static CoreGui currentCoreGui;
+		private static BeverDrive.Gui.CoreGui currentCoreGui;
 		private static bool fullScreen;
 
-		public static CoreGui CurrentCoreGui { get { if (currentCoreGui == null) { currentCoreGui = LoadedModules.OfType<CoreGui>().FirstOrDefault(); } return currentCoreGui; } }
+		//public static BeverDrive.Gui.CoreGui CurrentCoreGui { get { if (currentCoreGui == null) { currentCoreGui = LoadedModules.OfType<CoreGui>().FirstOrDefault(); } return currentCoreGui; } }
+		public static BeverDrive.Gui.CoreGui CurrentCoreGui { get; set; }
 		public static System.Windows.Forms.Form CurrentMainForm { get; set; }
 		public static bool RtsEnabled { get; set; }
 		public static BeverDriveSettings Settings { get; set; }
@@ -50,6 +51,8 @@ namespace BeverDrive.Core
 			Settings = new BeverDriveSettings();
 			if (Settings.EnableIbus)
 				Ibus = new BeverDrive.Ibus.IbusContext(Settings.ComPort);
+
+			CurrentCoreGui = new BeverDrive.Gui.CoreGui();
 		}
 
 		public static bool FullScreen
@@ -69,16 +72,19 @@ namespace BeverDrive.Core
 		public static void LoadModules()
 		{
 			if (BeverDriveContext.Settings == null)
-				throw new Exception("Run Initialize first");
+				throw new Exception("Run Initialize() first");
 
 			// Load modules according to the ones defined in Config.xml
 			foreach (var modName in BeverDriveContext.Settings.Modules)
 			{
 				Type modType = Type.GetType(modName);
-				AModule mod = (AModule)Activator.CreateInstance(modType);
-				mod.Settings = BeverDriveContext.Settings.ReadModuleSettings(modName);
-				mod.Init();
-				BeverDriveContext.LoadedModules.Add(mod);
+				if (modType != null)
+				{
+					AModule mod = (AModule)Activator.CreateInstance(modType);
+					mod.Settings = BeverDriveContext.Settings.ReadModuleSettings(modName);
+					mod.Init();
+					BeverDriveContext.LoadedModules.Add(mod);
+				}
 			}
 		}
 
@@ -86,7 +92,6 @@ namespace BeverDrive.Core
 		{
 			bool backButtonVisible = false;
 			bool playbackModule = false;
-			var currentCoreGui = LoadedModules.OfType<CoreGui>().FirstOrDefault();
 
 			AModule module = BeverDriveContext.LoadedModules.Find(x => { return x.GetType().Name.Equals(moduleName); });
 
@@ -118,12 +123,12 @@ namespace BeverDrive.Core
 
 			if (backButtonVisible)
 			{
-				currentCoreGui.BackButton.Visible = true;
-				currentCoreGui.ModuleContainer.GraphicControls.Add(currentCoreGui.BackButton);
+				CurrentCoreGui.BackButton.Visible = true;
+				CurrentCoreGui.ModuleContainer.GraphicControls.Add(CurrentCoreGui.BackButton);
 			}
 			else
 			{
-				currentCoreGui.BackButton.Visible = false;
+				CurrentCoreGui.BackButton.Visible = false;
 			}
 		}
 	}
