@@ -84,8 +84,7 @@ namespace BeverDrive.Modules
 		{
 			// Add controls to the module container
 			this.buttons.Any(x => { BeverDriveContext.CurrentCoreGui.AddControl(x); return false; });
-			BeverDriveContext.CurrentCoreGui.AddControl(this.lbl_title);
-
+			this.ShowControls();
 			this.Update();
 		}
 

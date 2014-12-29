@@ -102,7 +102,6 @@ namespace BeverDrive.Modules
 					case ModuleCommands.Show:
 						BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
 						this.ShowControls();
-						this.ctrlGame.Visible = true;
 						this.SelectedIndex = 0;
 						ctrlGame.GameState.Walls = BeverDrive.Modules.Nubbles.LevelLibrary.Walls();
 						gameTimer.Start();

@@ -102,9 +102,6 @@ namespace BeverDrive.Core
 			// Check for attributes on that module
 			foreach (object attrib in module.GetType().GetCustomAttributes(false))
 			{
-				if (attrib is BackButtonVisibleAttribute)
-					backButtonVisible = ((BackButtonVisibleAttribute)attrib).BackButtonVisible;
-
 				if (attrib is PlaybackModuleAttribute)
 					playbackModule = true;
 			}
@@ -121,15 +118,6 @@ namespace BeverDrive.Core
 			if (playbackModule)
 				BeverDriveContext.PlaybackModule = module;
 
-			if (backButtonVisible)
-			{
-				CurrentCoreGui.BackButton.Visible = true;
-				CurrentCoreGui.ModuleContainer.GraphicControls.Add(CurrentCoreGui.BackButton);
-			}
-			else
-			{
-				CurrentCoreGui.BackButton.Visible = false;
-			}
 		}
 	}
 }

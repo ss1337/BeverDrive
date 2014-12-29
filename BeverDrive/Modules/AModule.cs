@@ -67,6 +67,14 @@ namespace BeverDrive.Modules
 						BeverDriveContext.CurrentCoreGui.AddControl(ctrl);
 				}
 			}
+
+			// Reflection to show backbutton
+			foreach (object attrib in this.GetType().GetCustomAttributes(false))
+			{
+				if (attrib is BackButtonVisibleAttribute)
+					if (((BackButtonVisibleAttribute)attrib).BackButtonVisible)
+						BeverDriveContext.CurrentCoreGui.AddControl(BeverDriveContext.CurrentCoreGui.BackButton);
+			}
 		}
 
 		public virtual void ProcessMessage(string message) { }
