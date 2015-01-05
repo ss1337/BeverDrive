@@ -22,7 +22,7 @@ How to Use
 * Remove the cd changer
 * Connect the PC's power supply to 12V, ignition and GND
 * Connect the audio output from the computer to the cd changer audio, fabricating a custom cable may be necessary
-* Connect the Ibus interface to the car's Ibus wire, (it's a white one)
+* Connect the Ibus interface: Ibus -> Ibus wire, RTS -> back camera on, 12V -> 12V and GND -> GND
 * Connect the VGA->composite adapter to the back camera input
 * Set BeverDrive to autostart when windows start
 * When BeverDrive is running and everything is connected, press Mode to change to cd changer mode, the display should switch to the computer display
