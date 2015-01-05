@@ -131,6 +131,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Gui\CoreGui.cs" />
+    <Compile Include="Gui\ICoreGui.cs" />
     <Compile Include="Gui\Styles\Brushes.cs" />
     <Compile Include="Gui\Styles\Colors.cs" />
     <Compile Include="Gui\Styles\Fonts.cs" />

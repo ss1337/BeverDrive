@@ -29,12 +29,15 @@ using BeverDrive.Modules;
 
 namespace BeverDrive.Gui
 {
-	public class CoreGui
+	public class CoreGui : ICoreGui
 	{
-		public Panel BaseContainer;								// Adjust this to fit everything to screen
-		public BackButton BackButton;
-		public ClockPanel ClockContainer;						// Contains lower portion with date/time and maybe text
-		public GraphicsPanel ModuleContainer;					// All module controls goes into here
+		public Panel BaseContainer { get; set; }								// Adjust this to fit everything to screen
+		public ClockPanel ClockContainer { get; set; }						// Contains lower portion with date/time and maybe text
+		public GraphicsPanel ModuleContainer { get; set; }					// All module controls goes into here
+
+		public BackButton BackButton { get; set; }
+
+		public Size BaseAreaSize { get { return this.BaseContainer.Size; } }
 
 		public Size ModuleAreaSize { get { return this.ModuleContainer.Size; } }
 
@@ -67,7 +70,7 @@ namespace BeverDrive.Gui
 		/// Adds ctrl to module container
 		/// </summary>
 		/// <param name="ctrl"></param>
-		public void AddControl(Control ctrl)
+		public void AddControl(AGraphicsControl ctrl)
 		{
 			this.ModuleContainer.GraphicControls.Add((AGraphicsControl)ctrl);
 		}
@@ -86,6 +89,15 @@ namespace BeverDrive.Gui
 		public void ClearModuleContainer()
 		{
 			this.ModuleContainer.GraphicControls.Clear();
+		}
+
+		/// <summary>
+		/// Trigger redraw
+		/// </summary>
+		public void Invalidate()
+		{
+			this.ClockContainer.Invalidate();
+			this.ModuleContainer.Invalidate();
 		}
 
 		private void CreateControls()

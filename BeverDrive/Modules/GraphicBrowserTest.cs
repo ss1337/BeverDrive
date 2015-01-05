@@ -78,12 +78,12 @@ namespace BeverDrive.Modules
 					break;
 			}
 
-			BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
+			BeverDriveContext.CurrentCoreGui.Invalidate();
 		}
 
 		public override void Update1Hz()
 		{
-			BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
+			BeverDriveContext.CurrentCoreGui.Invalidate();
 		}
 
 		private void Show()

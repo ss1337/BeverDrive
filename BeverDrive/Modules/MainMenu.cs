@@ -98,8 +98,7 @@ namespace BeverDrive.Modules
 			this.buttons.Any(x => { x.Selected = false; return false; });
 			this.buttons[this.selectedIndex].Selected = true;
 			BeverDriveContext.CurrentCoreGui.ClockContainer.Text = this.buttons[this.selectedIndex].Text;
-			BeverDriveContext.CurrentCoreGui.ClockContainer.Invalidate();
-			BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
+			BeverDriveContext.CurrentCoreGui.Invalidate();
 		}
 
 		private void CreateButton(string text, Type moduleType, string icon, string selectedIcon)

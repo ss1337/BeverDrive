@@ -113,7 +113,7 @@ namespace BeverDrive.Modules
 					break;
 			}
 
-			BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
+			BeverDriveContext.CurrentCoreGui.Invalidate();
 		}
 
 		#region Command methods

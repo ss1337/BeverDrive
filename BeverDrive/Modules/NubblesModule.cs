@@ -59,7 +59,7 @@ namespace BeverDrive.Modules
 			if (ctrlGame.Visible && MenuState == MenuState.Playing)
 			{
 				ctrlGame.GameState.Update();
-				BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
+				BeverDriveContext.CurrentCoreGui.Invalidate();
 			}
 		}
 
@@ -99,12 +99,15 @@ namespace BeverDrive.Modules
 					case ModuleCommands.SelectNext:
 						this.ctrlGame.GameState.Player1.TurnRight();
 						break;
+
 					case ModuleCommands.Show:
 						BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
 						this.ShowControls();
+						this.ctrlGame.Visible = true;
 						this.SelectedIndex = 0;
 						ctrlGame.GameState.Walls = BeverDrive.Modules.Nubbles.LevelLibrary.Walls();
 						gameTimer.Start();
+						BeverDriveContext.CurrentCoreGui.Invalidate();
 						break;
 
 					case ModuleCommands.Hide:
@@ -131,7 +134,7 @@ namespace BeverDrive.Modules
 			ctrlMenu.Items.Add("Start");
 
 			BeverDriveContext.CurrentCoreGui.BackButton.Selected = (this.SelectedIndex == -1) ? true : false;
-			BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
+			BeverDriveContext.CurrentCoreGui.Invalidate();
 		}
 
 		private void ShowPlayingMenu()
@@ -142,7 +145,7 @@ namespace BeverDrive.Modules
 			ctrlMenu.Items.Add("Exit to menu");
 
 			BeverDriveContext.CurrentCoreGui.BackButton.Selected = (this.SelectedIndex == -1) ? true : false;
-			BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
+			BeverDriveContext.CurrentCoreGui.Invalidate();
 		}
 
 		private void SwitchMainMenu(ModuleCommands command)

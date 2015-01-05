@@ -28,11 +28,9 @@ namespace BeverDrive.Core
 {
 	public static class BeverDriveContext
 	{
-		private static BeverDrive.Gui.CoreGui currentCoreGui;
 		private static bool fullScreen;
 
-		//public static BeverDrive.Gui.CoreGui CurrentCoreGui { get { if (currentCoreGui == null) { currentCoreGui = LoadedModules.OfType<CoreGui>().FirstOrDefault(); } return currentCoreGui; } }
-		public static BeverDrive.Gui.CoreGui CurrentCoreGui { get; set; }
+		public static BeverDrive.Gui.ICoreGui CurrentCoreGui { get; set; }
 		public static System.Windows.Forms.Form CurrentMainForm { get; set; }
 		public static bool RtsEnabled { get; set; }
 		public static BeverDriveSettings Settings { get; set; }
@@ -111,7 +109,6 @@ namespace BeverDrive.Core
 
 			BeverDriveContext.ActiveModule = module;
 			BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.Show });
-			BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
 
 			// If this module controls playback (ie should react to for example steering wheel buttons
 			// set PlaybackModule here

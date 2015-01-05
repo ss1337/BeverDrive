@@ -100,7 +100,7 @@ namespace BeverDrive.Modules
 					break;
 			}
 
-			BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
+			BeverDriveContext.CurrentCoreGui.Invalidate();
 		}
 
 		public override void Update1Hz()
@@ -111,7 +111,7 @@ namespace BeverDrive.Modules
 				var t = VlcContext.AudioPlayer.Time;
 				this.ctrl_pb.Maximum = (int)d;
 				this.ctrl_pb.Value = (int)t;
-				BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
+				BeverDriveContext.CurrentCoreGui.Invalidate();
 			}
 		}
 		#endregion
