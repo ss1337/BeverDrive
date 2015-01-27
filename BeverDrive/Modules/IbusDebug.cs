@@ -33,10 +33,10 @@ namespace BeverDrive.Modules
 		public bool Logging;
 		public bool Rts;
 
-		public Label title;
-		public Label log;
-		public TextButton button1;
-		public TextButton button2;
+		private Label title;
+		private Label log;
+		private TextButton button1;
+		private TextButton button2;
 
 		public int SelectedIndex { get; set; }
 
@@ -170,7 +170,7 @@ namespace BeverDrive.Modules
 			this.Logging = false;
 			this.Rts = false;
 			this.SelectedIndex = 0;
-			this.ShowControls();
+			base.ShowControls();
 		}
 
 		private void Hide()
