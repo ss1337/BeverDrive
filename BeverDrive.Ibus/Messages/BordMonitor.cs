@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2011-2014 Sebastian Sjödin
+// Copyright 2011-2015 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -64,6 +64,9 @@ namespace BeverDrive.Ibus.Messages
 		public const string Button4 = "F0 04 68 48 02 D6";
 		public const string Button5 = "F0 04 68 48 13 C7";
 		public const string Button6 = "F0 04 68 48 03 D7";
+
+		public const string ArrowLeft = "F0 04 68 48 10 C4";
+		public const string ArrowRight = "F0 04 68 48 00 D4";
 
 		public const string Eject = "F0 04 68 48 33 E7";
 		public const string Menu = "F0 04 FF 48 34 77";

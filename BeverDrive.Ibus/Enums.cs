@@ -1,5 +1,5 @@
 //
-// Copyright 2011-2014 Sebastian Sjödin
+// Copyright 2011-2015 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -25,19 +25,67 @@ namespace BeverDrive.Ibus
 {
 	public enum Devices : byte
 	{
+		BroadCast00 = 0x00,
+		SHD = 0x08,
 		CdChanger = 0x18,
-		Nav = 0x3B,
-		MenuScreen = 0x48,
-		SteeringWheel = 0x50,
+
+		HKM = 0x24,
+		FUM = 0x28,
+
+		CCM = 0x30,
+		Nav = 0x3B,				// Navigation, video module
+		DIA = 0x3F,
+
+		FBZV = 0x40,
+		MenuScreen = 0x43,
+		EWS = 0x44,
+		CID = 0x46,
+		FMBT = 0x47,
+
+		SteeringWheel = 0x50,	// Multi Functional Steering Wheel Buttons
+		MML = 0x51,
+		IHK = 0x5B,
+
+		PDC = 0x60,				// Park Distance Control
+		CDCD = 0x66,
 		Radio = 0x68,
 		Amplifier = 0x6A,
-		IKE = 0x80,
-		LCM = 0xBF,
-		Mid = 0xC0,
-		ObcTextBar = 0xE7,
-		LightWipers = 0xED,
-		BordMonitor = 0xF0,
-		Broadcast = 0xFF
+
+		RDC = 0x70,
+		SM = 0x72,
+		SDRS = 0x73,
+		// CDCD = 0x76,
+		NAVE = 0x7F,
+
+		IKE = 0x80,				// Instrument Kombi Electronics
+
+		MMR = 0x9B,
+		CVM = 0x9C,
+
+		FMID = 0xA0,
+		ACM = 0xA4,
+		FHK = 0xA7,
+		NAVC = 0xA8,
+		EHC = 0xAC,
+
+		SES = 0xB0,
+		TvModule = 0xBB,		// TV, NAVJ
+		LCM = 0xBF,				// Light Control Module
+
+		Mid = 0xC0,				// Multi Information Display
+		Telephone = 0xC8,
+
+		LKM = 0xD0,				// Navigation Location, LKM
+		SMAD = 0xDA,
+
+		IRIS = 0xE0,			// IRIS
+		ObcTextBar = 0xE7,		// OBC Textbar, ANZV
+		ISP = 0xE8,
+		LightWipers = 0xED,		// Lights, wipers, seat memory, TV
+
+		BordMonitor = 0xF0,		// Bordmonitor buttons
+		CSU = 0xF5,
+		Broadcast = 0xFF,
 	}
 
 	public enum Mode : int
