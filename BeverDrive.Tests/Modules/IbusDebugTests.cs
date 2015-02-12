@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2014 Sebastian Sjödin
+// Copyright 2014-2015 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -24,6 +24,8 @@ using System.Text;
 using BeverDrive.Core;
 using BeverDrive.Modules;
 using NUnit.Framework;
+using System.Reflection;
+using BeverDrive.Gui.Controls;
 
 namespace BeverDrive.Tests.Modules
 {
@@ -39,10 +41,9 @@ namespace BeverDrive.Tests.Modules
 		public void Logging_works()
 		{
 			var msg = "bmw";
-
-			BeverDriveContext.LoadedModules.Clear();
-			BeverDriveContext.LoadedModules.Add(new CoreGui());
 			var module = new IbusDebug();
+			var log = (Label)module.GetType().GetField("log", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(module);
+			BeverDriveContext.LoadedModules.Clear();
 			BeverDriveContext.LoadedModules.Add(module);
 
 			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.Show });
@@ -51,22 +52,21 @@ namespace BeverDrive.Tests.Modules
 			Assert.AreEqual(true, module.Logging);
 
 			// Logging on should add msg to module.log
-			Assert.AreEqual(string.Empty, module.log.Text);
+			Assert.AreEqual(string.Empty, log.Text);
 			module.ProcessMessage(msg);
-			Assert.AreEqual(msg + Environment.NewLine, module.log.Text);
+			Assert.AreEqual(msg + Environment.NewLine, log.Text);
 
 			// Logging off should not add to module.log
 			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectClick });
 			module.ProcessMessage(msg);
-			Assert.AreEqual(msg + Environment.NewLine, module.log.Text);
+			Assert.AreEqual(msg + Environment.NewLine, log.Text);
 		}
 
 		[Test]
 		public void Logging_onoff_works()
 		{
-			BeverDriveContext.LoadedModules.Clear();
-			BeverDriveContext.LoadedModules.Add(new CoreGui());
 			var module = new IbusDebug();
+			BeverDriveContext.LoadedModules.Clear();
 			BeverDriveContext.LoadedModules.Add(module);
 
 			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.Show });
@@ -80,9 +80,8 @@ namespace BeverDrive.Tests.Modules
 		[Test]
 		public void Menu_works()
 		{
-			BeverDriveContext.LoadedModules.Clear();
-			BeverDriveContext.LoadedModules.Add(new CoreGui());
 			var module = new IbusDebug();
+			BeverDriveContext.LoadedModules.Clear();
 			BeverDriveContext.LoadedModules.Add(module);
 
 			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.Show });

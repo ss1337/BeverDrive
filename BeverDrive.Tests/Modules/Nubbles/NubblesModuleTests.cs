@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2014 Sebastian Sjödin
+// Copyright 2014-2015 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -38,9 +38,8 @@ namespace BeverDrive.Tests.Modules.Nubbles
 		[Test]
 		public void InGameMenu_works()
 		{
-			BeverDriveContext.LoadedModules.Clear();
-			BeverDriveContext.LoadedModules.Add(new CoreGui());
 			var module = new NubblesModule();
+			BeverDriveContext.LoadedModules.Clear();
 			BeverDriveContext.LoadedModules.Add(module);
 
 			module.SelectedIndex = 0;
@@ -63,9 +62,8 @@ namespace BeverDrive.Tests.Modules.Nubbles
 		[Test]
 		public void MainMenu_works()
 		{
-			BeverDriveContext.LoadedModules.Clear();
-			BeverDriveContext.LoadedModules.Add(new CoreGui());
 			var module = new NubblesModule();
+			BeverDriveContext.LoadedModules.Clear();
 			BeverDriveContext.LoadedModules.Add(module);
 
 			module.SelectedIndex = 0;
