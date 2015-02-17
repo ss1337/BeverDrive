@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2014 Sebastian Sjödin
+// Copyright 2012-2015 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -48,12 +48,9 @@ namespace BeverDrive
 				// TODO: Make this point to CurrentVlc and update current module
 				// TODO: Check if sending TrackStart avoids urspårning
 				BeverDriveContext.CurrentCoreGui.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.NextTrack });
-
-				//if (BeverDriveContext.Settings.DebugTrack > 0)
-				//    BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_TrackStart(disc, track));
-
-				//if (BeverDriveContext.Settings.DebugTrack > 1)
-				//    BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_StatusPlaying(disc, track));
+				
+				// Should it really be a cd -> radio message???
+				BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_TrackStart(disc, track));
 			}
 
 			if (message.IsMessage(BeverDrive.Ibus.Messages.Other.Wheel_PrevTrack))
@@ -62,11 +59,8 @@ namespace BeverDrive
 				// TODO: Check if sending TrackStart avoids urspårning
 				BeverDriveContext.CurrentCoreGui.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.PreviousTrack });
 
-				//if (BeverDriveContext.Settings.DebugTrack > 0)
-				//    BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_TrackStart(disc, track));
-
-				//if (BeverDriveContext.Settings.DebugTrack > 1)
-				//    BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_StatusPlaying(disc, track));
+				// Should it really be a cd -> radio message???
+				BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_TrackStart(disc, track));
 			}
 
 			if (message.IsMessage(BeverDrive.Ibus.Messages.Radio.ReqTrack) /* || message.IsMessage("68 05 18 38 06 0X XX")*/)
@@ -107,7 +101,7 @@ namespace BeverDrive
 
 			// Check if we should enable or disable RTS
 			// This checks whether the message is a Write large text message
-			if (message.StartsWith("68 17 3B 23 62 30"))
+			if (message.StartsWith("68 XX 3B 23 62 30"))
 			{
 				rtsEnable = false;
 
@@ -140,9 +134,9 @@ namespace BeverDrive
 
 			// Something something darkside
 			// if (message.Code[3] = 35 && (message.Code[5] == 16 || message.Code[5] == 48))
-			if (message.Length > 17)
+			/*if (message.Length > 17)
 				if (message.Substring(10, 2) == "35" && (message.Substring(16, 2) == "16" || message.Substring(16, 2) == "48"))
-					rtsEnable = false;
+					rtsEnable = false;*/
 
 			BeverDriveContext.Ibus.RtsEnable = rtsEnable;
 			BeverDriveContext.ActiveModule.ProcessMessage(message);
