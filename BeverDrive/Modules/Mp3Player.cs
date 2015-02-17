@@ -173,6 +173,17 @@ namespace BeverDrive.Modules
 						// Add stuff to list
 						foreach (var f in ctrl_browser.Files)
 							playlist.AddFile(ctrl_browser.CurrentPath + "\\" + f.Name);
+
+						// TODO: Add cover image
+						/*if (ctrl_browser.CurrentItem.CoverImage != null)
+						{
+							BeverDriveContext.CurrentCoreGui.ModuleContainer.SetBackgroundImage(ctrl_browser.CurrentItem.Name, ctrl_browser.CurrentItem.CoverImage);
+							BeverDriveContext.CurrentCoreGui.Invalidate();
+						}
+						else
+						{
+							BeverDriveContext.CurrentCoreGui.ModuleContainer.SetBackgroundImage("", null);
+						}*/
 					}
 
 					vlcPopulated = true;

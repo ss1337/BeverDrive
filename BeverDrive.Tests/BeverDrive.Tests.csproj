@@ -56,6 +56,7 @@
     <Compile Include="Controls\ListControlTests.cs" />
     <Compile Include="Core\FileSystemBrowserTests.cs" />
     <Compile Include="Core\GraphicsExtensionsTests.cs" />
+    <Compile Include="Core\ImageProcessorTests.cs" />
     <Compile Include="Core\PlaylistTests.cs" />
     <Compile Include="IbusTests.cs" />
     <Compile Include="Modules\IbusDebugTests.cs" />

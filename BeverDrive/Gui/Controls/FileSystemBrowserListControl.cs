@@ -31,6 +31,7 @@ namespace BeverDrive.Gui.Controls
 	{
 		private FileSystemBrowser browser;
 
+		public FileSystemItem CurrentItem { get { return this.browser.CurrentItem; } }
 		public string CurrentPath { get { return this.browser.CurrentDirectory.FullName; } }
 		public List<DirectoryInfo> Directories { get { return this.browser.Directories; } }
 		public List<FileInfo> Files { get { return this.browser.Files; } }

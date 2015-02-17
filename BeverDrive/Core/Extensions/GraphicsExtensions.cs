@@ -88,7 +88,7 @@ namespace BeverDrive.Core.Extensions
 		/// <param name="dest"></param>
 		/// <param name="source"></param>
 		/// <param name="alpha">Alpha value, from 0f to 1f</param>
-		public static void DrawImageAlphaFaded(this Graphics graphic, Image image, Rectangle dest, Rectangle source, float alpha)
+		public static void DrawImageAlphaFadedAsdf(this Graphics graphic, Image image, Rectangle dest, Rectangle source, float alpha)
 		{
 			// Initialize the color matrix. 
 			float[][] matrixItems ={ 
