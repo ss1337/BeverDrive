@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.Drawing;
+using BeverDrive.Ibus.Messages.Predefined;
 
 namespace BeverDrive.Core
 {
@@ -39,6 +40,7 @@ namespace BeverDrive.Core
 		public int OffsetLeft { get; set; }
 		public int OffsetRight { get; set; }
 		public int OffsetTop { get; set; }
+		public LightWipers.TvMode TvMode { get; set; }
 		public string VlcPath { get; set; }
 
 		public Color BackColor { get; set; }
@@ -72,6 +74,7 @@ namespace BeverDrive.Core
 			this.OffsetLeft = this.ReadIntSetting("OffsetLeft", nodes);
 			this.OffsetRight = this.ReadIntSetting("OffsetRight", nodes);
 			this.OffsetTop = this.ReadIntSetting("OffsetTop", nodes);
+			this.TvMode = this.ReadTvModeSetting("TvMode", nodes);
 			this.VlcPath = this.ReadStringSetting("VlcPath", nodes);
 
 			this.DebugTrack = this.ReadIntSetting("DebugTrack", nodes);
@@ -165,6 +168,52 @@ namespace BeverDrive.Core
 			}
 
 			return "";
+		}
+
+		private LightWipers.TvMode ReadTvModeSetting(String name, XmlNodeList nodes)
+		{
+			/* 
+			 * Possible values are:
+			 * Mode_169Zoom_60Hz,
+			 * Mode_169Zoom_50Hz,
+			 * Mode_169_60Hz,
+			 * Mode_169_50Hz,
+			 * Mode_43_60Hz,
+			 * Mode_43_50Hz
+			 */
+
+			var result = LightWipers.TvMode.Mode_43_60Hz;
+
+			foreach (XmlNode xn in nodes)
+			{
+				XmlAttribute attrName = (XmlAttribute)xn.Attributes.GetNamedItem("name");
+				XmlAttribute attrValue = (XmlAttribute)xn.Attributes.GetNamedItem("value");
+
+				if (attrName.Value.Equals(name))
+				{
+					// Parse tv mode here
+					if (attrValue.Value.ToLower().Equals("mode_169zoom_60hz"))
+						result = LightWipers.TvMode.Mode_169Zoom_60Hz;
+
+					if (attrValue.Value.ToLower().Equals("mode_169zoom_50hz"))
+						result = LightWipers.TvMode.Mode_169Zoom_50Hz;
+
+					if (attrValue.Value.ToLower().Equals("mode_169_60hz"))
+						result = LightWipers.TvMode.Mode_169_60Hz;
+
+					if (attrValue.Value.ToLower().Equals("mode_169_50hz"))
+						result = LightWipers.TvMode.Mode_169_50Hz;
+
+					if (attrValue.Value.ToLower().Equals("mode_43_60hz"))
+						result = LightWipers.TvMode.Mode_43_60Hz;
+
+					if (attrValue.Value.ToLower().Equals("mode_43_50hz"))
+						result = LightWipers.TvMode.Mode_43_50Hz;
+
+				}
+			}
+			
+			return result;
 		}
 
 		public void Save()

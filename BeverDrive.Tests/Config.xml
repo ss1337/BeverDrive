@@ -30,6 +30,18 @@
 		<setting name="OffsetRight" value="10" />
 		<setting name="OffsetTop" value="10" />
 
+		<!-- Tv Mode, possibilities are:
+			Mode_169Zoom_60Hz,
+			Mode_169Zoom_50Hz,
+			Mode_169_60Hz,
+			Mode_169_50Hz,
+			Mode_43_60Hz,
+			Mode_43_50Hz
+			
+			Default if no tv mode is set is Mode_43_60Hz
+		-->
+		<setting name="TvMode" value="Mode_169_60Hz" />
+		
 		<!-- Path to VLC libraries -->
 		<setting name="VlcPath" value="C:\Program Files\Media\VLC" />
 

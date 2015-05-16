@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Controls\FileSystemBrowserListTests.cs" />
     <Compile Include="Controls\ListControlTests.cs" />
+    <Compile Include="Core\BeverDriveSettingsTests.cs" />
     <Compile Include="Core\FileSystemBrowserTests.cs" />
     <Compile Include="Core\GraphicsExtensionsTests.cs" />
     <Compile Include="Core\ImageProcessorTests.cs" />
@@ -68,6 +69,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BeverDrive.Ibus\BeverDrive.Ibus.csproj">
+      <Project>{A2AEC3AE-26A4-4F08-B3F4-52E80A40CD29}</Project>
+      <Name>BeverDrive.Ibus</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BeverDrive\BeverDrive.csproj">
       <Project>{07B0F930-F4ED-443D-8BCB-19AD1E3813BB}</Project>
       <Name>BeverDrive</Name>
