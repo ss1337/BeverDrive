@@ -101,19 +101,18 @@ namespace BeverDrive
 
 			// Check if we should enable or disable RTS
 			// This checks whether the message is a Write large text message
-			if (message.StartsWith("68 XX 3B 23 62 30"))
+			if (message.IsMessage("68 XX 3B 23 62 30", true))
 			{
 				rtsEnable = false;
 
-				// Check if message contains CD X-XX
-				if (message.Contains("20 08 43 44 20"))
-				{
-					var index = message.IndexOf("20 08 43 44 20");
-					if (message.Substring(index, 26).IsMessage("20 08 43 44 20 3X 2D XX XX"))
-						rtsEnable = true;
+				// Simpler check, check for CD X-XX only
+				var index = message.IndexOf("43 44 20");
+				if (message.Substring(index, 20).IsMessage("43 44 20 3X 2D XX XX"))
+					rtsEnable = true;
 
-					// TODO: We should also check for SCAN
-				}
+				// Check for SCAN
+				if (message.Contains("53 43 41 4E"))
+					rtsEnable = true;
 
 				// TAPE
 				// We dont want stuff in tape mode
@@ -131,12 +130,6 @@ namespace BeverDrive
 			{
 				rtsEnable = false;
 			}
-
-			// Something something darkside
-			// if (message.Code[3] = 35 && (message.Code[5] == 16 || message.Code[5] == 48))
-			/*if (message.Length > 17)
-				if (message.Substring(10, 2) == "35" && (message.Substring(16, 2) == "16" || message.Substring(16, 2) == "48"))
-					rtsEnable = false;*/
 
 			BeverDriveContext.Ibus.RtsEnable = rtsEnable;
 			BeverDriveContext.ActiveModule.ProcessMessage(message);
