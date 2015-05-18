@@ -31,6 +31,8 @@ namespace BeverDrive
 {
 	public partial class MainForm : Form
 	{
+		bool greeting = true;
+
 		private void ProcessMessage(string message)
 		{
 			bool rtsEnable = BeverDriveContext.Ibus.RtsEnable;
@@ -38,7 +40,17 @@ namespace BeverDrive
 			int track = VlcContext.CurrentTrack;
 
 			if (message.IsMessage(BeverDrive.Ibus.Messages.Other.Cdc_PollCd))
+			{
 				BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Other.Cdc_PollResponse);
+
+				// Send greeting?
+				if (greeting && !string.IsNullOrEmpty(BeverDriveContext.Settings.Greeting))
+				{
+					var msg = BeverDrive.Ibus.Messages.Predefined.ObcTextbar.SetUrgentText(BeverDriveContext.Settings.Greeting);
+					BeverDriveContext.Ibus.Send(msg);
+					greeting = false;
+				}
+			}
 
 			if (message.IsMessage(BeverDrive.Ibus.Messages.Other.AnteKrök))
 				BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_StatusPlaying(disc, track));

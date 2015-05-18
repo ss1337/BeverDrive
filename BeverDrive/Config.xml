@@ -30,6 +30,9 @@
 		     and want to navigate with LEFT/RIGHT/SPACE -->
 		<setting name="EnableIbus" value="true" />
 
+		<!-- Greeting sent when BeverDrive has been started -->
+		<setting name="Greeting" value="BEVERDRIVE STARTED" />
+		
 		<!-- Root directory of mp3's -->
 		<setting name="MusicRoot" value="D:\BeverDrive\Mp3" />
 		
@@ -43,9 +46,7 @@
 		<!-- Hide the cursor? Yes you almost always want this on -->
 		<setting name="HideCursor" value="true" />
 		
-		<!-- How many pixels from each direction should we offset the drawing area 
-		
-		-->
+		<!-- How many pixels from each direction should we offset the drawing area -->
 		<setting name="OffsetBottom" value="10" />
 		<setting name="OffsetLeft" value="10" />
 		<setting name="OffsetRight" value="10" />
@@ -62,7 +63,7 @@
 			
 			Default if no tv mode is set is Mode_43_60Hz
 		-->
-		<setting name="TvMode" value="Mode_169_60Hz" />
+		<setting name="TvMode" value="Mode_169Zoom_60Hz" />
 
 		<!-- Video mode, which mode shoud the GUI use: Mode_169 or Mode_43-->
 		<setting name="VideoMode" value="Mode_169" />
