@@ -19,13 +19,19 @@
 // ============================================================================
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 using System.Xml;
-using System.Drawing;
 using BeverDrive.Ibus.Messages.Predefined;
 
 namespace BeverDrive.Core
 {
+	public enum VideoMode
+	{
+		Mode_169,
+		Mode_43
+	}
+
 	public class BeverDriveSettings
 	{
 		public string ComPort { get; private set; }
@@ -41,6 +47,7 @@ namespace BeverDrive.Core
 		public int OffsetRight { get; set; }
 		public int OffsetTop { get; set; }
 		public LightWipers.TvMode TvMode { get; set; }
+		public VideoMode VideoMode { get; set; }
 		public string VlcPath { get; set; }
 
 		public Color BackColor { get; set; }
@@ -84,6 +91,13 @@ namespace BeverDrive.Core
 			this.SelectedColor = this.ReadColorSetting("SelectedColor", nodes);
 			this.ClockBackgroundColor = this.ReadColorSetting("ClockBackgroundColor", nodes);
 			this.ClockForegroundColor = this.ReadColorSetting("ClockForegroundColor", nodes);
+
+			// Tweak OffsetTop and OffsetBottom depending on video mode
+			if (this.VideoMode == VideoMode.Mode_169)
+			{
+				OffsetBottom += 60;
+				OffsetTop += 60;
+			}
 
 			// Parse module list
 			XmlNodeList moduleNodes = xdoc.SelectNodes("//config/modules/module");
@@ -213,6 +227,35 @@ namespace BeverDrive.Core
 				}
 			}
 			
+			return result;
+		}
+
+		private VideoMode ReadVideoModeSetting(String name, XmlNodeList nodes)
+		{
+			/* 
+			 * Possible values are:
+			 * Mode_169,
+			 * Mode_43
+			 */
+
+			var result = VideoMode.Mode_43;
+
+			foreach (XmlNode xn in nodes)
+			{
+				XmlAttribute attrName = (XmlAttribute)xn.Attributes.GetNamedItem("name");
+				XmlAttribute attrValue = (XmlAttribute)xn.Attributes.GetNamedItem("value");
+
+				if (attrName.Value.Equals(name))
+				{
+					// Parse tv mode here
+					if (attrValue.Value.ToLower().Equals("mode_169"))
+						result = VideoMode.Mode_169;
+
+					if (attrValue.Value.ToLower().Equals("mode_43"))
+						result = VideoMode.Mode_43;
+				}
+			}
+
 			return result;
 		}
 

@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2014 Sebastian Sjödin
+// Copyright 2015 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -21,26 +21,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NUnit.Framework;
 
-namespace BeverDrive.Modules
+namespace BeverDrive.Tests.Core
 {
-	public class ModuleCommandEventArgs : EventArgs
+	[TestFixture]
+	public class BeverDriveSettingsTests
 	{
-		public ModuleCommands Command { get; set; }
-		public string IbusData { get; set; }
-	}
+		public BeverDriveSettingsTests()
+		{
+		}
 
-	public enum ModuleCommands : int
-	{
-		Show = 1,
-		Hide = 2,
-		NextTrack = 3,
-		PreviousTrack = 4,
-		SelectClick = 5,
-		SelectLeft = 6,
-		SelectRight = 7,
-		StartPlayback = 8,
-		StopPlayback = 9,
-		Update = 10
+		[Test]
+		public void Settings_initializes_correctly()
+		{
+			var bs = new BeverDrive.Core.BeverDriveSettings();
+			Assert.AreEqual(BeverDrive.Ibus.Messages.Predefined.LightWipers.TvMode.Mode_169_60Hz, bs.TvMode);
+		}
 	}
 }

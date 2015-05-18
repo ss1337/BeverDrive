@@ -76,7 +76,7 @@ namespace BeverDrive.Gui.Controls
 				gridSize = (this.Width / 80);
 
 			offsetLeft = (this.Width - gridSize * 80) / 2;
-			offsetTop = (this.Height - gridSize * 50) - 46;
+			offsetTop = (this.Height - gridSize * 50) / 2;
 
 			//this.Width = gridSize * 80;
 			//this.Height = gridSize * 50 + 46;

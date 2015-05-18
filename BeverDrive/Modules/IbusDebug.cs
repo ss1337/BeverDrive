@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2014 Sebastian Sjödin
+// Copyright 2014-2015 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -93,13 +93,13 @@ namespace BeverDrive.Modules
 				case ModuleCommands.SelectClick:
 					this.SelectClick();
 					break;
-				case ModuleCommands.SelectNext:
-					if (this.SelectedIndex < 1)
-						this.SelectedIndex++;
-					break;
-				case ModuleCommands.SelectPrevious:
+				case ModuleCommands.SelectLeft:
 					if (this.SelectedIndex > -1)
 						this.SelectedIndex--;
+					break;
+				case ModuleCommands.SelectRight:
+					if (this.SelectedIndex < 1)
+						this.SelectedIndex++;
 					break;
 				default:
 					break;
@@ -144,7 +144,7 @@ namespace BeverDrive.Modules
 			switch (this.SelectedIndex)
 			{
 				case -1:
-					BeverDriveContext.SetActiveModule("MainMenu");
+					BeverDriveContext.SetActiveModule("");
 					break;
 
 				case 0:

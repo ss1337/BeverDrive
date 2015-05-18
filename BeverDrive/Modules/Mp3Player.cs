@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2014 Sebastian Sjödin
+// Copyright 2012-2015 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -77,10 +77,10 @@ namespace BeverDrive.Modules
 				case ModuleCommands.SelectClick:
 					this.SelectClick();
 					break;
-				case ModuleCommands.SelectNext:
+				case ModuleCommands.SelectLeft:
 					this.SelectNext();
 					break;
-				case ModuleCommands.SelectPrevious:
+				case ModuleCommands.SelectRight:
 					this.SelectPrevious();
 					break;
 				case ModuleCommands.Show:
@@ -127,12 +127,17 @@ namespace BeverDrive.Modules
 			switch (this.ctrl_browser.SelectedIndex)
 			{
 				case -5:
-					BeverDriveContext.SetActiveModule("MainMenu");
+					BeverDriveContext.SetActiveModule("");
 					break;
 				case -4:
 					this.PreviousTrack();
 					break;
 				case -3:
+					if (VlcContext.AudioPlayer.IsPlaying)
+						this.StopPlayback();
+					else
+						this.StartPlayback();
+
 					break;
 				case -2:
 					this.NextTrack();
@@ -314,10 +319,14 @@ namespace BeverDrive.Modules
 
 		private void CreateControls()
 		{
+			int browserHeight = 7;
+			if (BeverDriveContext.Settings.VideoMode == VideoMode.Mode_169)
+				browserHeight = 5;
+
 			var width = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width;
 
 			this.ctrl_browser = new FileSystemBrowserListControl(BeverDriveContext.Settings.MusicRoot);
-			this.ctrl_browser.HeightInItems = 7;
+			this.ctrl_browser.HeightInItems = browserHeight;
 			this.ctrl_browser.Name = "list1";
 			this.ctrl_browser.Width = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width;
 			this.ctrl_browser.Location = new System.Drawing.Point(0, BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Height - this.ctrl_browser.Height);

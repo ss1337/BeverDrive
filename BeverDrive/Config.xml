@@ -43,11 +43,13 @@
 		<!-- Hide the cursor? Yes you almost always want this on -->
 		<setting name="HideCursor" value="true" />
 		
-		<!-- How many pixels from each direction should we offset the drawing area -->
-		<setting name="OffsetBottom" value="70" />
+		<!-- How many pixels from each direction should we offset the drawing area 
+		
+		-->
+		<setting name="OffsetBottom" value="10" />
 		<setting name="OffsetLeft" value="10" />
 		<setting name="OffsetRight" value="10" />
-		<setting name="OffsetTop" value="70" />
+		<setting name="OffsetTop" value="10" />
 
 		<!-- Tv Mode, which mode should the board monitor switch to.
 			The possibilities are:
@@ -62,8 +64,8 @@
 		-->
 		<setting name="TvMode" value="Mode_169_60Hz" />
 
-		<!-- Video mode, which mode shoud the GUI use 169 or 43-->
-		<setting name="VideoMode" value="169" />
+		<!-- Video mode, which mode shoud the GUI use: Mode_169 or Mode_43-->
+		<setting name="VideoMode" value="Mode_169" />
 		
 		<!-- Path to VLC libraries -->
 		<setting name="VlcPath" value="C:\Program Files\Media\vlc-2.1.5" />

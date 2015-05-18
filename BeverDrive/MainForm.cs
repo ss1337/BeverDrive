@@ -1,5 +1,5 @@
 //
-// Copyright 2012-2014 Sebastian Sjödin
+// Copyright 2012-2015 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -57,7 +57,7 @@ namespace BeverDrive
 			BeverDriveContext.CurrentCoreGui.ClockContainer.Time = DateTime.Now.ToShortTimeString();
 			BeverDriveContext.CurrentCoreGui.ClockContainer.Date = DateTime.Now.ToString("yyyy-MM-dd");
 			BeverDriveContext.CurrentCoreGui.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.Show });
-			BeverDriveContext.SetActiveModule("MainMenu");
+			BeverDriveContext.SetActiveModule("");
 
 			this.Timer1Hz = new Timer();
 			this.Timer1Hz.Interval = 1000;
@@ -124,10 +124,10 @@ namespace BeverDrive
 
 			// Emulating right knob using left arrow/right arrow/space
 			if (keyData == Keys.Left)
-				BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectPrevious });
+				BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectLeft });
 
 			if (keyData == Keys.Right)
-				BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectNext });
+				BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectRight });
 
 			if (keyData == Keys.Space)
 				BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectClick });

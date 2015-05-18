@@ -34,6 +34,21 @@ namespace BeverDrive.Gui.Controls
 
 		public ContentAlignment TextAlign { get; set; }
 
+		public override Color ForeColor
+		{
+			get
+			{
+				return base.ForeColor;
+			}
+			set
+			{
+				base.ForeColor = value;
+
+				// Reset buffer then text is changed
+				this.buffer = null;
+			}
+		}
+
 		public override string Text
 		{
 			get

@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2014 Sebastian Sjödin
+// Copyright 2014-2015 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -71,8 +71,8 @@ namespace BeverDrive.Modules
 		{
 			if (MenuState != MenuState.Playing && 
 				(e.Command == ModuleCommands.SelectClick ||
-				e.Command == ModuleCommands.SelectNext ||
-				e.Command == ModuleCommands.SelectPrevious))
+				e.Command == ModuleCommands.SelectLeft ||
+				e.Command == ModuleCommands.SelectRight))
 			{
 				if (MenuState == MenuState.MainMenu)
 					SwitchMainMenu(e.Command);
@@ -92,11 +92,11 @@ namespace BeverDrive.Modules
 						}
 						break;
 
-					case ModuleCommands.SelectPrevious:
+					case ModuleCommands.SelectLeft:
 						this.ctrlGame.GameState.Player1.TurnLeft();
 						break;
 
-					case ModuleCommands.SelectNext:
+					case ModuleCommands.SelectRight:
 						this.ctrlGame.GameState.Player1.TurnRight();
 						break;
 
@@ -155,7 +155,7 @@ namespace BeverDrive.Modules
 				case ModuleCommands.SelectClick:
 					if (this.SelectedIndex == -1)
 					{
-						BeverDriveContext.SetActiveModule("MainMenu");
+						BeverDriveContext.SetActiveModule("");
 					}
 
 					if (this.SelectedIndex == 0)
@@ -179,16 +179,16 @@ namespace BeverDrive.Modules
 
 					break;
 
-				case ModuleCommands.SelectPrevious:
-					if (this.SelectedIndex > -1)
-						this.SelectedIndex--;
+				case ModuleCommands.SelectLeft:
+					if (this.SelectedIndex < 1)
+						this.SelectedIndex++;
 
 					ShowMainMenu();
 					break;
 
-				case ModuleCommands.SelectNext:
-					if (this.SelectedIndex < 1)
-						this.SelectedIndex++;
+				case ModuleCommands.SelectRight:
+					if (this.SelectedIndex > -1)
+						this.SelectedIndex--;
 
 					ShowMainMenu();
 					break;
@@ -202,7 +202,7 @@ namespace BeverDrive.Modules
 				case ModuleCommands.SelectClick:
 					if (this.SelectedIndex == -1)
 					{
-						BeverDriveContext.SetActiveModule("MainMenu");
+						BeverDriveContext.SetActiveModule("");
 					}
 
 					if (this.SelectedIndex == 0)
@@ -220,16 +220,16 @@ namespace BeverDrive.Modules
 
 					break;
 
-				case ModuleCommands.SelectPrevious:
-					if (this.SelectedIndex > -1)
-						this.SelectedIndex--;
+				case ModuleCommands.SelectLeft:
+					if (this.SelectedIndex < 1)
+						this.SelectedIndex++;
 
 					ShowPlayingMenu();
 					break;
 
-				case ModuleCommands.SelectNext:
-					if (this.SelectedIndex < 1)
-						this.SelectedIndex++;
+				case ModuleCommands.SelectRight:
+					if (this.SelectedIndex > -1)
+						this.SelectedIndex--;
 
 					ShowPlayingMenu();
 					break;

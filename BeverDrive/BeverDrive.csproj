@@ -152,6 +152,9 @@
     <Compile Include="Modules\Attributes.cs" />
     <Compile Include="Modules\Bluetooth.cs" />
     <Compile Include="Modules\Bluetooth_Devices.cs" />
+    <Compile Include="Modules\VideoPlayer_Command.cs" />
+    <Compile Include="Modules\VideoPlayer_VlcControl.cs" />
+    <Compile Include="Modules\MainMenuSimple.cs" />
     <Compile Include="Modules\GraphicBrowserTest.cs" />
     <Compile Include="Modules\IbusDebug.cs" />
     <Compile Include="Modules\MainMenu.cs" />

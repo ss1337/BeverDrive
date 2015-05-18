@@ -59,6 +59,9 @@ namespace BeverDrive.Gui
 					this.BaseContainer.Controls.Add(this.ModuleContainer);
 					break;
 				case ModuleCommands.NextTrack:
+					if (BeverDriveContext.PlaybackModule != null)
+						BeverDriveContext.PlaybackModule.OnCommand(e);
+					break;
 				case ModuleCommands.PreviousTrack:
 					if (BeverDriveContext.PlaybackModule != null)
 						BeverDriveContext.PlaybackModule.OnCommand(e);

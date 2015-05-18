@@ -90,10 +90,10 @@ namespace BeverDrive
 			if (rtsEnable)
 			{
 				if (message.IsMessage(BeverDrive.Ibus.Messages.BordMonitor.RightKnobLeft))
-					BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectPrevious });
+					BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectLeft });
 
 				if (message.IsMessage(BeverDrive.Ibus.Messages.BordMonitor.RightKnobRight))
-					BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectNext });
+					BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectRight });
 
 				if (message.IsMessage(BeverDrive.Ibus.Messages.BordMonitor.RightKnobPush))
 					BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectClick });
@@ -130,6 +130,9 @@ namespace BeverDrive
 			{
 				rtsEnable = false;
 			}
+
+			if (rtsEnable)
+				BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.LightWipers.SetTvMode(BeverDriveContext.Settings.TvMode));
 
 			BeverDriveContext.Ibus.RtsEnable = rtsEnable;
 			BeverDriveContext.ActiveModule.ProcessMessage(message);

@@ -29,20 +29,23 @@ using BeverDrive.Gui.Styles;
 namespace BeverDrive.Modules
 {
 	[BackButtonVisible(false)]
-	public class MainMenu : AModule
+	public class MainMenuSimple : AModule
 	{
-		private int gridLeft = 1;
-		private int gridTop = 2;
-		private int selectedIndex = 0;
+		public int SelectedIndex = 0;
+
+		private int x;
+		private int y;
 
 		private Label lbl_title;
-		private List<MetroidButton> buttons;
+		private List<Label> buttons;
 		private List<string> buttonTypes;
 
-		public MainMenu()
+		public MainMenuSimple()
 		{
-			this.buttons = new List<MetroidButton>();
+			this.buttons = new List<Label>();
 			this.buttonTypes = new List<string>();
+			x = 20;
+			y = 140;
 		}
 
 		public override void Init()
@@ -57,17 +60,21 @@ namespace BeverDrive.Modules
 			switch(e.Command)
 			{
 				case ModuleCommands.SelectClick:
-					BeverDriveContext.SetActiveModule(this.buttonTypes[this.selectedIndex]);
+					BeverDriveContext.SetActiveModule(this.buttonTypes[this.SelectedIndex]);
 					break;
 				case ModuleCommands.SelectRight:
-					if (selectedIndex < this.buttons.Count - 1)
-						selectedIndex++;
+					if (SelectedIndex > 0)
+						SelectedIndex--;
+					else
+						SelectedIndex = this.buttons.Count - 1;
 
 					this.Update();
 					break;
 				case ModuleCommands.SelectLeft:
-					if (selectedIndex > 0)
-						selectedIndex--;
+					if (SelectedIndex < this.buttons.Count - 1)
+						SelectedIndex++;
+					else
+						SelectedIndex = 0;
 
 					this.Update();
 					break;
@@ -95,28 +102,39 @@ namespace BeverDrive.Modules
 
 		private void Update()
 		{
-			this.buttons.Any(x => { x.Selected = false; return false; });
-			this.buttons[this.selectedIndex].Selected = true;
-			BeverDriveContext.CurrentCoreGui.ClockContainer.Text = this.buttons[this.selectedIndex].Text;
+			for (int i = 0; i < this.buttons.Count; i++)
+			{
+				if (i == SelectedIndex)
+					this.buttons[i].ForeColor = Colors.SelectedColor;
+				else
+					this.buttons[i].ForeColor = Colors.ForeColor;
+			}
+
+			BeverDriveContext.CurrentCoreGui.ClockContainer.Text = this.buttons[this.SelectedIndex].Text;
 			BeverDriveContext.CurrentCoreGui.Invalidate();
 		}
 
 		private void CreateButton(string text, Type moduleType, string icon, string selectedIcon)
 		{
-			// Create and add button
-			var mb = new MetroidButton(icon, selectedIcon);
-			mb.GridLeft = gridLeft;
-			mb.GridTop = gridTop;
-			mb.Text = text;
-			this.buttons.Add(mb);
+			// Create and add menu choices
+			var lb = new Label();
+			lb.Font = Fonts.GuiFont28;
+			lb.ForeColor = Colors.ForeColor;
+			lb.Location = new System.Drawing.Point(x, y);
+			lb.Size = new System.Drawing.Size(400, 50);
+			lb.Text = text;
+			lb.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+
+			this.buttons.Add(lb);
 			this.buttonTypes.Add(moduleType.Name);
 
-			// Increment grid
-			this.gridLeft += 6;
-			if (gridLeft > 13)
+			// Increment x/y
+			y += 80;
+
+			if (y > 310)
 			{
-				gridLeft = 1;
-				gridTop += 6;
+				y = 140;
+				x = 460;
 			}
 		}
 

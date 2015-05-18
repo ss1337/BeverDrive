@@ -25,6 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -64,6 +65,7 @@
     <Compile Include="Modules\MainMenuTests.cs" />
     <Compile Include="Modules\Nubbles\GameStateTests.cs" />
     <Compile Include="Modules\Nubbles\LevelLibraryTests.cs" />
+    <Compile Include="Modules\MainMenuSimpleTests.cs" />
     <Compile Include="Modules\Nubbles\NubblesModuleTests.cs" />
     <Compile Include="Modules\Nubbles\PlayerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

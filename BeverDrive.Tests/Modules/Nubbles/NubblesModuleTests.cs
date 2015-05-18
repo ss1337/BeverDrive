@@ -44,7 +44,7 @@ namespace BeverDrive.Tests.Modules.Nubbles
 
 			module.SelectedIndex = 0;
 			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectClick });
-			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectNext });
+			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectLeft });
 			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectClick });
 			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectClick });
 			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectClick });
@@ -54,7 +54,7 @@ namespace BeverDrive.Tests.Modules.Nubbles
 			Assert.AreEqual(MenuState.Playing, module.MenuState);
 
 			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectClick });
-			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectNext });
+			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectLeft });
 			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectClick });
 			Assert.AreEqual(MenuState.MainMenu, module.MenuState);
 		}
@@ -68,7 +68,7 @@ namespace BeverDrive.Tests.Modules.Nubbles
 
 			module.SelectedIndex = 0;
 			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectClick });
-			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectNext });
+			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectLeft });
 			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectClick });
 			Assert.AreEqual(1, module.SelectedIndex);
 			Assert.AreEqual(MenuState.Playing, module.MenuState);

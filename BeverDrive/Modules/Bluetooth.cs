@@ -60,10 +60,10 @@ namespace BeverDrive.Modules
 				case ModuleCommands.SelectClick:
 					this.SelectClick();
 					break;
-				case ModuleCommands.SelectNext:
+				case ModuleCommands.SelectLeft:
 					this.SelectNext();
 					break;
-				case ModuleCommands.SelectPrevious:
+				case ModuleCommands.SelectRight:
 					this.SelectPrevious();
 					break;
 				case ModuleCommands.Show:

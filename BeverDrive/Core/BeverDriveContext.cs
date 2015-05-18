@@ -21,8 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BeverDrive.Modules;
 using BeverDrive.Ibus;
+using BeverDrive.Modules;
 
 namespace BeverDrive.Core
 {
@@ -86,12 +86,26 @@ namespace BeverDrive.Core
 			}
 		}
 
+		/// <summary>
+		/// Sets active module, if moduleName is empty, the first module loaded
+		/// is set active
+		/// </summary>
+		/// <param name="moduleName"></param>
 		public static void SetActiveModule(string moduleName)
 		{
-			bool backButtonVisible = false;
 			bool playbackModule = false;
+			AModule module = null;
 
-			AModule module = BeverDriveContext.LoadedModules.Find(x => { return x.GetType().Name.Equals(moduleName); });
+			if (string.IsNullOrEmpty(moduleName))
+			{
+				// Find first module, the main menu module
+				module = BeverDriveContext.LoadedModules[0];
+			}
+			else
+			{
+				// Find module by name
+				module = BeverDriveContext.LoadedModules.Find(x => { return x.GetType().Name.Equals(moduleName); });
+			}
 
 			if (module == null)
 				return;

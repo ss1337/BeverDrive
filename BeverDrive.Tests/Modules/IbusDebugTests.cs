@@ -86,19 +86,19 @@ namespace BeverDrive.Tests.Modules
 
 			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.Show });
 			Assert.AreEqual(0, module.SelectedIndex);
-			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectNext });
+			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectLeft });
 			Assert.AreEqual(1, module.SelectedIndex);
 			
 			// SelectedIndex should never exceed 1
-			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectNext });
+			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectLeft });
 			Assert.AreEqual(1, module.SelectedIndex);
-			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectPrevious });
+			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectRight });
 			Assert.AreEqual(0, module.SelectedIndex);
-			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectPrevious });
+			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectRight });
 			Assert.AreEqual(-1, module.SelectedIndex);
 
 			// SelectedIndex should never be less than -1
-			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectPrevious });
+			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectRight });
 			Assert.AreEqual(-1, module.SelectedIndex);
 		}
 	}
