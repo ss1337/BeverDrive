@@ -72,5 +72,15 @@ namespace BeverDrive.IbusEmulator
 		{
 			this.ibus.Send("68 17 3B 23 62 30 20 20 07 20 20 20 20 20 08 43 44 20 36 2D 39 39 20 20 26");
 		}
+
+		private void btnWheelLeft_Click(object sender, EventArgs e)
+		{
+			this.ibus.Send(BeverDrive.Ibus.Messages.Other.Wheel_PrevTrack);
+		}
+
+		private void btnWheelRight_Click(object sender, EventArgs e)
+		{
+			this.ibus.Send(BeverDrive.Ibus.Messages.Other.Wheel_NextTrack);
+		}
 	}
 }
