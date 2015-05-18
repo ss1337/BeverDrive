@@ -35,6 +35,11 @@ namespace BeverDrive.Modules
 		public IEnumerable<KeyValuePair<string, string>> Settings { get; set; }
 
 		/// <summary>
+		/// Selected index for the current module
+		/// </summary>
+		public int SelectedIndex { get; set; }
+
+		/// <summary>
 		/// A module's constructor is executed before the settings for that module are loaded, so
 		/// never have any code that is dependent on settings in the constructor, instead have that
 		/// in Init, since it is executed after the settings are loaded

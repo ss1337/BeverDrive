@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2014 Sebastian Sjödin
+// Copyright 2012-2015 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -35,11 +35,10 @@ namespace BeverDrive.Modules
 		private Label lbl_bt1;
 		private Label lbl_bt2;
 		private bool isActive;
-		private int selectedIndex;
 
 		public Bluetooth()
 		{
-			this.selectedIndex = 0;
+			this.SelectedIndex = 0;
 			this.CreateControls();
 
 			try
@@ -79,7 +78,7 @@ namespace BeverDrive.Modules
 
 		private void SelectClick()
 		{
-			switch (selectedIndex)
+			switch (this.SelectedIndex)
 			{
 				case -1:
 					BeverDriveContext.SetActiveModule("MainMenu");
@@ -91,13 +90,13 @@ namespace BeverDrive.Modules
 
 		private void SelectNext()
 		{
-			if (selectedIndex == 0)
-				selectedIndex = 0;
+			if (this.SelectedIndex == 0)
+				this.SelectedIndex = 0;
 			else
 			{
-				selectedIndex++;
+				this.SelectedIndex++;
 
-				if (selectedIndex == 0)
+				if (this.SelectedIndex == 0)
 					BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
 			}
 
@@ -106,13 +105,13 @@ namespace BeverDrive.Modules
 
 		private void SelectPrevious()
 		{
-			if (selectedIndex == -1)
-				selectedIndex = -1;
+			if (this.SelectedIndex == -1)
+				this.SelectedIndex = -1;
 			else
 			{
-				selectedIndex--;
+				this.SelectedIndex--;
 
-				if (selectedIndex == -1)
+				if (this.SelectedIndex == -1)
 					BeverDriveContext.CurrentCoreGui.BackButton.Selected = true;
 			}
 
@@ -124,7 +123,7 @@ namespace BeverDrive.Modules
 			VlcContext.AudioPlayer.Stop();
 			VlcContext.VideoPlayer.Stop();
 			isActive = true;
-			selectedIndex = 0;
+			this.SelectedIndex = 0;
 			BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
 			this.ShowControls();
 			this.Update();

@@ -31,8 +31,6 @@ namespace BeverDrive.Modules
 	[BackButtonVisible(false)]
 	public class MainMenuSimple : AModule
 	{
-		public int SelectedIndex = 0;
-
 		private int x;
 		private int y;
 

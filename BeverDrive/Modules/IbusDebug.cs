@@ -38,8 +38,6 @@ namespace BeverDrive.Modules
 		private TextButton button1;
 		private TextButton button2;
 
-		public int SelectedIndex { get; set; }
-
 		public IbusDebug()
 		{
 			var width = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width;

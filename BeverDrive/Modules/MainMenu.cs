@@ -33,7 +33,6 @@ namespace BeverDrive.Modules
 	{
 		private int gridLeft = 1;
 		private int gridTop = 2;
-		private int selectedIndex = 0;
 
 		private Label lbl_title;
 		private List<MetroidButton> buttons;
@@ -57,17 +56,17 @@ namespace BeverDrive.Modules
 			switch(e.Command)
 			{
 				case ModuleCommands.SelectClick:
-					BeverDriveContext.SetActiveModule(this.buttonTypes[this.selectedIndex]);
+					BeverDriveContext.SetActiveModule(this.buttonTypes[this.SelectedIndex]);
 					break;
 				case ModuleCommands.SelectRight:
-					if (selectedIndex < this.buttons.Count - 1)
-						selectedIndex++;
+					if (this.SelectedIndex < this.buttons.Count - 1)
+						this.SelectedIndex++;
 
 					this.Update();
 					break;
 				case ModuleCommands.SelectLeft:
-					if (selectedIndex > 0)
-						selectedIndex--;
+					if (this.SelectedIndex > 0)
+						this.SelectedIndex--;
 
 					this.Update();
 					break;
@@ -96,8 +95,8 @@ namespace BeverDrive.Modules
 		private void Update()
 		{
 			this.buttons.Any(x => { x.Selected = false; return false; });
-			this.buttons[this.selectedIndex].Selected = true;
-			BeverDriveContext.CurrentCoreGui.ClockContainer.Text = this.buttons[this.selectedIndex].Text;
+			this.buttons[this.SelectedIndex].Selected = true;
+			BeverDriveContext.CurrentCoreGui.ClockContainer.Text = this.buttons[this.SelectedIndex].Text;
 			BeverDriveContext.CurrentCoreGui.Invalidate();
 		}
 
