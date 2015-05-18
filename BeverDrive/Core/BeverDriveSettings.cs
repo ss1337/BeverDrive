@@ -82,6 +82,7 @@ namespace BeverDrive.Core
 			this.OffsetRight = this.ReadIntSetting("OffsetRight", nodes);
 			this.OffsetTop = this.ReadIntSetting("OffsetTop", nodes);
 			this.TvMode = this.ReadTvModeSetting("TvMode", nodes);
+			this.VideoMode = this.ReadVideoModeSetting("VideoMode", nodes);
 			this.VlcPath = this.ReadStringSetting("VlcPath", nodes);
 
 			this.DebugTrack = this.ReadIntSetting("DebugTrack", nodes);
