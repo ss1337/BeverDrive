@@ -119,10 +119,14 @@ namespace BeverDrive.Core
 			}
 
 			if (BeverDriveContext.ActiveModule != null)
+			{
 				BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.Hide });
+				BeverDriveContext.ActiveModule.Visible = false;
+			}
 
 			BeverDriveContext.ActiveModule = module;
 			BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.Show });
+			BeverDriveContext.ActiveModule.Visible = true;
 
 			// If this module controls playback (ie should react to for example steering wheel buttons
 			// set PlaybackModule here

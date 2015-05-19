@@ -35,6 +35,11 @@ namespace BeverDrive.Modules
 		public IEnumerable<KeyValuePair<string, string>> Settings { get; set; }
 
 		/// <summary>
+		/// Is set if the module is visible
+		/// </summary>
+		public bool Visible { get; set; }
+
+		/// <summary>
 		/// Selected index for the current module
 		/// </summary>
 		public int SelectedIndex { get; set; }
