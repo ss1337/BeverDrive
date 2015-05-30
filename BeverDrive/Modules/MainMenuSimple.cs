@@ -1,5 +1,5 @@
 //
-// Copyright 2012-2014 Sebastian Sjödin
+// Copyright 2012-2015 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -60,21 +60,65 @@ namespace BeverDrive.Modules
 				case ModuleCommands.SelectClick:
 					BeverDriveContext.SetActiveModule(this.buttonTypes[this.SelectedIndex]);
 					break;
-				case ModuleCommands.SelectRight:
-					if (SelectedIndex > 0)
-						SelectedIndex--;
-					else
-						SelectedIndex = this.buttons.Count - 1;
 
-					this.Update();
+				case ModuleCommands.SelectRight:
+					if (RightSide(this.buttons[SelectedIndex]))
+					{
+						if (SelectedIndex == this.buttons.Count - 1)
+						{
+							for (int i = SelectedIndex; i > 0; i--)
+								if (RightSide(this.buttons[i]) && !RightSide(this.buttons[i - 1]))
+									SelectedIndex = i - 1;
+						}
+						else
+						{
+							SelectedIndex++;
+						}
+
+						this.Update();
+						break;
+					}
+
+					if (!RightSide(this.buttons[SelectedIndex]))
+					{
+						if (SelectedIndex == 0)
+						{
+							for (int i = 0; i < this.buttons.Count; i++)
+								if (!RightSide(this.buttons[i]) && RightSide(this.buttons[i + 1]))
+									SelectedIndex = i + 1;
+						}
+						else
+						{
+							SelectedIndex--;
+						}
+
+						this.Update();
+						break;
+					}
 					break;
 				case ModuleCommands.SelectLeft:
-					if (SelectedIndex < this.buttons.Count - 1)
-						SelectedIndex++;
-					else
-						SelectedIndex = 0;
+					if (RightSide(this.buttons[SelectedIndex]))
+					{
+						if (!RightSide(this.buttons[SelectedIndex - 1]))
+							SelectedIndex = 0;
+						else
+							SelectedIndex--;
 
-					this.Update();
+						this.Update();
+						break;
+					}
+
+					if (!RightSide(this.buttons[SelectedIndex]))
+					{
+						if (RightSide(this.buttons[SelectedIndex + 1]))
+							SelectedIndex = this.buttons.Count - 1;
+						else
+							SelectedIndex++;
+
+						this.Update();
+						break;
+					}
+
 					break;
 				case ModuleCommands.Show:
 					this.Show();
@@ -173,6 +217,11 @@ namespace BeverDrive.Modules
 			this.lbl_title.Size = new System.Drawing.Size(400, 50);
 			this.lbl_title.Text = "BeverDrive";
 			this.lbl_title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+		}
+
+		private bool RightSide(Label label)
+		{
+			return (label.Left > 400);
 		}
 	}
 }
