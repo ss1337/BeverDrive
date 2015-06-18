@@ -21,19 +21,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
-using BeverDrive.Core;
 using BeverDrive.Ibus;
 using BeverDrive.Ibus.Extensions;
 using BeverDrive.Modules;
 
-namespace BeverDrive
+namespace BeverDrive.Core
 {
-	public partial class MainForm : Form
+	public static class MessageProcessor
 	{
-		bool greeting = true;
+		public static bool greeting = true;
 
-		private void ProcessMessage(string message)
+		public static void Process(string message)
 		{
 			bool rtsEnable = BeverDriveContext.Ibus.RtsEnable;
 			int disc = VlcContext.CurrentDisc;
@@ -60,7 +58,7 @@ namespace BeverDrive
 				// TODO: Make this point to CurrentVlc and update current module
 				// TODO: Check if sending TrackStart avoids urspårning
 				BeverDriveContext.CurrentCoreGui.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.NextTrack });
-				
+
 				// Should it really be a cd -> radio message???
 				BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_TrackStart(disc, track));
 			}
@@ -118,9 +116,12 @@ namespace BeverDrive
 				rtsEnable = false;
 
 				// Simpler check, check for CD X-XX only
-				var index = message.IndexOf("43 44 20");
-				if (message.Substring(index, 20).IsMessage("43 44 20 3X 2D XX XX"))
-					rtsEnable = true;
+				int index = message.IndexOf("43 44 20");
+				if (index > 0 && index + 20 < message.Length)
+				{
+					// Check for CD X-XX
+					rtsEnable = message.Substring(index, 20).IsMessage("43 44 20 3X 2D XX XX");
+				}
 
 				// Check for SCAN
 				if (message.Contains("53 43 41 4E"))

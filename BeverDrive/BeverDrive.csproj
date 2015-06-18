@@ -52,6 +52,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="InTheHand.Net.Personal, Version=3.5.605.0, Culture=neutral, PublicKeyToken=ea38caa273134499, processorArchitecture=MSIL">
@@ -81,6 +82,7 @@
     <Compile Include="Core\BeverDriveSettings.cs" />
     <Compile Include="Core\FileSystemItem.cs" />
     <Compile Include="Core\ImageProcessor.cs" />
+    <Compile Include="Core\MessageProcessor.cs" />
     <Compile Include="Core\Playlist.cs" />
     <Compile Include="Core\PlaylistItem.cs" />
     <Compile Include="Gui\Controls\BackButton.cs">
@@ -141,9 +143,6 @@
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MainForm_ProcessMessage.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm_Splash.cs">
       <SubType>Form</SubType>

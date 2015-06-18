@@ -76,9 +76,9 @@ namespace BeverDrive
 		protected void Ibus_OnValidMessage(object sender, BeverDrive.Ibus.ValidMessageRecievedEventArgs e)
 		{
 			if (this.InvokeRequired)
-				this.Invoke(new Action<string>(ProcessMessage), new object[] { e.Message });
+				this.Invoke(new Action<string>(MessageProcessor.Process), new object[] { e.Message });
 			else
-				this.ProcessMessage(e.Message);
+				MessageProcessor.Process(e.Message);
 		}
 
 		protected void Timer1Hz_Tick(object sender, EventArgs e)
