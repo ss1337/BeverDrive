@@ -144,7 +144,7 @@ namespace BeverDrive.Ibus
 				this.comport.Write("asdf1234");
 		}
 
-		protected void DataReceived(object sender, SerialDataReceivedEventArgs e)
+		private void DataReceived(object sender, SerialDataReceivedEventArgs e)
 		{
 			if (this.comport.IsOpen)
 			{
