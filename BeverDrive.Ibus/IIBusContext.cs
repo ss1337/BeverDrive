@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BeverDrive.Ibus
 {
-	public interface IIBusContext
+	public interface IIbusContext
 	{
 		Mode CurrentMode { get; }
 		bool CtsHolding { get; }

@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\MessageExtensions.cs" />
+    <Compile Include="IIbusContext.cs" />
     <Compile Include="Messages\BordMonitor.cs" />
     <Compile Include="Constants\Buttons.cs" />
     <Compile Include="Enums.cs" />
