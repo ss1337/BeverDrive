@@ -36,6 +36,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dependencies\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -59,6 +63,7 @@
     <Compile Include="Core\FileSystemBrowserTests.cs" />
     <Compile Include="Core\GraphicsExtensionsTests.cs" />
     <Compile Include="Core\ImageProcessorTests.cs" />
+    <Compile Include="Core\MessageProcessorTests.cs" />
     <Compile Include="Core\PlaylistTests.cs" />
     <Compile Include="IbusTests.cs" />
     <Compile Include="Modules\IbusDebugTests.cs" />
