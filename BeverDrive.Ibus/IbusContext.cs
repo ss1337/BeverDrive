@@ -42,7 +42,7 @@ namespace BeverDrive.Ibus
 	public delegate void InitEventHandler(object sender, EventArgs e);
 	public delegate void ValidMessageEventHandler(object sender, ValidMessageRecievedEventArgs e);
 
-	public class IbusContext : IIBusContext
+	public class IbusContext : IIbusContext
 	{
 		public Mode CurrentMode { get; private set; }
 
