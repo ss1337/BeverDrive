@@ -82,5 +82,17 @@ namespace BeverDrive.IbusEmulator
 		{
 			this.ibus.Send(BeverDrive.Ibus.Messages.Other.Wheel_NextTrack);
 		}
+
+		private void chkRts_Click(object sender, EventArgs e)
+		{
+			if (this.chkRts.Checked)
+			{
+				this.ibus.Send(BeverDrive.Ibus.Messages.BordMonitor.Menu);
+			}
+			else
+			{
+				this.ibus.Send("68 17 3B 23 62 30 20 20 07 20 20 20 20 20 08 43 44 20 36 2D 39 39 20 20 26");
+			}
+		}
 	}
 }

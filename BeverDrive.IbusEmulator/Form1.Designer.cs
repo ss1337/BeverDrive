@@ -38,6 +38,7 @@
 			this.btnWheelLeft = new System.Windows.Forms.Button();
 			this.btnWheelRight = new System.Windows.Forms.Button();
 			this.label3 = new System.Windows.Forms.Label();
+			this.chkRts = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -135,11 +136,23 @@
 			this.label3.TabIndex = 7;
 			this.label3.Text = "Wheel buttons";
 			// 
+			// chkRts
+			// 
+			this.chkRts.AutoSize = true;
+			this.chkRts.Location = new System.Drawing.Point(116, 74);
+			this.chkRts.Name = "chkRts";
+			this.chkRts.Size = new System.Drawing.Size(54, 17);
+			this.chkRts.TabIndex = 10;
+			this.chkRts.Text = "RTS?";
+			this.chkRts.UseVisualStyleBackColor = true;
+			this.chkRts.Click += new System.EventHandler(this.chkRts_Click);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(207, 191);
+			this.Controls.Add(this.chkRts);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.btnWheelRight);
 			this.Controls.Add(this.btnWheelLeft);
@@ -170,6 +183,7 @@
 		private System.Windows.Forms.Button btnWheelLeft;
 		private System.Windows.Forms.Button btnWheelRight;
 		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.CheckBox chkRts;
 	}
 }
 
