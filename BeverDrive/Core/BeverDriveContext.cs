@@ -37,7 +37,7 @@ namespace BeverDrive.Core
 		public static AModule ActiveModule { get; set; }
 		public static AModule PlaybackModule { get; set; }
 		public static List<AModule> LoadedModules { get; set; }
-		public static IbusContext Ibus { get; set; }
+		public static IIbusContext Ibus { get; set; }
 
 		static BeverDriveContext()
 		{
@@ -76,6 +76,15 @@ namespace BeverDrive.Core
 			foreach (var modName in BeverDriveContext.Settings.Modules)
 			{
 				Type modType = Type.GetType(modName);
+
+				if (modType == null)
+				{
+					// Try loading module...
+					/*Assembly assembly = Assembly.LoadFrom("MyNice.dll");
+					Type type = assembly.GetType("MyType");
+					object instanceOfMyType = Activator.CreateInstance(type);*/
+				}
+
 				if (modType != null)
 				{
 					AModule mod = (AModule)Activator.CreateInstance(modType);
