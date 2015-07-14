@@ -44,6 +44,8 @@ namespace BeverDrive.Ibus
 
 		void pollQueue_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
+            bool msgSent = false;
+
 			if (messageQueue.Count == 0)
 				return;
 
@@ -52,12 +54,14 @@ namespace BeverDrive.Ibus
 
 			if (this.comport != null)
 			{
-				this.comport.Write(msg, 0, msg.Length);
-
-				// Retry?
-				while (this.comport.BytesToWrite > 0)
-					this.comport.Write(msg, 0, msg.Length);
-
+                while (!msgSent)
+                {
+                    if (this.comport.CtsHolding)
+                    {
+                        this.comport.Write(msg, 0, msg.Length);
+                        msgSent = true;
+                    }
+                }
 			}
 
 			this.pollQueue.Start();
