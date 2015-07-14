@@ -66,12 +66,42 @@ namespace BeverDrive.Tests.Core
 		}
 
 		[Test]
+		public void Sends_video_mode_when_switching_video()
+		{
+			List<string> sent = new List<string>();
+			var rtsEnable = false;
+			var ibusMock = new Mock<BeverDrive.Ibus.IIbusContext>();
+			ibusMock.SetupGet(p => p.RtsEnable).Returns(rtsEnable);
+			ibusMock.SetupSet(p => p.RtsEnable = It.IsAny<bool>()).Callback<bool>(value =>
+			{
+				rtsEnable = value;
+				ibusMock.SetupGet(p => p.RtsEnable).Returns(rtsEnable);
+			});
+
+			BeverDriveContext.Initialize();
+			BeverDriveContext.Ibus = ibusMock.Object;
+
+			var module = new BeverDrive.Modules.MainMenuSimple();
+			module.Settings = BeverDriveContext.Settings.ReadModuleSettings(module.GetType().FullName);
+			module.Init();
+			BeverDriveContext.LoadedModules.Add(module);
+			BeverDriveContext.ActiveModule = module;
+
+			Assert.False(rtsEnable);
+			BeverDrive.Core.MessageProcessor.Process(cdxxx);
+			ibusMock.Verify(x => x.Send(It.Is<string>(d => d == "ED 05 F0 4F 11 11 57")), Times.Once());
+		}
+
+		[Test]
 		public void Sets_Rts_correctly()
 		{
 			var rtsEnable = false;
 			var ibusMock = new Mock<BeverDrive.Ibus.IIbusContext>();
 			ibusMock.SetupGet(p => p.RtsEnable).Returns(rtsEnable);
-			ibusMock.SetupSet(p => p.RtsEnable = It.IsAny<bool>()).Callback<bool>(value => rtsEnable = value);
+			ibusMock.SetupSet(p => p.RtsEnable = It.IsAny<bool>()).Callback<bool>( value => {
+				rtsEnable = value;
+				ibusMock.SetupGet(p => p.RtsEnable).Returns(rtsEnable);
+			});
 			BeverDriveContext.Initialize();
 			BeverDriveContext.Ibus = ibusMock.Object;
 
