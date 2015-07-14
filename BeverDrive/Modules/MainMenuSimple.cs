@@ -205,7 +205,11 @@ namespace BeverDrive.Modules
 
 						default:
 							Type t = Type.GetType(kvp.Value);
-							this.CreateButton(t.Name, t, "Resources\\settings.png", "Resources\\settings_s.png");
+
+							// Check if the type actually exists
+							if (t != null)
+								this.CreateButton(t.Name, t, "Resources\\settings.png", "Resources\\settings_s.png");
+
 							break;
 					}
 			}
