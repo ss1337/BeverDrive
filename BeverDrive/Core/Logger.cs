@@ -33,6 +33,11 @@ namespace BeverDrive.Core
 			LogToFile("WARNING: " + message);
 		}
 
+		public static void AddDebug(string message)
+		{
+			LogToFile("DEBUG: " + message);
+		}
+
 		public static void AddError(string message)
 		{
 			LogToFile("ERROR:   " + message);

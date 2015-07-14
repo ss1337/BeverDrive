@@ -31,6 +31,7 @@ namespace BeverDrive
 {
 	public partial class MainForm : Form
 	{
+		private int seconds = 0;
 		public Timer Timer1Hz;
 		public Timer Timer50Hz;
 
@@ -83,6 +84,15 @@ namespace BeverDrive
 
 		protected void Timer1Hz_Tick(object sender, EventArgs e)
 		{
+			seconds++;
+
+			// Send announce every 200 seconds,
+			if (seconds > 199)
+			{
+				BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Other.Cdc_Announce);
+				seconds = 0;
+			}
+
 			if (BeverDriveContext.ActiveModule != null)
 				BeverDriveContext.ActiveModule.Update1Hz();
 
