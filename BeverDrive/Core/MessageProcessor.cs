@@ -39,7 +39,7 @@ namespace BeverDrive.Core
 
 			if (message.IsMessage(BeverDrive.Ibus.Messages.Other.Cdc_PollCd))
 			{
-				BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Other.Cdc_PollResponse);
+				Send(BeverDrive.Ibus.Messages.Other.Cdc_PollResponse);
 
 				// Send greeting?
 				if (greeting && !string.IsNullOrEmpty(BeverDriveContext.Settings.Greeting))
@@ -60,7 +60,7 @@ namespace BeverDrive.Core
 				BeverDriveContext.CurrentCoreGui.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.NextTrack });
 
 				// Should it really be a cd -> radio message???
-				BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_TrackStart(disc, track));
+				Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_TrackStart(disc, track));
 			}
 
 			if (message.IsMessage(BeverDrive.Ibus.Messages.Other.Wheel_PrevTrack))
@@ -70,32 +70,29 @@ namespace BeverDrive.Core
 				BeverDriveContext.CurrentCoreGui.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.PreviousTrack });
 
 				// Should it really be a cd -> radio message???
-				BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_TrackStart(disc, track));
+				Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_TrackStart(disc, track));
 			}
 
 			if (message.IsMessage(BeverDrive.Ibus.Messages.Radio.ReqTrack) /* || message.IsMessage("68 05 18 38 06 0X XX")*/)
 			{
 				if (VlcContext.IsPlaying)
-					BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_StatusPlaying(disc, track));
+					Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_StatusPlaying(disc, track));
 				else
-					BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_StatusNotPlaying(disc, track));
+					Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_StatusNotPlaying(disc, track));
 			}
 
 			if (message.IsMessage(BeverDrive.Ibus.Messages.Radio.PlayCd))
 			{
 				BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.StartPlayback });
-				BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_TrackStart(disc, track));
+				Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_TrackStart(disc, track));
 			}
 
 			if (message.IsMessage(BeverDrive.Ibus.Messages.Radio.StopCd))
 			{
 				// Stop playback
 				BeverDriveContext.ActiveModule.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.StopPlayback });
-				BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_StatusNotPlaying(disc, track));
+				Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_StatusNotPlaying(disc, track));
 			}
-
-			if (message.IsMessage(BeverDrive.Ibus.Messages.Radio.Menu))
-				rtsEnable = false;
 
 			if (rtsEnable)
 			{
@@ -144,11 +141,35 @@ namespace BeverDrive.Core
 				rtsEnable = false;
 			}
 
-			if (rtsEnable)
-				BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.LightWipers.SetTvMode(BeverDriveContext.Settings.TvMode));
+			// RTS enable switched, do stuff depending
+			if (BeverDriveContext.Ibus.RtsEnable != rtsEnable)
+			{
+				BeverDriveContext.Ibus.RtsEnable = rtsEnable;
 
-			BeverDriveContext.Ibus.RtsEnable = rtsEnable;
+				if (rtsEnable)
+				{
+					Send(BeverDrive.Ibus.Messages.Predefined.LightWipers.SetTvMode(BeverDriveContext.Settings.TvMode));
+					Send(BeverDrive.Ibus.Messages.Predefined.LightWipers.SetTvMode(BeverDriveContext.Settings.TvMode));
+				}
+				else
+				{
+					// Log which message caused the switch
+					Logger.AddDebug(string.Format("RTS disabled by message: {0}", message));
+				}
+			}
+
 			BeverDriveContext.ActiveModule.ProcessMessage(message);
+		}
+
+		public static void Send(Message message)
+		{
+			Send(message.ToString());
+		}
+
+		public static void Send(string message)
+		{
+			BeverDriveContext.Ibus.Send(message);
+			Logger.AddDebug(string.Format("CTS holding: {0} {1}", BeverDriveContext.Ibus.CtsHolding, message));
 		}
 	}
 }
