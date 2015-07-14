@@ -71,6 +71,8 @@ namespace BeverDrive.Ibus.Messages
 		public const string Eject = "F0 04 68 48 33 E7";
 		public const string Menu = "F0 04 FF 48 34 77";
 		public const string Mode = "F0 04 68 48 23 F7";
+		public const string SelectPress = "F0 04 68 48 20 F4";
+		public const string SelectRelease = "F0 04 68 48 A0 74";
 		public const string Tone = "F0 04 68 48 04 D0";
 
 		public const string LeftKnobLeft = "F0 04 68 32 X0 XX";
