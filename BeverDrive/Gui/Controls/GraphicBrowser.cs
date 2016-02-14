@@ -128,7 +128,7 @@ namespace BeverDrive.Gui.Controls
 			int stop = browser.Items.Count - start > 10 ? start + 10 : browser.Items.Count;
 			int row = 0;
 			int column = 0;
-			int x = 0;
+
 			int y = (int)this.ClientRectangle.Top;
 			for(int i = start; i < stop; i++)
 			{

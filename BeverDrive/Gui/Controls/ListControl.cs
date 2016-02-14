@@ -101,7 +101,6 @@ namespace BeverDrive.Gui.Controls
 			// Calculate rectangles and stuff...
 			string text = this.Items[itemIndex + scrollIndex].ToString();
 			var outerRect = new Rectangle(this.Location.X, this.Location.Y + y, this.Width, this.ItemHeight);
-			var innerRect = outerRect.Shrink(3);
 
 			// Draw selected box if this is selected
 			if (itemIndex + scrollIndex == this.SelectedIndex)
