@@ -87,5 +87,21 @@ namespace BeverDrive.Core
 			VizPlayer = Factory.CreatePlayer<IAudioPlayer>();
 			VideoPlayer = Factory.CreatePlayer<IVideoPlayer>();
 		}
+
+		public static void PlayAudio()
+		{
+			if (VideoPlayer.IsPlaying)
+				VideoPlayer.Pause();
+
+			AudioPlayer.Play();
+		}
+
+		public static void PlayVideo()
+		{
+			if (AudioPlayer.IsPlaying)
+				AudioPlayer.Pause();
+
+			VideoPlayer.Play();
+		}
 	}
 }
