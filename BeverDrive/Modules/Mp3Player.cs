@@ -361,7 +361,7 @@ namespace BeverDrive.Modules
 
 			this.ctrl_pb = new ProgressBar();
 			this.ctrl_pb.BackColor = Colors.BackColor;
-			this.ctrl_pb.Location = new System.Drawing.Point(15, 140);
+			this.ctrl_pb.Location = new System.Drawing.Point(15, 138);
 			this.ctrl_pb.Height = 25;
 			this.ctrl_pb.Width = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width - 30;
 			this.ctrl_pb.Maximum = 100;
@@ -370,16 +370,16 @@ namespace BeverDrive.Modules
 			var x = width / 2 - 120;
 
 			this.ctrl_prev = new MetroidButton("Resources\\core_prev.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
-			this.ctrl_prev.Location = new System.Drawing.Point(x, 180);
+			this.ctrl_prev.Location = new System.Drawing.Point(x, 172);
 
 			this.ctrl_play = new MetroidButton("Resources\\core_play.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
-			this.ctrl_play.Location = new System.Drawing.Point(x + 60, 180);
+			this.ctrl_play.Location = new System.Drawing.Point(x + 60, 172);
 
 			this.ctrl_next = new MetroidButton("Resources\\core_next.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
-			this.ctrl_next.Location = new System.Drawing.Point(x + 120, 180);
+			this.ctrl_next.Location = new System.Drawing.Point(x + 120, 172);
 
 			this.ctrl_shuffle = new MetroidButton("Resources\\core_shuffle.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
-			this.ctrl_shuffle.Location = new System.Drawing.Point(x + 180, 180);
+			this.ctrl_shuffle.Location = new System.Drawing.Point(x + 180, 172);
 		}
 	}
 }
