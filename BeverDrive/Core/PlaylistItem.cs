@@ -19,6 +19,7 @@
 // ============================================================================
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using nVlc.LibVlcWrapper.Declarations.Media;
@@ -42,9 +43,9 @@ namespace BeverDrive.Core
 			this.Album = string.Empty;
 			this.Artist = string.Empty;
 			this.Title = string.Empty;
-			this.Filename = filename.Substring(filename.LastIndexOf("\\") + 1);
+			this.Filename = filename.Substring(filename.LastIndexOf(Path.DirectorySeparatorChar) + 1);
 			this.VlcMedia = VlcContext.Factory.CreateMedia<IMedia>(filename);
-			this.VlcMedia.Parse(true);
+			//this.VlcMedia.Parse(false);
 			
 			if (filename.EndsWith(".mp3"))
 			{

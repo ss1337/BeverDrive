@@ -49,6 +49,8 @@ namespace BeverDrive.Core
 			Settings = new BeverDriveSettings();
 			if (Settings.EnableIbus)
 				Ibus = new BeverDrive.Ibus.IbusContext(Settings.ComPort);
+			else
+				Ibus = new BeverDrive.Ibus.IbusContext("");
 
 			CurrentCoreGui = new BeverDrive.Gui.CoreGui();
 		}
