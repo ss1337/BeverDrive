@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2014 Sebastian Sjödin
+// Copyright 2014-2016 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -33,6 +33,8 @@ namespace BeverDrive
 	/// </summary>
 	public partial class MainForm
 	{
+		public bool IsRunningMono { get { return Type.GetType ("Mono.Runtime") != null; } }
+
 		private Label lblSplash;
 
 		/// <summary>
@@ -84,35 +86,6 @@ namespace BeverDrive
 				}
 			}
 
-			// Check for Webdings
-			if (!fail)
-			{
-				lblSplash.Text += "done\nChecking for Webdings font... ";
-				Font f = new Font("Webdings", 28f, FontStyle.Bold);
-
-				if (f.Name != "Webdings")
-				{
-					lblSplash.Text += string.Format("does not exist ({0})... exiting\n");
-					fail = true;
-					QuitWithError();
-				}
-			}
-
-			// Check for Wingdings 3
-			if (!fail)
-			{
-				lblSplash.Text += "done\nChecking for Wingdings 3 font... ";
-				Font f = new Font("Wingdings 3", 28f, FontStyle.Bold);
-
-				if (f.Name != "Wingdings 3")
-				{
-					lblSplash.Text += string.Format("does not exist ({0})... exiting\n");
-					fail = true;
-					QuitWithError();
-				}
-			}
-
-
 			// Check com port
 			if (!fail)
 			{
@@ -131,8 +104,8 @@ namespace BeverDrive
 				}
 			}
 
-			// Check path to vlc dlls
-			if (!fail)
+			// Check path to vlc dlls, only if we are running in Windows
+			if (!fail && !this.IsRunningMono)
 			{
 				lblSplash.Text += "done\nChecking VLC path... ";
 
