@@ -77,6 +77,7 @@ namespace BeverDrive.Gui.Controls
 			((Bitmap)selectedIcon).UnlockBits(icon2Data);
 			((Bitmap)icon).UnlockBits(icon1Data);
 			((Bitmap)tmpBmp).UnlockBits(tmpData);
+			tmpBmp.Dispose();
 
 			this.Font = new Font("Arial", 16f);
 			this.Width = width;
