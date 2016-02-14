@@ -35,7 +35,7 @@ namespace BeverDrive.Gui
 		public ClockPanel ClockContainer { get; set; }						// Contains lower portion with date/time and maybe text
 		public GraphicsPanel ModuleContainer { get; set; }					// All module controls goes into here
 
-		public BackButton BackButton { get; set; }
+		public MetroidButton BackButton { get; set; }
 
 		public Size BaseAreaSize { get { return this.BaseContainer.Size; } }
 
@@ -108,7 +108,7 @@ namespace BeverDrive.Gui
 			int width = 800 - BeverDriveContext.Settings.OffsetLeft - BeverDriveContext.Settings.OffsetRight;
 			int height = 600 - BeverDriveContext.Settings.OffsetTop - BeverDriveContext.Settings.OffsetBottom;
 
-			this.BackButton = new BackButton();
+			this.BackButton = new MetroidButton("Resources\\core_back.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
 			this.BackButton.Location = new System.Drawing.Point(0, 5);
 
 			// Adjust this to fit to screen

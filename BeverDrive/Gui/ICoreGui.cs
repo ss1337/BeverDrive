@@ -11,7 +11,7 @@ namespace BeverDrive.Gui
 {
 	public interface ICoreGui
 	{
-		BackButton BackButton { get; set; }
+		MetroidButton BackButton { get; set; }
 		Size BaseAreaSize { get; }
 		Size ModuleAreaSize { get; }
 

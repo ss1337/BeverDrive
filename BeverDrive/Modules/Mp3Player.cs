@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2015 Sebastian Sjödin
+// Copyright 2012-2016 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -44,10 +44,10 @@ namespace BeverDrive.Modules
 		private Label ctrl_filename;
 		private Label ctrl_title;
 		private ProgressBar ctrl_pb;
-		private WebdingsButton ctrl_prev;
-		private WebdingsButton ctrl_play;
-		private WebdingsButton ctrl_next;
-		private WebdingsButton ctrl_shuffle;
+		private MetroidButton ctrl_prev;
+		private MetroidButton ctrl_play;
+		private MetroidButton ctrl_next;
+		private MetroidButton ctrl_shuffle;
 
 		private Playlist playlist;
 		private bool vlcPopulated;
@@ -270,7 +270,7 @@ namespace BeverDrive.Modules
 
 		private void StartPlayback()
 		{
-			VlcContext.AudioPlayer.Play();
+			VlcContext.PlayAudio();
 		}
 
 		private void StopPlayback()
@@ -298,7 +298,7 @@ namespace BeverDrive.Modules
 		{
 			VlcContext.AudioPlayer.Stop();
 			VlcContext.AudioPlayer.Open(playlist.CurrentItem.VlcMedia);
-			VlcContext.AudioPlayer.Play();
+			VlcContext.PlayAudio();
 
 			VlcContext.CurrentTrack = playlist.CurrentIndex + 1;
 			BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_TrackStart(VlcContext.CurrentDisc, VlcContext.CurrentTrack));
@@ -369,16 +369,16 @@ namespace BeverDrive.Modules
 
 			var x = width / 2 - 120;
 
-			this.ctrl_prev = new WebdingsButton(0x39);
+			this.ctrl_prev = new MetroidButton("Resources\\core_prev.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
 			this.ctrl_prev.Location = new System.Drawing.Point(x, 180);
 
-			this.ctrl_play = new WebdingsButton(0x34);
+			this.ctrl_play = new MetroidButton("Resources\\core_play.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
 			this.ctrl_play.Location = new System.Drawing.Point(x + 60, 180);
 
-			this.ctrl_next = new WebdingsButton(0x3A);
+			this.ctrl_next = new MetroidButton("Resources\\core_next.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
 			this.ctrl_next.Location = new System.Drawing.Point(x + 120, 180);
 
-			this.ctrl_shuffle = new WebdingsButton(0x71);
+			this.ctrl_shuffle = new MetroidButton("Resources\\core_shuffle.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
 			this.ctrl_shuffle.Location = new System.Drawing.Point(x + 180, 180);
 		}
 	}

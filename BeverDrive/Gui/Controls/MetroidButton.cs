@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2014 Sebastian Sjödin
+// Copyright 2012-2016 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -23,6 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace BeverDrive.Gui.Controls
 {
@@ -36,6 +37,51 @@ namespace BeverDrive.Gui.Controls
 		private int gridTop;
 		private Image icon;
 		private Image selectedIcon;
+
+		public MetroidButton(string iconFile, Color normal, Color selected)
+		{
+			Bitmap tmpBmp = (Bitmap)Bitmap.FromFile(iconFile);
+			int width = tmpBmp.Width;
+			int height = tmpBmp.Height;
+
+			icon = new Bitmap(width, height, tmpBmp.PixelFormat);
+			selectedIcon = new Bitmap(width, height, tmpBmp.PixelFormat);
+
+			// Create normal and selected icons depending on colors
+			BitmapData tmpData = tmpBmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, tmpBmp.PixelFormat);
+			BitmapData icon1Data = ((Bitmap)icon).LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, tmpBmp.PixelFormat);
+			BitmapData icon2Data = ((Bitmap)selectedIcon).LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, tmpBmp.PixelFormat);
+
+			unsafe
+			{
+				uint* p_tmp = (uint*)tmpData.Scan0;
+				uint* p_icon1 = (uint*)icon1Data.Scan0;
+				uint* p_icon2 = (uint*)icon2Data.Scan0;
+
+				uint pixelValue = 0;
+				uint icon1Color = (uint)normal.ToArgb() & 0xffffff;
+				uint icon2Color = (uint)selected.ToArgb() & 0xffffff;
+
+				for (uint i = 0; i < width * height; i++)
+				{
+					pixelValue = (uint)*(p_tmp + i);
+					if ((pixelValue & 0xffffff) == 0xffffff)
+					{
+						// Alpha from original image + color
+						*(p_icon1 + i) = ((pixelValue >> 24) << 24) + icon1Color;
+						*(p_icon2 + i) = ((pixelValue >> 24) << 24) + icon2Color;
+					}
+				}
+			}
+
+			((Bitmap)selectedIcon).UnlockBits(icon2Data);
+			((Bitmap)icon).UnlockBits(icon1Data);
+			((Bitmap)tmpBmp).UnlockBits(tmpData);
+
+			this.Font = new Font("Arial", 16f);
+			this.Width = width;
+			this.Height = height;
+		}
 
 		public MetroidButton(string iconFile, string selectedIconFile)
 		{
