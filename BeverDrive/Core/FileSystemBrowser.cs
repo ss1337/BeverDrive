@@ -139,14 +139,14 @@ namespace BeverDrive.Core
 
 			if (this.ShowDirectories)
 				this.Directories.Any(x => {
-					string cover = this.FindCoverImage(this.CurrentDirectory.FullName + "\\" + x.Name);
-					this.Items.Add(new FileSystemItem("\\" + x.Name, cover)); return false; 
+					string cover = this.FindCoverImage(this.CurrentDirectory.FullName + Path.DirectorySeparatorChar + x.Name);
+					this.Items.Add(new FileSystemItem(Path.DirectorySeparatorChar + x.Name, cover)); return false; 
 				});
 
 			if (this.ShowFiles)
 				this.Files.Any(x => { this.Items.Add(new FileSystemItem(x.Name)); return false; });
 
-			this.CurrentItem = new FileSystemItem("\\" + this.CurrentDirectory.Name, this.FindCoverImage(this.CurrentDirectory.FullName));
+			this.CurrentItem = new FileSystemItem(Path.DirectorySeparatorChar + this.CurrentDirectory.Name, this.FindCoverImage(this.CurrentDirectory.FullName));
 		}
 
 		private string FindCoverImage(string path)
