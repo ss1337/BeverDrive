@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2015 Sebastian Sjödin
+// Copyright 2012-2016 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -23,9 +23,6 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using BeverDrive.Core;
-using BeverDrive.Gui.Controls;
-using BeverDrive.Gui.Styles;
-using nVlc.LibVlcWrapper.Declarations.Media;
 
 namespace BeverDrive.Modules
 {
@@ -44,11 +41,16 @@ namespace BeverDrive.Modules
 			// Fullscreen 2 = zoomed video
 			if (fullScreen == 2)
 			{
+				// Set every control in ModuleContainer as visible
+				foreach (Control ctrl in BeverDriveContext.CurrentCoreGui.ModuleContainer.Controls)
+					ctrl.Visible = true;
+
+				BeverDriveContext.CurrentCoreGui.ClockContainer.Visible = true;
+
 				// Un-fullscreen
 				this.fullScreen = 0;
-				BeverDriveContext.FullScreen = false;
 				VlcContext.VideoPlayer.VideoScale = 0.0f;
-				this.AddControls();
+				this.SetVlcControl();
 				return true;
 			}
 
@@ -61,10 +63,14 @@ namespace BeverDrive.Modules
 
 			if (switchTo)
 			{
+				// Set every control except ctrl_vlc as not visible
+				foreach (Control ctrl in BeverDriveContext.CurrentCoreGui.ModuleContainer.Controls)
+					if (ctrl != ctrl_vlc)
+						ctrl.Visible = false;
+
+				BeverDriveContext.CurrentCoreGui.ClockContainer.Visible = false;
+
 				this.fullScreen = 1;
-				BeverDriveContext.FullScreen = true;
-				// TODO: Set background black here, doesn't work yet for some reason
-				BeverDriveContext.CurrentCoreGui.BaseContainer.BackColor = Color.Black;
 				this.SetVlcControl();
 				return true;
 			}
@@ -76,35 +82,22 @@ namespace BeverDrive.Modules
 		{
 			var vlcx = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2 - 210;
 
-			/*if (fullScreen == 2)
+			if (this.fullScreen == 1)
 			{
-				var vlcSize = BeverDriveContext.CurrentCoreGui.BaseContainer.Size;
-				vlcSize.Height += 180;
-				vlcSize.Height += 320;
-
-				this.ctrl_vlc.BackColor = System.Drawing.Color.Black;
-				this.ctrl_vlc.Location = new System.Drawing.Point(-160, -90);
-				this.ctrl_vlc.Size = vlcSize;
-			}*/
-
-			if (this.fullScreen > 0)
-			{
-				this.ctrl_vlc.BackColor = System.Drawing.Color.Black;
+				this.ctrl_vlc.BackColor = Color.Black;
 				this.ctrl_vlc.Location = new System.Drawing.Point(0, 0);
-				this.ctrl_vlc.Size = BeverDriveContext.CurrentCoreGui.BaseContainer.Size;
-				BeverDriveContext.CurrentCoreGui.BaseContainer.Controls.Add(this.ctrl_vlc);
+				this.ctrl_vlc.Size = BeverDriveContext.CurrentCoreGui.ModuleAreaSize;
 			}
 
 			if (fullScreen == 0)
 			{
 				int height = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Height - ctrl_browser.Height - 10;
-				this.ctrl_vlc.BackColor = System.Drawing.Color.Black;
+				this.ctrl_vlc.BackColor = Color.Black;
 				this.ctrl_vlc.Location = new System.Drawing.Point(vlcx, 0);
 				this.ctrl_vlc.Size = new System.Drawing.Size(420, height);
-				BeverDriveContext.CurrentCoreGui.ModuleContainer.Controls.Add(ctrl_vlc);
+				BeverDriveContext.CurrentCoreGui.ModuleContainer.BackColor = BeverDriveContext.Settings.BackColor;
+				BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
 			}
-
-			this.ctrl_vlc.Visible = true;
 		}
 	}
 }

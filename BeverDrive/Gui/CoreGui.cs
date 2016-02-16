@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2014 Sebastian Sjödin
+// Copyright 2012-2016 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -31,15 +31,21 @@ namespace BeverDrive.Gui
 {
 	public class CoreGui : ICoreGui
 	{
-		public Panel BaseContainer { get; set; }								// Adjust this to fit everything to screen
+		public Panel BaseContainer { get; set; }							// Adjust this to fit everything to screen
 		public ClockPanel ClockContainer { get; set; }						// Contains lower portion with date/time and maybe text
 		public GraphicsPanel ModuleContainer { get; set; }					// All module controls goes into here
-
 		public MetroidButton BackButton { get; set; }
 
-		public Size BaseAreaSize { get { return this.BaseContainer.Size; } }
-
-		public Size ModuleAreaSize { get { return this.ModuleContainer.Size; } }
+		public Size ModuleAreaSize
+		{
+			get { 
+				var retVal = this.ModuleContainer.Size;
+				if (this.ClockContainer.Visible)
+					retVal.Height -= 40;
+				
+				return retVal;
+			}
+		}
 
 		public CoreGui()
 		{
@@ -55,7 +61,7 @@ namespace BeverDrive.Gui
 					break;
 				case ModuleCommands.Show:
 					BeverDriveContext.CurrentMainForm.Controls.Add(this.BaseContainer);
-					this.BaseContainer.Controls.Add(this.ClockContainer);
+					this.ModuleContainer.Controls.Add(this.ClockContainer);
 					this.BaseContainer.Controls.Add(this.ModuleContainer);
 					break;
 				case ModuleCommands.NextTrack:
@@ -109,7 +115,7 @@ namespace BeverDrive.Gui
 			int height = 600 - BeverDriveContext.Settings.OffsetTop - BeverDriveContext.Settings.OffsetBottom;
 
 			this.BackButton = new MetroidButton("Resources\\core_back.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
-			this.BackButton.Location = new System.Drawing.Point(0, 5);
+			this.BackButton.Location = new System.Drawing.Point(0, 0);
 
 			// Adjust this to fit to screen
 			this.BaseContainer = new Panel();
@@ -119,23 +125,23 @@ namespace BeverDrive.Gui
 			this.BaseContainer.Size = new System.Drawing.Size(width, height);
 			this.BaseContainer.TabIndex = 0;
 
-			this.ClockContainer = new ClockPanel();
-			this.ClockContainer.BackColor = Colors.ClockBackgroundColor;
-			this.ClockContainer.ForeColor = Colors.ClockForegroundColor;
-			this.ClockContainer.TextColor = Colors.SelectedColor;
-			this.ClockContainer.Font = Fonts.GuiFont24;
-			this.ClockContainer.Location = new System.Drawing.Point(0, this.BaseContainer.Size.Height - 40);
-			this.ClockContainer.Size = new System.Drawing.Size(this.BaseContainer.Size.Width, 40);
-			this.ClockContainer.Name = "ClockContainer";
-			this.ClockContainer.TabIndex = 0;
-
 			// This panel is were everything ends up
 			this.ModuleContainer = new GraphicsPanel();
 			this.ModuleContainer.BackColor = Colors.BackColor;
 			this.ModuleContainer.Location = new System.Drawing.Point(0, 0);
 			this.ModuleContainer.Name = "ModuleContainer";
-			this.ModuleContainer.Size = new System.Drawing.Size(this.BaseContainer.Size.Width, this.BaseContainer.Size.Height - 40);
+			this.ModuleContainer.Size = new System.Drawing.Size(this.BaseContainer.Size.Width, this.BaseContainer.Size.Height);
 			this.ModuleContainer.TabIndex = 0;
+
+			this.ClockContainer = new ClockPanel();
+			this.ClockContainer.BackColor = Colors.ClockBackgroundColor;
+			this.ClockContainer.ForeColor = Colors.ClockForegroundColor;
+			this.ClockContainer.TextColor = Colors.SelectedColor;
+			this.ClockContainer.Font = Fonts.GuiFont24;
+			this.ClockContainer.Location = new System.Drawing.Point(0, this.ModuleContainer.Size.Height - 40);
+			this.ClockContainer.Size = new System.Drawing.Size(this.BaseContainer.Size.Width, 40);
+			this.ClockContainer.Name = "ClockContainer";
+			this.ClockContainer.TabIndex = 0;
 
 #if DEBUG
 			//this.BaseContainer.BackColor = System.Drawing.Color.Green;

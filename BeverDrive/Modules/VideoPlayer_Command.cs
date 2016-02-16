@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2015 Sebastian Sjödin
+// Copyright 2012-2016 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -136,7 +136,7 @@ namespace BeverDrive.Modules
 
 				case -1:
 					// Full screen
-					SetFullScreen(true);
+					this.SetFullScreen(true);
 					break;
 
 				default:
@@ -170,6 +170,7 @@ namespace BeverDrive.Modules
 
 						playlist.CurrentIndex = this.ctrl_browser.SelectedIndex - this.ctrl_browser.Directories.Count - 1;
 						this.PlayTrack();
+						this.SetFullScreen(true);
 					}
 					break;
 			}

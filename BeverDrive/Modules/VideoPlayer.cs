@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2015 Sebastian Sjödin
+// Copyright 2012-2016 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -87,6 +87,7 @@ namespace BeverDrive.Modules
 		private void AddControls()
 		{
 			BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
+			BeverDriveContext.CurrentCoreGui.ModuleContainer.Controls.Add(ctrl_vlc);
 			this.ShowControls();
 			this.SetVlcControl();
 		}
