@@ -114,7 +114,7 @@ namespace BeverDrive.Gui
 			int width = 800 - BeverDriveContext.Settings.OffsetLeft - BeverDriveContext.Settings.OffsetRight;
 			int height = 600 - BeverDriveContext.Settings.OffsetTop - BeverDriveContext.Settings.OffsetBottom;
 
-			this.BackButton = new MetroidButton("Resources\\core_back.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
+			this.BackButton = new MetroidButton("core_back.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
 			this.BackButton.Location = new System.Drawing.Point(0, 0);
 
 			// Adjust this to fit to screen

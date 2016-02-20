@@ -127,24 +127,24 @@ namespace BeverDrive.Modules
 					switch(kvp.Value)
 					{
 						case "BeverDrive.Modules.Bluetooth":
-							this.CreateButton("Bluetooth", typeof(Bluetooth), "Resources\\bluetooth.png", "Resources\\bluetooth_s.png");
+							this.CreateButton("Bluetooth", typeof(Bluetooth), "bluetooth.png", "bluetooth_s.png");
 							break;
 
 						case "BeverDrive.Modules.Mp3Player":
-							this.CreateButton("Music player", typeof(Mp3Player), "Resources\\music.png", "Resources\\music_s.png");
+							this.CreateButton("Music player", typeof(Mp3Player), "music.png", "music_s.png");
 							break;
 
 						case "BeverDrive.Modules.NubblesModule":
-							this.CreateButton("Nubbles", typeof(NubblesModule), "Resources\\nubbles.png", "Resources\\nubbles_s.png");
+							this.CreateButton("Nubbles", typeof(NubblesModule), "nubbles.png", "nubbles_s.png");
 							break;
 
 						case "BeverDrive.Modules.VideoPlayer":
-							this.CreateButton("Video player", typeof(VideoPlayer), "Resources\\video.png", "Resources\\video_s.png");
+							this.CreateButton("Video player", typeof(VideoPlayer), "video.png", "video_s.png");
 							break;
 
 						default:
 							Type t = Type.GetType(kvp.Value);
-							this.CreateButton(t.Name, t, "Resources\\settings.png", "Resources\\settings_s.png");
+							this.CreateButton(t.Name, t, "settings.png", "settings_s.png");
 							break;
 					}
 			}

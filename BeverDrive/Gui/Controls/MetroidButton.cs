@@ -19,11 +19,12 @@
 // ============================================================================
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.Drawing;
-using System.Drawing.Imaging;
 
 namespace BeverDrive.Gui.Controls
 {
@@ -40,7 +41,7 @@ namespace BeverDrive.Gui.Controls
 
 		public MetroidButton(string iconFile, Color normal, Color selected)
 		{
-			Bitmap tmpBmp = (Bitmap)Bitmap.FromFile(iconFile);
+			Bitmap tmpBmp = (Bitmap)Bitmap.FromFile("Resources" + Path.DirectorySeparatorChar + iconFile);
 			int width = tmpBmp.Width;
 			int height = tmpBmp.Height;
 
