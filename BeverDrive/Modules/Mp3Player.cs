@@ -19,6 +19,7 @@
 // ============================================================================
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using BeverDrive.Core;
@@ -164,7 +165,7 @@ namespace BeverDrive.Modules
 			{
 				this.ctrl_browser.Select();
 
-				if (this.ctrl_browser.SelectedItem.StartsWith("\\"))
+				if (this.ctrl_browser.SelectedItem.StartsWith(Path.DirectorySeparatorChar.ToString()))
 				{
 					vlcPopulated = false;
 					shuffle = false;
@@ -177,7 +178,7 @@ namespace BeverDrive.Modules
 
 						// Add stuff to list
 						foreach (var f in ctrl_browser.Files)
-							playlist.AddFile(ctrl_browser.CurrentPath + "\\" + f.Name);
+							playlist.AddFile(ctrl_browser.CurrentPath + Path.DirectorySeparatorChar + f.Name);
 
 						// TODO: Add cover image
 						/*if (ctrl_browser.CurrentItem.CoverImage != null)

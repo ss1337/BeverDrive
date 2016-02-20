@@ -52,8 +52,6 @@ namespace BeverDrive.Gui.Controls
 			int center = this.Width / 2;
 			int y = this.Location.Y;
 
-			var rect = new RectangleF(0, 0, this.Width, this.Height);
-
 			StringFormat cFormat = new StringFormat();
 			Int32 lNum = (Int32)Math.Log((Double)this.TextAlign, 2);
 			cFormat.LineAlignment = (StringAlignment)(lNum / 4);

@@ -66,11 +66,16 @@ namespace BeverDrive.Gui.Controls
 				for (uint i = 0; i < width * height; i++)
 				{
 					pixelValue = (uint)*(p_tmp + i);
-					if ((pixelValue & 0xffffff) == 0xffffff)
+					if (pixelValue > 0)
 					{
 						// Alpha from original image + color
 						*(p_icon1 + i) = ((pixelValue >> 24) << 24) + icon1Color;
 						*(p_icon2 + i) = ((pixelValue >> 24) << 24) + icon2Color;
+					}
+					else
+					{
+						*(p_icon1 + i) = 0x00000000;
+						*(p_icon2 + i) = 0x00000000;
 					}
 				}
 			}

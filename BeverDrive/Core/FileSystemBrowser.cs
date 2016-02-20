@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2014 Sebastian Sjödin
+// Copyright 2012-2016 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -69,8 +69,8 @@ namespace BeverDrive.Core
 		/// <param name="name">Name of subdirectory, can be prepended with \ for simplicity</param>
 		public void Cd(string name)
 		{
-			if (!name.StartsWith("\\"))
-				name = "\\" + name;
+			if (!name.StartsWith(Path.DirectorySeparatorChar.ToString()))
+				name = Path.DirectorySeparatorChar + name;
 
 			this.CurrentDirectory = new DirectoryInfo(this.CurrentDirectory.FullName + name);
 			this.ReadDirectory();
@@ -100,14 +100,14 @@ namespace BeverDrive.Core
 			var item = this.Items[index];
 
 			// Cd up if we should
-			if (item.Name == "\\..")
+			if (item.Name == Path.DirectorySeparatorChar.ToString())
 			{
 				this.CdUp();
 				return this.CurrentDirectory.Name;
 			}
 
 			// Cd to subdirectory if we should
-			if (item.Name.StartsWith("\\"))
+			if (item.Name.StartsWith(Path.DirectorySeparatorChar.ToString()))
 			{
 				this.Cd(item.Name);
 				return this.CurrentDirectory.Name;
@@ -125,7 +125,7 @@ namespace BeverDrive.Core
 
 			// Decide whether we should show .. or not
 			if (!((this.chrootBehavior) && this.CurrentDirectory.FullName == this.chrootPath.FullName) || (this.CurrentDirectory.Parent != null))
-				this.Items.Add(new FileSystemItem("\\.."));
+				this.Items.Add(new FileSystemItem(Path.DirectorySeparatorChar + ".."));
 
 			// TODO: We are on top, enumerate drives instead...
 			if (this.CurrentDirectory.Parent != null)

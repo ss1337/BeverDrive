@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using BeverDrive.Core;
@@ -140,7 +141,7 @@ namespace BeverDrive.Modules
 					break;
 
 				default:
-					if (this.ctrl_browser.SelectedItem.StartsWith("\\"))
+				if (this.ctrl_browser.SelectedItem.StartsWith(Path.DirectorySeparatorChar.ToString()))
 					{
 						this.ctrl_browser.Select();
 						vlcPopulated = false;
@@ -163,7 +164,7 @@ namespace BeverDrive.Modules
 
 							// Add stuff to list
 							foreach (var f in ctrl_browser.Files)
-								playlist.AddFile(ctrl_browser.CurrentPath + "\\" + f.Name);
+							playlist.AddFile(ctrl_browser.CurrentPath + Path.DirectorySeparatorChar + f.Name);
 						}
 
 						vlcPopulated = true;

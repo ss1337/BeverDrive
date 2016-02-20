@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2014 Sebastian Sjödin
+// Copyright 2014-2016 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -19,6 +19,7 @@
 // ============================================================================
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -95,9 +96,9 @@ namespace BeverDrive.Gui.Controls
 			{
 				var item = this.browser.Items[this.SelectedIndex];
 
-				if (item.Name.StartsWith("\\"))
+				if (item.Name.StartsWith(Path.DirectorySeparatorChar.ToString()))
 				{
-					if (item.Name == "\\..")
+					if (item.Name == Path.DirectorySeparatorChar.ToString())
 					{
 						this.browser.CdUp();
 					}

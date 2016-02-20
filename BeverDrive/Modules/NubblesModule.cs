@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2014-2015 Sebastian Sjödin
+// Copyright 2014-2016 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -40,7 +40,7 @@ namespace BeverDrive.Modules
 		private int numPlayers;
 		public MenuState MenuState { get; set; }
 
-		public int SelectedIndex
+		public new int SelectedIndex
 		{
 			get { return ctrlMenu.SelectedIndex; }
 			set { ctrlMenu.SelectedIndex = value; }

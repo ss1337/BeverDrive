@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2014 Sebastian Sjödin
+// Copyright 2012-2016 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -55,14 +55,14 @@ namespace BeverDrive.Gui.Controls
 			{
 				var item = this.browser.Items[this.SelectedIndex];
 
-				if (item.Name.StartsWith("\\"))
+				if (item.Name.StartsWith(Path.DirectorySeparatorChar.ToString()))
 				{
-					var childName = "\\" + browser.CurrentDirectory.Name;
+					var childName = Path.DirectorySeparatorChar + browser.CurrentDirectory.Name;
 					this.browser.Select(this.SelectedIndex);
 					this.PopulateBrowser();
 					this.Invalidate();
 
-					if (item.Name == "\\..") {
+					if (item.Name == Path.DirectorySeparatorChar + "..") {
 						int newIndex = this.Items.IndexOf(childName);
 						this.ScrollToCenter(newIndex);
 						this.SelectedIndex = newIndex;

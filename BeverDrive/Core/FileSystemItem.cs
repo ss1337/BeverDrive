@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2014 Sebastian Sjödin
+// Copyright 2014-2016 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -19,6 +19,7 @@
 // ============================================================================
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -56,9 +57,9 @@ namespace BeverDrive.Core
 			this.Name = name;
 			this.FileType = FileType.Unknown;
 
-			if (name.StartsWith("\\"))
+			if (name.StartsWith(Path.DirectorySeparatorChar.ToString()))
 			{
-				if (name.Equals("\\.."))
+				if (name.Equals(Path.DirectorySeparatorChar))
 					this.FileType = FileType.DotDot;
 				else
 					this.FileType = FileType.Directory;
