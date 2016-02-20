@@ -271,7 +271,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy $(SolutionDir)Dependencies\32feetWidcomm.dll $(TargetDir)
-copy $(SolutionDir)Dependencies\btwapi.dll $(TargetDir)</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
