@@ -225,6 +225,9 @@
     <Content Include="Resources\core_close.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\core_full.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\core_next.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

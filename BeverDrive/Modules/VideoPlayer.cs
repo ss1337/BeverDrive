@@ -35,10 +35,10 @@ namespace BeverDrive.Modules
 	{
 		private int fullScreen;
 		private FileSystemBrowserListControl ctrl_browser;
-		private WebdingsButton ctrl_prev;
-		private WebdingsButton ctrl_play;
-		private WebdingsButton ctrl_next;
-		private WebdingsButton ctrl_full;
+		private MetroidButton ctrl_prev;
+		private MetroidButton ctrl_play;
+		private MetroidButton ctrl_next;
+		private MetroidButton ctrl_full;
 		private Panel ctrl_vlc;
 
 		private Playlist playlist;
@@ -58,16 +58,16 @@ namespace BeverDrive.Modules
 
 			var btnx = (BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2 - 338) / 2;
 
-			this.ctrl_prev = new WebdingsButton(0x39);
+			this.ctrl_prev = new MetroidButton("core_prev.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
 			this.ctrl_prev.Location = new System.Drawing.Point(70, 20);
 
-			this.ctrl_play = new WebdingsButton(0x34);
+			this.ctrl_play = new MetroidButton("core_play.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
 			this.ctrl_play.Location = new System.Drawing.Point(70, 70);
 
-			this.ctrl_next = new WebdingsButton(0x3A);
+			this.ctrl_next = new MetroidButton("core_next.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
 			this.ctrl_next.Location = new System.Drawing.Point(70, 120);
 
-			this.ctrl_full = new WebdingsButton(0x32);
+			this.ctrl_full = new MetroidButton("core_full.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
 			this.ctrl_full.Location = new System.Drawing.Point(70, 170);
 
 			this.ctrl_vlc = new Panel();
