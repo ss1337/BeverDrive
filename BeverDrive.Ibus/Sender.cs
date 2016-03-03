@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2011-2014 Sebastian Sjödin
+// Copyright 2011-2016 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -20,7 +20,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
-using System.Linq;
 using System.Text;
 
 namespace BeverDrive.Ibus
@@ -44,7 +43,7 @@ namespace BeverDrive.Ibus
 
 		void pollQueue_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-            bool msgSent = false;
+			bool msgSent = false;
 
 			if (messageQueue.Count == 0)
 				return;
@@ -54,14 +53,14 @@ namespace BeverDrive.Ibus
 
 			if (this.comport != null)
 			{
-                while (!msgSent)
-                {
-                    if (this.comport.CtsHolding)
-                    {
-                        this.comport.Write(msg, 0, msg.Length);
-                        msgSent = true;
-                    }
-                }
+				while (!msgSent)
+				{
+					if (this.comport.CtsHolding)
+					{
+						this.comport.Write(msg, 0, msg.Length);
+						msgSent = true;
+					}
+				}
 			}
 
 			this.pollQueue.Start();

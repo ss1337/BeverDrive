@@ -1,5 +1,5 @@
 //
-// Copyright 2011-2014 Sebastian Sjödin
+// Copyright 2011-2016 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -97,10 +97,13 @@ namespace BeverDrive.Ibus
 
 		~IbusContext()
 		{
-			if (this.comport.IsOpen)
-				this.comport.Close();
+			if (this.comport != null)
+			{
+				if (this.comport.IsOpen)
+					this.comport.Close();
 
-			this.comport.Dispose();
+				this.comport.Dispose();
+			}
 		}
 
 		public void Close()
