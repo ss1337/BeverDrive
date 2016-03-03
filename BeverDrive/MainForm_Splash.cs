@@ -25,6 +25,7 @@ using System.Text;
 using System.Windows.Forms;
 using BeverDrive.Core;
 using InTheHand.Net.Sockets;
+using BeverDrive.Gui.Controls;
 
 namespace BeverDrive
 {
@@ -35,7 +36,7 @@ namespace BeverDrive
 	{
 		public bool IsRunningMono { get { return Type.GetType ("Mono.Runtime") != null; } }
 
-		private Label lblSplash;
+		private TeletypeLabel lblSplash;
 
 		/// <summary>
 		/// Shows the splash screen with startup messages
@@ -43,7 +44,7 @@ namespace BeverDrive
 		/// <returns>0 on success, -1 on failure</returns>
 		private int ShowSplashScreen()
 		{
-			this.lblSplash = new Label();
+			this.lblSplash = new TeletypeLabel();
 			this.lblSplash.AutoSize = true;
 			this.lblSplash.Location = new System.Drawing.Point(38, 37);
 			this.lblSplash.ForeColor = Color.FromArgb(211, 211, 211);
@@ -51,6 +52,7 @@ namespace BeverDrive
 			this.lblSplash.Name = "label1";
 			this.lblSplash.Size = new System.Drawing.Size(0, 13);
 			this.lblSplash.TabIndex = 0;
+			this.lblSplash.Visible = true;
 			this.Controls.Add(this.lblSplash);
 			this.BackColor = Color.FromArgb(62, 67, 130);
 
@@ -145,29 +147,6 @@ namespace BeverDrive
 
 			// TODO: Check modules loaded here...
 
-			// Check bluetooth support if it's enabled
-			/*if (!fail)
-			{
-				if (bs.EnableBluetooth)
-				{
-					try
-					{
-						lblSplash.Text += "done\nChecking bluetooth support... ";
-						BluetoothClient btClient = new BluetoothClient();
-					}
-					catch (Exception ex)
-					{
-						lblSplash.Text += string.Format("failed\n({0})... exiting\n", ex.Message);
-						fail = true;
-						QuitWithError();
-					}
-				}
-				else
-					lblSplash.Text += "done\nBluetooth disabled";
-			}*/
-
-			this.Invalidate();
-
 			// Everything A-OK
 			if (fail)
 				return -1;
@@ -179,15 +158,25 @@ namespace BeverDrive
 
 		private void QuitWithError()
 		{
-			var t = new Timer();
-			t.Interval = 4000;
-			t.Tick += new EventHandler(t_Tick);
-			t.Start();
+			var t1 = new Timer();
+			t1.Interval = 4000;
+			t1.Tick += new EventHandler(t1_Tick);
+			t1.Start();
+
+			var t2 = new Timer();
+			t2.Interval = 50;
+			t2.Tick += new EventHandler(t2_Tick);
+			t2.Start();
 		}
 
-		private void t_Tick(object sender, EventArgs e)
+		private void t1_Tick(object sender, EventArgs e)
 		{
 			Application.Exit();
+		}
+
+		private void t2_Tick(object sender, EventArgs e)
+		{
+			lblSplash.Refresh();
 		}
 	}
 }
