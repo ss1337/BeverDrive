@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2015 Sebastian Sjödin
+// Copyright 2015-2016 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -89,7 +89,7 @@ namespace BeverDrive.Tests.Core
 
 			Assert.False(rtsEnable);
 			BeverDrive.Core.MessageProcessor.Process(cdxxx);
-			ibusMock.Verify(x => x.Send(It.Is<string>(d => d == "ED 05 F0 4F 11 11 57")), Times.Once());
+			ibusMock.Verify(x => x.Send(It.Is<string>(d => d == "ED 05 F0 4F 11 11 57")), Times.AtLeastOnce());
 		}
 
 		[Test]
