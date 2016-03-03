@@ -24,8 +24,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using BeverDrive.Core;
-using InTheHand.Net.Sockets;
 using BeverDrive.Gui.Controls;
+using nVlc.LibVlcWrapper.Implementation.Exceptions;
 
 namespace BeverDrive
 {
@@ -110,6 +110,34 @@ namespace BeverDrive
 					"done\nChecking VLC path... ",
 					string.Format("can't find libvlc.dll and libvlccore.dll in \n   {0}\n\nExiting...", bs.VlcPath),
 					!System.IO.File.Exists(bs.VlcPath + "\\libvlc.dll") || !System.IO.File.Exists(bs.VlcPath + "\\libvlccore.dll"));
+			}
+
+			// Try to initialize vlc
+			if (!fail)
+			{
+				lblSplash.Text += "done\nTrying to initialize libvlc... ";
+
+				BeverDriveContext.Initialize();
+				try
+				{
+					VlcContext.Initialize(BeverDriveContext.Settings.VlcPath);
+				}
+				catch (LibVlcNotFoundException)
+				{
+					if (IsRunningMono)
+						lblSplash.Text += "couldn't find libvlc, missing symlink?\n\nExiting...";
+					else
+						lblSplash.Text += string.Format("couldn't find libvlc at {0}\n\nExiting...", BeverDriveContext.Settings.VlcPath);
+
+					fail = true;
+					QuitWithError();
+				}
+				catch (LibVlcInitException)
+				{
+					lblSplash.Text += "something went wrong when initializing libvlc\n\nExiting...";
+					fail = true;
+					QuitWithError();
+				}
 			}
 
 			// Check if music path exists

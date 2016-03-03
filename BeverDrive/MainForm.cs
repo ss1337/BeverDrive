@@ -1,5 +1,5 @@
 //
-// Copyright 2012-2015 Sebastian Sjödin
+// Copyright 2012-2016 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -23,9 +23,9 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using BeverDrive.Core;
-using BeverDrive.Modules;
 using BeverDrive.Ibus;
 using BeverDrive.Ibus.Extensions;
+using BeverDrive.Modules;
 
 namespace BeverDrive
 {
@@ -43,8 +43,6 @@ namespace BeverDrive
 			if (this.ShowSplashScreen() == -1)
 				return;
 
-			BeverDriveContext.Initialize();
-			VlcContext.Initialize(BeverDriveContext.Settings.VlcPath);
 			BeverDriveContext.CurrentMainForm = this;
 			BeverDriveContext.LoadModules();
 
