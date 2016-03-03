@@ -61,15 +61,12 @@ namespace BeverDrive
 			BeverDriveSettings bs = null;
 
 			// Check that config exists
-			if (!fail && !System.IO.File.Exists("Config.xml"))
+			if (!fail)
 			{
-				lblSplash.Text += "Config.xml doesn't exist... exiting\n";
-				fail = true;
-				QuitWithError();
-			}
-			else
-			{
-				lblSplash.Text += "Config.xml exists...\n";
+				fail = SplashTest(
+					"Checking that Config.xml exists...\n",
+					"can't find Config.xml...\n\nExiting...",
+					!System.IO.File.Exists("Config.xml"));
 			}
 
 			// Parse config...
@@ -82,7 +79,7 @@ namespace BeverDrive
 				}
 				catch (Exception ex)
 				{
-					lblSplash.Text += string.Format("failed ({0})... exiting\n", ex.Message);
+					lblSplash.Text += string.Format("failed ({0})...\n\nExiting...", ex.Message);
 					fail = true;
 					QuitWithError();
 				}
@@ -100,7 +97,7 @@ namespace BeverDrive
 				}
 				catch (Exception ex)
 				{
-					lblSplash.Text += string.Format("failed ({0})... exiting\n", ex.Message);
+					lblSplash.Text += string.Format("failed ({0})... \n\nExiting...", ex.Message);
 					fail = true;
 					QuitWithError();
 				}
@@ -109,40 +106,28 @@ namespace BeverDrive
 			// Check path to vlc dlls, only if we are running in Windows
 			if (!fail && !this.IsRunningMono)
 			{
-				lblSplash.Text += "done\nChecking VLC path... ";
-
-				if (!System.IO.File.Exists(bs.VlcPath + "\\libvlc.dll") || !System.IO.File.Exists(bs.VlcPath + "\\libvlccore.dll"))
-				{
-					lblSplash.Text += string.Format("can't find libvlc.dll and libvlccore.dll in \n   {0}\n\nExiting...", bs.VlcPath);
-					fail = true;
-					QuitWithError();
-				}
+				fail = SplashTest(
+					"done\nChecking VLC path... ",
+					string.Format("can't find libvlc.dll and libvlccore.dll in \n   {0}\n\nExiting...", bs.VlcPath),
+					!System.IO.File.Exists(bs.VlcPath + "\\libvlc.dll") || !System.IO.File.Exists(bs.VlcPath + "\\libvlccore.dll"));
 			}
 
 			// Check if music path exists
 			if (!fail)
 			{
-				lblSplash.Text += "done\nChecking music path... ";
-
-				if (!System.IO.Directory.Exists(bs.MusicRoot))
-				{
-					lblSplash.Text += string.Format("can't find music root {0}\n\nExiting...", bs.MusicRoot);
-					fail = true;
-					QuitWithError();
-				}
+				fail = SplashTest(
+					"done\nChecking music path... ",
+					string.Format("can't find music root {0}\n\nExiting...", bs.MusicRoot),
+					!System.IO.Directory.Exists(bs.MusicRoot));
 			}
 
 			// Check if video path exists
 			if (!fail)
 			{
-				lblSplash.Text += "done\nChecking video path... ";
-
-				if (!System.IO.Directory.Exists(bs.VideoRoot))
-				{
-					lblSplash.Text += string.Format("can't find video root {0}\n\nExiting...", bs.VideoRoot);
-					fail = true;
-					QuitWithError();
-				}
+				fail = SplashTest(
+					"done\nChecking video path... ",
+					string.Format("can't find video root {0}\n\nExiting...", bs.VideoRoot),
+					!System.IO.Directory.Exists(bs.VideoRoot));
 			}
 
 			// TODO: Check modules loaded here...
@@ -154,6 +139,20 @@ namespace BeverDrive
 				this.Controls.Remove(lblSplash);
 
 			return 0;
+		}
+
+		private bool SplashTest(string msg1, string msg2, bool condition)
+		{
+			lblSplash.Text += msg1;
+
+			if (condition)
+			{
+				lblSplash.Text += msg2;
+				QuitWithError();
+				return true;
+			}
+
+			return false;
 		}
 
 		private void QuitWithError()
