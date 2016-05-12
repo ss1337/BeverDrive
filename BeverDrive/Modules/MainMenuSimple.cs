@@ -38,12 +38,13 @@ namespace BeverDrive.Modules
 		private List<Label> buttons;
 		private List<string> buttonTypes;
 
+		private int firstRightIdx = 0;
+		private int lastLeftIdx = 0;
+
 		public MainMenuSimple()
 		{
 			this.buttons = new List<Label>();
 			this.buttonTypes = new List<string>();
-			x = 20;
-			y = 140;
 		}
 
 		public override void Init()
@@ -66,9 +67,8 @@ namespace BeverDrive.Modules
 					{
 						if (SelectedIndex == this.buttons.Count - 1)
 						{
-							for (int i = SelectedIndex; i > 0; i--)
-								if (RightSide(this.buttons[i]) && !RightSide(this.buttons[i - 1]))
-									SelectedIndex = i - 1;
+							// Last item on the left side
+							SelectedIndex = lastLeftIdx;
 						}
 						else
 						{
@@ -83,9 +83,11 @@ namespace BeverDrive.Modules
 					{
 						if (SelectedIndex == 0)
 						{
-							for (int i = 0; i < this.buttons.Count; i++)
-								if (!RightSide(this.buttons[i]) && RightSide(this.buttons[i + 1]))
-									SelectedIndex = i + 1;
+							// Find the first item on the right side, if it exists
+							if (firstRightIdx == -1)
+								SelectedIndex = this.buttons.Count - 1;
+							else
+								SelectedIndex = firstRightIdx;
 						}
 						else
 						{
@@ -99,7 +101,7 @@ namespace BeverDrive.Modules
 				case ModuleCommands.SelectLeft:
 					if (RightSide(this.buttons[SelectedIndex]))
 					{
-						if (!RightSide(this.buttons[SelectedIndex - 1]))
+						if (SelectedIndex == firstRightIdx)
 							SelectedIndex = 0;
 						else
 							SelectedIndex--;
@@ -110,10 +112,17 @@ namespace BeverDrive.Modules
 
 					if (!RightSide(this.buttons[SelectedIndex]))
 					{
-						if (RightSide(this.buttons[SelectedIndex + 1]))
-							SelectedIndex = this.buttons.Count - 1;
+						if (SelectedIndex == lastLeftIdx)
+						{
+							if (firstRightIdx != -1)
+								SelectedIndex = this.buttons.Count - 1;
+							else
+								SelectedIndex = 0;
+						}
 						else
+						{
 							SelectedIndex++;
+						}
 
 						this.Update();
 						break;
@@ -156,7 +165,7 @@ namespace BeverDrive.Modules
 			BeverDriveContext.CurrentCoreGui.Invalidate();
 		}
 
-		private void CreateButton(string text, Type moduleType, string icon, string selectedIcon)
+		private void CreateButton(string text, Type moduleType, int x, int y)
 		{
 			// Create and add menu choices
 			var lb = new Label();
@@ -169,38 +178,32 @@ namespace BeverDrive.Modules
 
 			this.buttons.Add(lb);
 			this.buttonTypes.Add(moduleType.Name);
-
-			// Increment x/y
-			y += 80;
-
-			if (y > 310)
-			{
-				y = 140;
-				x = 460;
-			}
 		}
 
 		private void CreateControls()
 		{
+			int x = 20;
+			int y = 140;
+
 			foreach (var kvp in this.Settings)
 			{
 				if (kvp.Key.StartsWith("MenuItem"))
 					switch(kvp.Value)
 					{
 						case "BeverDrive.Modules.Bluetooth":
-							this.CreateButton("Bluetooth", typeof(Bluetooth), "bluetooth.png", "bluetooth_s.png");
+							this.CreateButton("Bluetooth", typeof(Bluetooth), x, y);
 							break;
 
 						case "BeverDrive.Modules.Mp3Player":
-							this.CreateButton("Music player", typeof(Mp3Player), "music.png", "music_s.png");
+							this.CreateButton("Music player", typeof(Mp3Player), x, y);
 							break;
 
 						case "BeverDrive.Modules.NubblesModule":
-							this.CreateButton("Nubbles", typeof(NubblesModule), "nubbles.png", "nubbles_s.png");
+							this.CreateButton("Nubbles", typeof(NubblesModule), x, y);
 							break;
 
 						case "BeverDrive.Modules.VideoPlayer":
-							this.CreateButton("Video player", typeof(VideoPlayer), "video.png", "video_s.png");
+							this.CreateButton("Video player", typeof(VideoPlayer), x, y);
 							break;
 
 						default:
@@ -208,11 +211,24 @@ namespace BeverDrive.Modules
 
 							// Check if the type actually exists
 							if (t != null)
-								this.CreateButton(t.Name, t, "settings.png", "settings_s.png");
+								this.CreateButton(t.Name, t, x, y);
 
 							break;
 					}
+
+				// Increment x/y
+				y += 80;
+
+				if (y > 310)
+				{
+					y = 140;
+					x = 460;
+				}
 			}
+
+			// Set indexes
+			firstRightIdx = this.buttons.FindIndex(a => RightSide(a));
+			lastLeftIdx = this.buttons.FindLastIndex(a => !RightSide(a));
 
 			this.lbl_title = new Label();
 			this.lbl_title.Font = Fonts.GuiFont36;
