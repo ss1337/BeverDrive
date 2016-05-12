@@ -46,6 +46,7 @@ namespace BeverDrive.Modules
 					ctrl.Visible = true;
 
 				BeverDriveContext.CurrentCoreGui.ClockContainer.Visible = true;
+				BeverDriveContext.CurrentMainForm.BackColor = BeverDrive.Gui.Styles.Colors.BackColor;
 
 				// Un-fullscreen
 				this.fullScreen = 0;
@@ -69,6 +70,7 @@ namespace BeverDrive.Modules
 						ctrl.Visible = false;
 
 				BeverDriveContext.CurrentCoreGui.ClockContainer.Visible = false;
+				BeverDriveContext.CurrentMainForm.BackColor = Color.Black;
 
 				this.fullScreen = 1;
 				this.SetVlcControl();

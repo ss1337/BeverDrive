@@ -148,13 +148,20 @@ namespace BeverDrive.Modules
 					}
 					else
 					{
-						// Check if we are already playing this track, if so, fullscreen
 						if (vlcPopulated)
 						{
+							// Check if we are already playing this track, if so, fullscreen
 							if (playlist.CurrentItem.Filename == this.ctrl_browser.SelectedItem)
 							{
 								// Full screen
 								SetFullScreen(true);
+							}
+							else
+							{
+								// .. else play new video
+								playlist.CurrentIndex = this.ctrl_browser.SelectedIndex - this.ctrl_browser.Directories.Count - 1;
+								this.PlayTrack();
+								this.SetFullScreen(true);
 							}
 						}
 
@@ -165,13 +172,12 @@ namespace BeverDrive.Modules
 							// Add stuff to list
 							foreach (var f in ctrl_browser.Files)
 							playlist.AddFile(ctrl_browser.CurrentPath + Path.DirectorySeparatorChar + f.Name);
+							vlcPopulated = true;
+
+							playlist.CurrentIndex = this.ctrl_browser.SelectedIndex - this.ctrl_browser.Directories.Count - 1;
+							this.PlayTrack();
+							this.SetFullScreen(true);
 						}
-
-						vlcPopulated = true;
-
-						playlist.CurrentIndex = this.ctrl_browser.SelectedIndex - this.ctrl_browser.Directories.Count - 1;
-						this.PlayTrack();
-						this.SetFullScreen(true);
 					}
 					break;
 			}
@@ -270,6 +276,7 @@ namespace BeverDrive.Modules
 
 			// Set vlc control to the
 			VlcContext.VideoPlayer.WindowHandle = this.ctrl_vlc.Handle;
+			this.ctrl_vlc.Visible = true;
 			this.ctrl_browser.SelectedIndex = 0;
 			this.AddControls();
 		}
