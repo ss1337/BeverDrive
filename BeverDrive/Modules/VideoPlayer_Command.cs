@@ -153,6 +153,10 @@ namespace BeverDrive.Modules
 							// Check if we are already playing this track, if so, fullscreen
 							if (playlist.CurrentItem.Filename == this.ctrl_browser.SelectedItem)
 							{
+								// Play if paused
+								ctrl_play.Selected = true;
+								VlcContext.VideoPlayer.Play();
+
 								// Full screen
 								SetFullScreen(true);
 							}
