@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2014-2016 Sebastian Sjödin
+// Copyright 2014-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -34,6 +34,7 @@ namespace BeverDrive.Core
 		DotDot = 0x31,
 		Drive = 0xC0,
 		Music = 0xB2,
+		MyComputer = 0xA5, // TODO: Fix this
 		Video = 0xB4,
 		Unknown = 0x9D
 	}
@@ -41,12 +42,55 @@ namespace BeverDrive.Core
 	public class FileSystemItem
 	{
 		public System.Drawing.Image CoverImage { get; set; }
+		public string DriveName { get; set; }
 		public string Name { get; set; }
 		public FileType FileType { get; set; }
+
+		public static FileSystemItem MyComputer()
+		{
+			var result = new FileSystemItem("> My computer");
+			result.FileType = FileType.MyComputer;
+			return result;
+		}
 
 		public FileSystemItem(string name)
 			: this(name, string.Empty)
 		{
+		}
+
+		public FileSystemItem(DriveInfo di)
+		{
+			string label = "";
+
+			if (di.IsReady && !string.IsNullOrEmpty(di.VolumeLabel))
+			{
+				label = di.VolumeLabel;
+			}
+			else
+			{
+				switch (di.DriveType)
+				{
+					case DriveType.CDRom:
+						label = "CD-ROM";
+						break;
+					case DriveType.Fixed:
+						label = "Local Disk";
+						break;
+					case DriveType.Network:
+						label = "Network Drive";
+						break;
+					case DriveType.Removable:
+						label = "Removable Disk";
+						break;
+					default:
+						label = "Unknown";
+						break;
+				}
+			}
+
+			this.Name = string.Format("{0} ({1})", label, di.Name.TrimEnd( new char[] { '\\' } ));
+			this.FileType = FileType.Drive;
+			this.DriveName = di.Name;
 		}
 
 		public FileSystemItem(string name, string coverImageFile)

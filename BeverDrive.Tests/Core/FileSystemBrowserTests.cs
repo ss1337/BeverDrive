@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2014 Sebastian Sjödin
+// Copyright 2012-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -32,40 +32,8 @@ namespace BeverDrive.Tests.Core
 	{
 		public FileSystemBrowserTests()
 		{
-		}
-
-		[Test]
-		public void Browser_stops_when_chroot()
-		{
-			var browser = new FileSystemBrowser("C:\\", false);
-			browser.CdUp();
-			Assert.AreEqual("C:\\", browser.CurrentDirectory.Name);
-		}
-
-		[Test]
-		public void Browser_cdups()
-		{
-			var browser = new FileSystemBrowser("C:\\Windows", false);
-			browser.CdUp();
-			Assert.AreEqual("C:\\", browser.CurrentDirectory.Name);
-		}
-
-		[Test]
-		public void Browser_cds_with_index()
-		{
-			var browser = new FileSystemBrowser("C:\\Windows", false);
-			Assert.AreEqual("Windows", browser.CurrentDirectory.Name);
-			browser.Cd(1);
-			Assert.AreNotEqual("Windows", browser.CurrentDirectory.Name);
-		}
-
-		[Test]
-		public void Browser_cds_with_name()
-		{
-			var browser = new FileSystemBrowser("C:\\Windows", false);
-			Assert.AreEqual("Windows", browser.CurrentDirectory.Name);
-			browser.Cd("system32");
-			Assert.AreEqual("system32", browser.CurrentDirectory.Name);
+			BeverDriveContext.Initialize();
+			VlcContext.Initialize(BeverDriveContext.Settings.VlcPath);
 		}
 
 		[Test]
@@ -78,12 +46,40 @@ namespace BeverDrive.Tests.Core
 		}
 
 		[Test]
+		public void Chroot_works()
+		{
+			var browser = new FileSystemBrowser("C:\\Windows", true);
+			Assert.AreNotEqual("\\..", browser.Items[0].Name);
+			browser.Select(2);
+			Assert.AreEqual("\\..", browser.Items[0].Name);
+			browser.Select(0);
+			Assert.AreNotEqual("\\..", browser.Items[0].Name);
+		}
+
+		[Test]
+		public void My_computer_doesnt_also_show_dotdot()
+		{
+			var browser = new FileSystemBrowser("C:\\", false);
+			Assert.AreEqual("> My computer", browser.Items[0].Name);
+			Assert.AreNotEqual("\\..", browser.Items[1].Name);
+		}
+
+		[Test]
 		public void Select_doesnt_break_on_invalid_indices()
 		{
 			var browser = new FileSystemBrowser("C:\\Windows", false);
 			browser.Select(-1);
+			browser.Select(-100);
 			browser.Select(browser.Items.Count);
 			browser.Select(browser.Items.Count + 10);
+		}
+
+		[Test]
+		public void Starting_with_my_computer_shows_drives()
+		{
+			var browser = new FileSystemBrowser("> My computer", false);
+			Assert.AreEqual("Local Disk (C:)", browser.Items[0].Name);
+			Assert.AreEqual("Storage (D:)", browser.Items[1].Name);
 		}
 	}
 }

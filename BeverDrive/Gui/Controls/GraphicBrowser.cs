@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2014-2016 Sebastian Sjödin
+// Copyright 2014-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -98,14 +98,8 @@ namespace BeverDrive.Gui.Controls
 
 				if (item.Name.StartsWith(Path.DirectorySeparatorChar.ToString()))
 				{
-					if (item.Name == Path.DirectorySeparatorChar.ToString())
-					{
-						this.browser.CdUp();
-					}
-					else
-					{
-						this.browser.Cd(item.Name);
-					}
+					//this.browser.Cd(item.Name);
+					this.browser.Select(this.SelectedIndex);
 
 					BeverDriveContext.CurrentCoreGui.ClockContainer.Text = this.browser.CurrentDirectory.Name;
 					this.SelectedIndex = 0;

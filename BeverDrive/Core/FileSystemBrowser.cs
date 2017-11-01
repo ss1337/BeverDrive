@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2016 Sebastian Sjödin
+// Copyright 2012-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -27,7 +27,6 @@ namespace BeverDrive.Core
 {
 	public class FileSystemBrowser
 	{
-		private bool chrootBehavior;
 		private DirectoryInfo chrootPath;
 		private bool showDirectories;
 		private bool showFiles;
@@ -42,50 +41,26 @@ namespace BeverDrive.Core
 
 		public FileSystemBrowser(string startPath, bool chrootBehavior)
 		{
-			this.chrootBehavior = chrootBehavior;
-			this.chrootPath = new DirectoryInfo(startPath);
-			this.CurrentDirectory = new DirectoryInfo(startPath);
-			this.Directories = new List<DirectoryInfo>();
-			this.Files = new List<FileInfo>();
-			this.Items = new List<FileSystemItem>();
+			if (chrootBehavior)
+				this.chrootPath = new DirectoryInfo(startPath);
+
 			this.ShowDirectories = true;
 			this.ShowFiles = true;
-			this.ReadDirectory();
+			this.ReadDirectory(startPath);
 		}
 
 		/// <summary>
-		/// Change directory to a subdirectory, \.. is omitted
+		/// Returns index of an item, or -1 if the item is not found
 		/// </summary>
-		/// <param name="index"></param>
-		public void Cd(int index)
+		/// <param name="item"></param>
+		/// <returns></returns>
+		public int IndexOf(string item)
 		{
-			this.CurrentDirectory = this.Directories[index];
-			this.ReadDirectory();
-		}
+			for (int i = 0; i < this.Items.Count; i++)
+				if (this.Items[i].Name == item)
+					return i;
 
-		/// <summary>
-		/// Change directory to a subdirectory
-		/// </summary>
-		/// <param name="name">Name of subdirectory, can be prepended with \ for simplicity</param>
-		public void Cd(string name)
-		{
-			if (!name.StartsWith(Path.DirectorySeparatorChar.ToString()))
-				name = Path.DirectorySeparatorChar + name;
-
-			this.CurrentDirectory = new DirectoryInfo(this.CurrentDirectory.FullName + name);
-			this.ReadDirectory();
-		}
-
-		/// <summary>
-		/// Changes directory to the parent of current directory if possible
-		/// </summary>
-		public void CdUp()
-		{
-			if (((this.chrootBehavior) && this.CurrentDirectory.FullName == this.chrootPath.FullName) || this.CurrentDirectory.Parent == null)
-				return;
-
-			this.CurrentDirectory = this.CurrentDirectory.Parent;
-			this.ReadDirectory();
+			return -1;
 		}
 
 		/// <summary>
@@ -99,54 +74,37 @@ namespace BeverDrive.Core
 
 			var item = this.Items[index];
 
+			// Go to My computer if we should
+			if (item.FileType == FileType.MyComputer)
+			{
+				this.ReadMyComputer();
+				return item.Name;
+			}
+
+			if (item.FileType == FileType.Drive)
+			{
+				this.ReadDirectory(item.DriveName);
+				return item.DriveName;
+			}
+
 			// Cd up if we should
-			if (item.Name == Path.DirectorySeparatorChar.ToString())
+			/*if (item.Name == Path.DirectorySeparatorChar.ToString())
 			{
 				this.CdUp();
 				return this.CurrentDirectory.Name;
-			}
+			}*/
 
 			// Cd to subdirectory if we should
 			if (item.Name.StartsWith(Path.DirectorySeparatorChar.ToString()))
 			{
-				this.Cd(item.Name);
+
+				this.ReadDirectory(this.CurrentDirectory + item.Name);
+				//this.Cd(item.Name);
 				return this.CurrentDirectory.Name;
 			}
 
 			// Seems to be a file, return it
 			return item.Name;
-		}
-
-		private void ReadDirectory()
-		{
-			this.Directories.Clear();
-			this.Files.Clear();
-			this.Items.Clear();
-
-			// Decide whether we should show .. or not
-			if (!((this.chrootBehavior) && this.CurrentDirectory.FullName == this.chrootPath.FullName) || (this.CurrentDirectory.Parent != null))
-				this.Items.Add(new FileSystemItem(Path.DirectorySeparatorChar + ".."));
-
-			// TODO: We are on top, enumerate drives instead...
-			if (this.CurrentDirectory.Parent != null)
-			{
-			}
-
-			this.CurrentDirectory.GetDirectories().Any(x => { this.Directories.Add(x); return false; });
-			this.CurrentDirectory.GetFiles("*.*").Any(x => { this.Files.Add(x); return false; });
-			this.Directories.OrderBy(x => x.Name);
-			this.Files.OrderBy(x => x.Name);
-
-			if (this.ShowDirectories)
-				this.Directories.Any(x => {
-					string cover = this.FindCoverImage(this.CurrentDirectory.FullName + Path.DirectorySeparatorChar + x.Name);
-					this.Items.Add(new FileSystemItem(Path.DirectorySeparatorChar + x.Name, cover)); return false; 
-				});
-
-			if (this.ShowFiles)
-				this.Files.Any(x => { this.Items.Add(new FileSystemItem(x.Name)); return false; });
-
-			this.CurrentItem = new FileSystemItem(Path.DirectorySeparatorChar + this.CurrentDirectory.Name, this.FindCoverImage(this.CurrentDirectory.FullName));
 		}
 
 		private string FindCoverImage(string path)
@@ -165,6 +123,68 @@ namespace BeverDrive.Core
 				return fi[0].FullName;
 
 			return string.Empty;
+		}
+
+		private void ReadDirectory()
+		{
+			if (this.CurrentDirectory != null)
+				this.ReadDirectory(this.CurrentDirectory.FullName);
+		}
+
+		private void ReadDirectory(string path)
+		{
+			List<FileSystemItem> result = new List<FileSystemItem>();
+			this.Directories = new List<DirectoryInfo>();
+			this.Files = new List<FileInfo>();
+
+			if (path == "> My computer")
+			{
+				DriveInfo.GetDrives().Any(x => { result.Add(new FileSystemItem(x)); return false; });
+				this.CurrentItem = FileSystemItem.MyComputer();
+			}
+			else
+			{
+				DirectoryInfo pathDi = new DirectoryInfo(path);
+
+				// Decide whether we should show .. or My computer or not
+				if ((this.chrootPath == null) && (pathDi.Parent == null))
+				{
+					result.Add(FileSystemItem.MyComputer());
+				}
+				else
+				{
+					if ((this.chrootPath == null) || (pathDi.FullName != this.chrootPath.FullName))
+						result.Add(new FileSystemItem(Path.DirectorySeparatorChar + ".."));
+				}
+
+				// This try/catch is for reading drives that may not be ready
+				try
+				{
+					pathDi.GetDirectories().Any(x => { this.Directories.Add(x); return false; });
+					pathDi.GetFiles("*.*").Any(x => { this.Files.Add(x); return false; });
+					this.Directories.OrderBy(x => x.Name);
+					this.Files.OrderBy(x => x.Name);
+				}
+				catch (Exception)
+				{
+				}
+
+				if (this.ShowDirectories)
+					this.Directories.Any(x => { result.Add(new FileSystemItem(Path.DirectorySeparatorChar + x.Name)); return false; });
+
+				if (this.ShowFiles)
+					this.Files.Any(x => { result.Add(new FileSystemItem(x.Name)); return false; });
+
+				this.CurrentDirectory = pathDi;
+				this.CurrentItem = new FileSystemItem(pathDi.Name);
+			}
+
+			this.Items = result;
+		}
+
+		private void ReadMyComputer()
+		{
+			this.ReadDirectory("> My computer");
 		}
 	}
 }

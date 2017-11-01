@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2016 Sebastian Sjödin
+// Copyright 2012-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -165,12 +165,7 @@ namespace BeverDrive.Modules
 			{
 				this.ctrl_browser.Select();
 
-				if (this.ctrl_browser.SelectedItem.StartsWith(Path.DirectorySeparatorChar.ToString()))
-				{
-					vlcPopulated = false;
-					shuffle = false;
-				}
-				else
+				if (this.ctrl_browser.SelectedItemIsFile())
 				{
 					if (!vlcPopulated)
 					{
@@ -196,6 +191,11 @@ namespace BeverDrive.Modules
 
 					playlist.CurrentIndex = this.ctrl_browser.SelectedIndex - this.ctrl_browser.Directories.Count - 1;
 					this.PlayTrack();
+				}
+				else
+				{
+					vlcPopulated = false;
+					shuffle = false;
 				}
 			}
 		}

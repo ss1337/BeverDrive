@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2016 Sebastian Sjödin
+// Copyright 2012-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -55,7 +55,7 @@ namespace BeverDrive.Gui.Controls
 			{
 				var item = this.browser.Items[this.SelectedIndex];
 
-				if (item.Name.StartsWith(Path.DirectorySeparatorChar.ToString()))
+				if (!this.SelectedItemIsFile())
 				{
 					var childName = Path.DirectorySeparatorChar + browser.CurrentDirectory.Name;
 					this.browser.Select(this.SelectedIndex);
@@ -69,6 +69,20 @@ namespace BeverDrive.Gui.Controls
 					}
 				}
 			}
+		}
+
+		public bool SelectedItemIsFile()
+		{
+			if (this.SelectedItem.StartsWith(Path.DirectorySeparatorChar.ToString()))
+				return false;
+
+			if (this.browser.Items[this.SelectedIndex].FileType == FileType.MyComputer)
+				return false;
+
+			if (this.browser.Items[this.SelectedIndex].FileType == FileType.Drive)
+				return false;
+
+			return true;
 		}
 
 		private void PopulateBrowser()
