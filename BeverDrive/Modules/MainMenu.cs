@@ -1,5 +1,5 @@
 //
-// Copyright 2012-2016 Sebastian Sjödin
+// Copyright 2012-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -29,7 +29,7 @@ using BeverDrive.Gui.Styles;
 namespace BeverDrive.Modules
 {
 	[BackButtonVisible(false)]
-	public class MainMenu : AModule
+	public class MainMenu : Module
 	{
 		private int gridLeft = 1;
 		private int gridTop = 2;
@@ -42,6 +42,11 @@ namespace BeverDrive.Modules
 		{
 			this.buttons = new List<MetroidButton>();
 			this.buttonTypes = new List<string>();
+		}
+
+		public override void Back()
+		{
+			throw new NotImplementedException();
 		}
 
 		public override void Init()
@@ -83,7 +88,6 @@ namespace BeverDrive.Modules
 		{
 			// Add controls to the module container
 			this.buttons.Any(x => { BeverDriveContext.CurrentCoreGui.AddControl(x); return false; });
-			this.ShowControls();
 			this.Update();
 		}
 
@@ -156,6 +160,9 @@ namespace BeverDrive.Modules
 			this.lbl_title.Size = new System.Drawing.Size(400, 50);
 			this.lbl_title.Text = "BeverDrive";
 			this.lbl_title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+
+			this.buttons.Any(x => { base.Controls.Add(x); return false; });
+			base.Controls.Add(this.lbl_title);
 		}
 	}
 }

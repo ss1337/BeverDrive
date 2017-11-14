@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2014 Sebastian Sjödin
+// Copyright 2014-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -27,7 +27,6 @@ namespace BeverDrive.Gui.Controls
 {
 	public class BackButton : AGraphicsControl
 	{
-		public bool Selected { get; set; }
 		public new int Width { get { return 40; } }
 		public new int Height { get { return 38; } }
 

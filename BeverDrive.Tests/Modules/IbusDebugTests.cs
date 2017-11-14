@@ -20,33 +20,38 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using BeverDrive.Core;
+using BeverDrive.Gui.Controls;
 using BeverDrive.Modules;
 using NUnit.Framework;
-using System.Reflection;
-using BeverDrive.Gui.Controls;
 
 namespace BeverDrive.Tests.Modules
 {
 	[TestFixture]
 	public class IbusDebugTests
 	{
+		private IbusDebug module;
+
 		public IbusDebugTests()
 		{
 			BeverDriveContext.Initialize();
+			module = new IbusDebug();
+			module.Init();
+			BeverDriveContext.LoadedModules.Clear();
+			BeverDriveContext.LoadedModules.Add(module);
 		}
 
 		[Test]
 		public void Logging_works()
 		{
 			var msg = "bmw";
-			var module = new IbusDebug();
 			var log = (Label)module.GetType().GetField("log", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(module);
-			BeverDriveContext.LoadedModules.Clear();
-			BeverDriveContext.LoadedModules.Add(module);
 
+			module.SelectedIndex = 0;
 			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.Show });
+			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectRight });
 			Assert.AreEqual(false, module.Logging);
 			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectClick });
 			Assert.AreEqual(true, module.Logging);
@@ -65,11 +70,9 @@ namespace BeverDrive.Tests.Modules
 		[Test]
 		public void Logging_onoff_works()
 		{
-			var module = new IbusDebug();
-			BeverDriveContext.LoadedModules.Clear();
-			BeverDriveContext.LoadedModules.Add(module);
-
+			module.SelectedIndex = 0;
 			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.Show });
+			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectRight });
 			Assert.AreEqual(false, module.Logging);
 			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectClick });
 			Assert.AreEqual(true, module.Logging);
@@ -80,26 +83,26 @@ namespace BeverDrive.Tests.Modules
 		[Test]
 		public void Menu_works()
 		{
-			var module = new IbusDebug();
-			BeverDriveContext.LoadedModules.Clear();
-			BeverDriveContext.LoadedModules.Add(module);
-
+			module.SelectedIndex = 0;
 			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.Show });
 			Assert.AreEqual(0, module.SelectedIndex);
-			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectRight });
-			Assert.AreEqual(1, module.SelectedIndex);
-			
-			// SelectedIndex should never exceed 1
-			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectRight });
-			Assert.AreEqual(1, module.SelectedIndex);
+
+			// SelectedIndex should never exceed 0
 			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectLeft });
 			Assert.AreEqual(0, module.SelectedIndex);
+			
+			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectRight });
+			Assert.AreEqual(-1, module.SelectedIndex);
 			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectLeft });
+			Assert.AreEqual(0, module.SelectedIndex);
+			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectRight });
 			Assert.AreEqual(-1, module.SelectedIndex);
 
-			// SelectedIndex should never be less than -1
-			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectLeft });
-			Assert.AreEqual(-1, module.SelectedIndex);
+			// SelectedIndex should never be less than -2
+			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectRight });
+			Assert.AreEqual(-2, module.SelectedIndex);
+			module.OnCommand(new ModuleCommandEventArgs { Command = ModuleCommands.SelectRight });
+			Assert.AreEqual(-2, module.SelectedIndex);
 		}
 	}
 }

@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2014 Sebastian Sjödin
+// Copyright 2012-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -26,7 +26,7 @@ using BeverDrive.Core;
 
 namespace BeverDrive.Modules
 {
-	public partial class Bluetooth : AModule
+	public partial class Bluetooth : Module
 	{
 		private BluetoothClient btClient;
 		private bool discovering;
@@ -81,9 +81,6 @@ namespace BeverDrive.Modules
 				this.lbl_bt1.Text = "Connected device: ";
 				this.lbl_bt2.Text = "Connect device now";
 			}
-			
-			this.lbl_bt1.Invalidate();
-			this.lbl_bt2.Invalidate();
 		}
 	}
 }

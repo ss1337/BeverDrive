@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2014 Sebastian Sjödin
+// Copyright 2014-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -26,33 +26,76 @@ using System.Drawing;
 
 namespace BeverDrive.Gui.Controls
 {
-	public abstract class AGraphicsControl : Control
+	public delegate void ControlEventHandler(object sender, EventArgs e);
+
+	public class AGraphicsControl
 	{
-		public new RectangleF ClientRectangle
+		public int Index { get; set; }
+		public string Name { get; set; }
+
+		public virtual Color BackColor { get; set; }
+		public virtual Color ForeColor { get; set; }
+		public virtual Font Font { get; set; }
+		public ContentAlignment TextAlign { get; set; }
+
+		public Point Location { get; set; }
+		public Size Size
+		{
+			get { return new Size(this.Width, this.Height); }
+			set { this.Width = value.Width; this.Height = value.Height; }
+		}
+		public virtual int Width { get; set; }
+		public virtual int Height { get; set; }
+
+		public virtual bool Selected { get; set; }
+
+		public virtual string Text { get; set; }
+
+		public virtual bool Visible { get; set; }
+
+		public event ControlEventHandler Click;
+
+		public event ControlEventHandler Hover;
+
+		public RectangleF ClientRectangle
 		{
 			get { return new RectangleF((PointF)this.Location, (SizeF)this.Size); }
 		}
 
 		public AGraphicsControl()
 		{
-		}
-
-		protected override void OnPaintBackground(PaintEventArgs pevent)
-		{
-			// Dont draw here
-			//base.OnPaintBackground(pevent);
-		}
-
-		protected override void OnPaint(PaintEventArgs e)
-		{
-			// Dont draw here
-			//base.OnPaint(e);
+			this.Visible = true;
+			var c = new System.Windows.Forms.Label();
 		}
 
 		/// <summary>
 		/// Draws the control to a buffer
 		/// </summary>
 		/// <param name="graphic"></param>
-		public abstract void PaintToBuffer(Graphics graphic);
+		public virtual void PaintToBuffer(Graphics graphic)
+		{
+		}
+
+		/// <summary>
+		/// Raises the click event
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		public void RaiseClick(object sender, EventArgs e)
+		{
+			if (this.Click != null)
+				this.Click(sender, e);
+		}
+
+		/// <summary>
+		/// Raises the hover event
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		public void RaiseHover(object sender, EventArgs e)
+		{
+			if (this.Hover != null)
+				this.Hover(sender, e);
+		}
 	}
 }

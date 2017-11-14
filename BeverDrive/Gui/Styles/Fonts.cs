@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2014 Sebastian Sjödin
+// Copyright 2012-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -34,6 +34,7 @@ namespace BeverDrive.Gui.Styles
 		private static Font guiFont28 = new Font("Arial", 28f, FontStyle.Bold);
 		private static Font guiFont32 = new Font("Arial", 32f, FontStyle.Bold);
 		private static Font guiFont36 = new Font("Arial", 36f, FontStyle.Bold);
+		private static Font wdFont26 = new Font("Webdings", 26f, FontStyle.Bold);
 		private static Font wdFont28 = new Font("Webdings", 28f, FontStyle.Bold);
 		private static Font wdFont64 = new Font("Webdings", 64f, FontStyle.Bold);
 
@@ -54,6 +55,7 @@ namespace BeverDrive.Gui.Styles
 		public static Font GuiFont28 { get { return guiFont28; } }
 		public static Font GuiFont32 { get { return guiFont32; } }
 		public static Font GuiFont36 { get { return guiFont36; } }
+		public static Font WdFont26 { get { return wdFont26; } }
 		public static Font WdFont28 { get { return wdFont28; } }
 		public static Font WdFont64 { get { return wdFont64; } }
 	}

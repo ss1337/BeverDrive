@@ -1,5 +1,5 @@
 //
-// Copyright 2012-2015 Sebastian Sjödin
+// Copyright 2012-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -29,37 +29,47 @@ using BeverDrive.Gui.Styles;
 namespace BeverDrive.Modules
 {
 	[BackButtonVisible(false)]
-	public class MainMenuSimple : AModule
+	[HandlesSelection(true)]
+	public class MainMenuSimple : Module
 	{
 		private int x;
 		private int y;
 
 		private Label lbl_title;
 		private List<Label> buttons;
-		private List<string> buttonTypes;
 
 		private int firstRightIdx = 0;
 		private int lastLeftIdx = 0;
+		private int lastIdx = 0;
 
 		public MainMenuSimple()
 		{
 			this.buttons = new List<Label>();
-			this.buttonTypes = new List<string>();
+		}
+
+		public override void Back()
+		{
+			throw new NotImplementedException();
 		}
 
 		public override void Init()
 		{
-			// Check if there are any buttons loaded
-			if (this.buttons.Count == 0)
-				this.CreateControls();
+			this.CreateControls();
 		}
 
 		public override void OnCommand(ModuleCommandEventArgs e)
 		{
+			base.OnCommand(e);
+
 			switch(e.Command)
 			{
-				case ModuleCommands.SelectClick:
-					BeverDriveContext.SetActiveModule(this.buttonTypes[this.SelectedIndex]);
+				case ModuleCommands.Hide:
+					this.lastIdx = this.SelectedIndex;
+					break;
+
+				case ModuleCommands.Show:
+					this.SelectedIndex = this.lastIdx;
+					this.Update();
 					break;
 
 				case ModuleCommands.SelectRight:
@@ -129,26 +139,7 @@ namespace BeverDrive.Modules
 					}
 
 					break;
-				case ModuleCommands.Show:
-					this.Show();
-					break;
-				case ModuleCommands.Hide:
-					this.Hide();
-					break;
 			}
-		}
-
-		private void Show()
-		{
-			// Add controls to the module container
-			this.buttons.Any(x => { BeverDriveContext.CurrentCoreGui.AddControl(x); return false; });
-			this.ShowControls();
-			this.Update();
-		}
-
-		private void Hide()
-		{
-			BeverDriveContext.CurrentCoreGui.ClearModuleContainer();
 		}
 
 		private void Update()
@@ -165,64 +156,61 @@ namespace BeverDrive.Modules
 			BeverDriveContext.CurrentCoreGui.Invalidate();
 		}
 
-		private void CreateButton(string text, Type moduleType, int x, int y)
+		private void CreateButton(string text, Type moduleType, int index, int x, int y)
 		{
 			// Create and add menu choices
 			var lb = new Label();
 			lb.Font = Fonts.GuiFont28;
 			lb.ForeColor = Colors.ForeColor;
+			lb.Index = index;
 			lb.Location = new System.Drawing.Point(x, y);
 			lb.Size = new System.Drawing.Size(400, 50);
 			lb.Text = text;
 			lb.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			lb.Click += (sender, e) => { BeverDriveContext.SetActiveModule(moduleType.Name); };
+			lb.Hover += (sender, e) => { BeverDriveContext.CurrentCoreGui.ClockContainer.Text = text; };
 
 			this.buttons.Add(lb);
-			this.buttonTypes.Add(moduleType.Name);
 		}
 
 		private void CreateControls()
 		{
+			int i = 0;
 			int x = 20;
 			int y = 140;
 
 			foreach (var kvp in this.Settings)
 			{
 				if (kvp.Key.StartsWith("MenuItem"))
-					switch(kvp.Value)
+				{
+					string name = "";
+					Type t = Type.GetType(kvp.Value);
+
+					// Check if the type actually exists
+					if (t != null)
 					{
-						case "BeverDrive.Modules.Bluetooth":
-							this.CreateButton("Bluetooth", typeof(Bluetooth), x, y);
-							break;
+						name = t.Name;
 
-						case "BeverDrive.Modules.Mp3Player":
-							this.CreateButton("Music player", typeof(Mp3Player), x, y);
-							break;
-
-						case "BeverDrive.Modules.NubblesModule":
-							this.CreateButton("Nubbles", typeof(NubblesModule), x, y);
-							break;
-
-						case "BeverDrive.Modules.VideoPlayer":
-							this.CreateButton("Video player", typeof(VideoPlayer), x, y);
-							break;
-
-						default:
-							Type t = Type.GetType(kvp.Value);
-
-							// Check if the type actually exists
-							if (t != null)
-								this.CreateButton(t.Name, t, x, y);
-
-							break;
+						foreach (object attrib in t.GetCustomAttributes(false))
+						{
+							if (attrib is MenuTextAttribute)
+							{
+								name = ((MenuTextAttribute)attrib).MenuText;
+							}
+						}
 					}
 
-				// Increment x/y
-				y += 80;
+					this.CreateButton(name, t, i, x, y);
 
-				if (y > 310)
-				{
-					y = 140;
-					x = 460;
+					// Increment x/y, i
+					y += 80;
+					i++;
+
+					if (y > 310)
+					{
+						y = 140;
+						x = 460;
+					}
 				}
 			}
 
@@ -237,11 +225,14 @@ namespace BeverDrive.Modules
 			this.lbl_title.Size = new System.Drawing.Size(400, 50);
 			this.lbl_title.Text = "BeverDrive";
 			this.lbl_title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+
+			this.buttons.ForEach(b => base.Controls.Add(b));
+			base.Controls.Add(lbl_title);
 		}
 
 		private bool RightSide(Label label)
 		{
-			return (label.Left > 400);
+			return (label.Location.X > 400);
 		}
 	}
 }

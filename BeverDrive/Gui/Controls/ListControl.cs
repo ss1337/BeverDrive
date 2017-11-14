@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2014 Sebastian Sjödin
+// Copyright 2012-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -22,8 +22,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
-using BeverDrive.Gui.Styles;
 using BeverDrive.Core.Extensions;
+using BeverDrive.Gui.Styles;
 
 namespace BeverDrive.Gui.Controls
 {
@@ -59,7 +59,7 @@ namespace BeverDrive.Gui.Controls
 		public ListControl()
 		{
 			this.Items = new List<string>();
-			this.SelectedIndex = -1;
+			//this.SelectedIndex = -1;
 		}
 
 		public override void PaintToBuffer(Graphics graphic)

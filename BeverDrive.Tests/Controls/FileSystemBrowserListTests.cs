@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2014 Sebastian Sjödin
+// Copyright 2012-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -30,12 +30,12 @@ namespace BeverDrive.Tests.Controls
 	[TestFixture]
 	public class FileSystemBrowserListTests
 	{
-		private FileSystemBrowserListControl control;
+		private FileSystemListControl control;
 
 		public FileSystemBrowserListTests()
 		{
 			BeverDriveContext.Initialize();
-			this.control = new FileSystemBrowserListControl();
+			this.control = new FileSystemListControl();
 			this.control.HeightInItems = 1;
 		}
 
@@ -53,6 +53,15 @@ namespace BeverDrive.Tests.Controls
 
 			this.control.SelectedIndex = this.control.Items.Count;
 			this.control.Select();
+		}
+
+		[Test]
+		public void Select_in_my_computer_works()
+		{
+			var ctrl = new FileSystemListControl("> My computer");
+			ctrl.SelectedIndex = 1;
+			ctrl.Select();
+			Assert.True(this.control.Items.Count > 1);
 		}
 	}
 }

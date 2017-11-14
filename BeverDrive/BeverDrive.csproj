@@ -88,26 +88,22 @@
     <Compile Include="Core\Playlist.cs" />
     <Compile Include="Core\PlaylistItem.cs" />
     <Compile Include="Gui\Controls\BackButton.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Gui\Controls\Background.cs" />
     <Compile Include="Gui\Controls\ClockPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Gui\Controls\FileSystemBrowserListControl.cs">
-      <SubType>Component</SubType>
+    <Compile Include="Gui\Controls\FileManagerListControl.cs">
+    </Compile>
+    <Compile Include="Gui\Controls\FileSystemListControl.cs">
     </Compile>
     <Compile Include="Gui\Controls\GraphicBrowser.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Gui\Controls\Label.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Gui\Controls\ListControl.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Gui\Controls\MetroidButton.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Core\FileSystemBrowser.cs" />
     <Compile Include="Core\Logger.cs" />
@@ -115,28 +111,24 @@
     <Compile Include="Core\Extensions\GraphicsExtensions.cs" />
     <Compile Include="Core\Extensions\RectangleExtensions.cs" />
     <Compile Include="Gui\Controls\AGraphicsControl.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Gui\Controls\GraphicsPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Gui\Controls\NubblesControl.cs">
-      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Gui\Controls\OverlayBox.cs">
     </Compile>
     <Compile Include="Gui\Controls\OverlayedMenu.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Gui\Controls\ProgressBar.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Gui\Controls\TeletypeLabel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Gui\Controls\TextButton.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Gui\Controls\WebDingsButton.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Gui\CoreGui.cs" />
     <Compile Include="Gui\ICoreGui.cs" />
@@ -152,10 +144,12 @@
     <Compile Include="MainForm_Splash.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\AModule.cs" />
+    <Compile Include="Modules\FileManager_Step2.cs" />
+    <Compile Include="Modules\Module.cs" />
     <Compile Include="Modules\Attributes.cs" />
     <Compile Include="Modules\Bluetooth.cs" />
     <Compile Include="Modules\Bluetooth_Devices.cs" />
+    <Compile Include="Modules\FileManager_Step1.cs" />
     <Compile Include="Modules\VideoPlayer_Command.cs" />
     <Compile Include="Modules\VideoPlayer_VlcControl.cs" />
     <Compile Include="Modules\MainMenuSimple.cs" />

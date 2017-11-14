@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2014-2016 Sebastian Sjödin
+// Copyright 2014-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using BeverDrive.Core;
 using BeverDrive.Gui.Controls;
@@ -35,7 +36,8 @@ namespace BeverDrive.Modules
 	}
 
 	[BackButtonVisible(true)]
-	public partial class NubblesModule : AModule
+	[MenuText("Nubbles")]
+	public partial class NubblesModule : Module
 	{
 		private int numPlayers;
 		public MenuState MenuState { get; set; }
@@ -61,6 +63,11 @@ namespace BeverDrive.Modules
 				ctrlGame.GameState.Update();
 				BeverDriveContext.CurrentCoreGui.Invalidate();
 			}
+		}
+
+		public override void Back()
+		{
+			BeverDriveContext.SetActiveModule("");
 		}
 
 		public override void Init()
@@ -192,6 +199,33 @@ namespace BeverDrive.Modules
 
 					ShowMainMenu();
 					break;
+			}
+		}
+
+		private void ShowControls()
+		{
+			// Reflection to show all the controls, oh yes
+			FieldInfo[] fieldInfos;
+			Type t = this.GetType();
+			fieldInfos = t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+
+			foreach (var fi in fieldInfos)
+			{
+				if (fi.FieldType.IsSubclassOf(typeof(AGraphicsControl)))
+				{
+					var field = t.GetField(fi.Name, BindingFlags.NonPublic | BindingFlags.Instance);
+					var ctrl = (AGraphicsControl)field.GetValue(this);
+					if (ctrl != null)
+						BeverDriveContext.CurrentCoreGui.AddControl(ctrl);
+				}
+			}
+
+			// Reflection to show backbutton
+			foreach (object attrib in this.GetType().GetCustomAttributes(false))
+			{
+				if (attrib is BackButtonVisibleAttribute)
+					if (((BackButtonVisibleAttribute)attrib).BackButtonVisible)
+						BeverDriveContext.CurrentCoreGui.AddControl(BeverDriveContext.CurrentCoreGui.BackButton);
 			}
 		}
 

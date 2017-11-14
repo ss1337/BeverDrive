@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2015 Sebastian Sjödin
+// Copyright 2012-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -34,9 +34,9 @@ namespace BeverDrive.Core
 		public static System.Windows.Forms.Form CurrentMainForm { get; set; }
 		public static bool RtsEnabled { get; set; }
 		public static BeverDriveSettings Settings { get; set; }
-		public static AModule ActiveModule { get; set; }
-		public static AModule PlaybackModule { get; set; }
-		public static List<AModule> LoadedModules { get; set; }
+		public static Module ActiveModule { get; set; }
+		public static Module PlaybackModule { get; set; }
+		public static List<Module> LoadedModules { get; set; }
 		public static IIbusContext Ibus { get; set; }
 
 		static BeverDriveContext()
@@ -45,7 +45,7 @@ namespace BeverDrive.Core
 
 		public static void Initialize()
 		{
-			LoadedModules = new List<AModule>();
+			LoadedModules = new List<Module>();
 			Settings = new BeverDriveSettings();
 			if (Settings.EnableIbus)
 				Ibus = new BeverDrive.Ibus.IbusContext(Settings.ComPort);
@@ -89,7 +89,7 @@ namespace BeverDrive.Core
 
 				if (modType != null)
 				{
-					AModule mod = (AModule)Activator.CreateInstance(modType);
+					Module mod = (Module)Activator.CreateInstance(modType);
 					mod.Settings = BeverDriveContext.Settings.ReadModuleSettings(modName);
 					mod.Init();
 					BeverDriveContext.LoadedModules.Add(mod);
@@ -105,7 +105,7 @@ namespace BeverDrive.Core
 		public static void SetActiveModule(string moduleName)
 		{
 			bool playbackModule = false;
-			AModule module = null;
+			Module module = null;
 
 			if (string.IsNullOrEmpty(moduleName))
 			{

@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Threading;
 
 namespace BeverDrive.Core
 {
@@ -41,7 +42,7 @@ namespace BeverDrive.Core
 
 		public FileSystemBrowser(string startPath, bool chrootBehavior)
 		{
-			if (chrootBehavior)
+			if (chrootBehavior && startPath != "> My computer")
 				this.chrootPath = new DirectoryInfo(startPath);
 
 			this.ShowDirectories = true;
@@ -61,6 +62,14 @@ namespace BeverDrive.Core
 					return i;
 
 			return -1;
+		}
+
+		/// <summary>
+		/// Refreshes the current bleh
+		/// </summary>
+		public void Refresh()
+		{
+			this.ReadDirectory();
 		}
 
 		/// <summary>
@@ -86,13 +95,6 @@ namespace BeverDrive.Core
 				this.ReadDirectory(item.DriveName);
 				return item.DriveName;
 			}
-
-			// Cd up if we should
-			/*if (item.Name == Path.DirectorySeparatorChar.ToString())
-			{
-				this.CdUp();
-				return this.CurrentDirectory.Name;
-			}*/
 
 			// Cd to subdirectory if we should
 			if (item.Name.StartsWith(Path.DirectorySeparatorChar.ToString()))
@@ -154,7 +156,7 @@ namespace BeverDrive.Core
 				else
 				{
 					if ((this.chrootPath == null) || (pathDi.FullName != this.chrootPath.FullName))
-						result.Add(new FileSystemItem(Path.DirectorySeparatorChar + ".."));
+						result.Add(new FileSystemItem(Path.DirectorySeparatorChar + "..", pathDi.FullName));
 				}
 
 				// This try/catch is for reading drives that may not be ready
@@ -170,13 +172,13 @@ namespace BeverDrive.Core
 				}
 
 				if (this.ShowDirectories)
-					this.Directories.Any(x => { result.Add(new FileSystemItem(Path.DirectorySeparatorChar + x.Name)); return false; });
+					this.Directories.Any(x => { result.Add(new FileSystemItem(Path.DirectorySeparatorChar + x.Name, x.FullName)); return false; });
 
 				if (this.ShowFiles)
-					this.Files.Any(x => { result.Add(new FileSystemItem(x.Name)); return false; });
+					this.Files.Any(x => { result.Add(new FileSystemItem(x.Name, x.FullName)); return false; });
 
 				this.CurrentDirectory = pathDi;
-				this.CurrentItem = new FileSystemItem(pathDi.Name);
+				this.CurrentItem = new FileSystemItem(pathDi.Name, pathDi.FullName);
 			}
 
 			this.Items = result;

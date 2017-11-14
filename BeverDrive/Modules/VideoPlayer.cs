@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2016 Sebastian Sjödin
+// Copyright 2012-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -30,11 +30,11 @@ using nVlc.LibVlcWrapper.Declarations.Media;
 namespace BeverDrive.Modules
 {
 	[BackButtonVisible(true)]
+	[MenuText("Video player")]
 	[PlaybackModule]
-	public partial class VideoPlayer : AModule
+	public partial class VideoPlayer : Module
 	{
-		private int fullScreen;
-		private FileSystemBrowserListControl ctrl_browser;
+		private FileSystemListControl ctrl_browser;
 		private MetroidButton ctrl_prev;
 		private MetroidButton ctrl_play;
 		private MetroidButton ctrl_next;
@@ -43,39 +43,20 @@ namespace BeverDrive.Modules
 
 		private Playlist playlist;
 		private bool vlcPopulated;
+		private bool playing;
 
 		public VideoPlayer()
 		{
-			int browserHeight = 7;
-			if (BeverDriveContext.Settings.VideoMode == VideoMode.Mode_169)
-				browserHeight = 5;
+		}
 
-			this.ctrl_browser = new FileSystemBrowserListControl(BeverDriveContext.Settings.VideoRoot);
-			this.ctrl_browser.HeightInItems = browserHeight;
-			this.ctrl_browser.Name = "ctrl_browser";
-			this.ctrl_browser.Width = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width;
-			this.ctrl_browser.Location = new System.Drawing.Point(0, BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Height - this.ctrl_browser.Height);
+		public override void Back()
+		{
+			BeverDriveContext.SetActiveModule("");
+		}
 
-			var btnx = (BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2 - 338) / 2;
-
-			this.ctrl_prev = new MetroidButton("core_prev.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
-			this.ctrl_prev.Location = new System.Drawing.Point(70, 20);
-
-			this.ctrl_play = new MetroidButton("core_play.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
-			this.ctrl_play.Location = new System.Drawing.Point(70, 70);
-
-			this.ctrl_next = new MetroidButton("core_next.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
-			this.ctrl_next.Location = new System.Drawing.Point(70, 120);
-
-			this.ctrl_full = new MetroidButton("core_full.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
-			this.ctrl_full.Location = new System.Drawing.Point(70, 170);
-
-			this.ctrl_vlc = new Panel();
-			this.ctrl_vlc.Name = "ctrl_vlc";
-
-			VlcContext.VideoPlayer.WindowHandle = this.ctrl_vlc.Handle;
-			VlcContext.VideoPlayer.Events.MediaEnded += new EventHandler(Events_MediaEnded);
-			playlist = new Playlist();
+		public override void Init()
+		{
+			this.CreateControls();
 		}
 
 		protected void Events_MediaEnded(object sender, EventArgs e)
@@ -84,12 +65,58 @@ namespace BeverDrive.Modules
 			this.PlayTrack();
 		}
 
-		private void AddControls()
+		private void CreateControls()
 		{
-			BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
+			int browserHeight = 7;
+			if (BeverDriveContext.Settings.VideoMode == VideoMode.Mode_169)
+				browserHeight = 5;
+
+			this.ctrl_browser = new FileSystemListControl(BeverDriveContext.Settings.VideoRoot);
+			this.ctrl_browser.HeightInItems = browserHeight;
+			this.ctrl_browser.Name = "ctrl_browser";
+			this.ctrl_browser.Width = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width;
+			this.ctrl_browser.Location = new System.Drawing.Point(0, BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Height - this.ctrl_browser.Height);
+
+			var btnx = (BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2 - 338) / 2;
+
+			this.ctrl_prev = new MetroidButton("core_prev.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
+			this.ctrl_prev.Index = -4;
+			this.ctrl_prev.Location = new System.Drawing.Point(70, 20);
+			this.ctrl_prev.Click += (sender, e) => { };
+			this.ctrl_prev.Hover += (sender, e) => { BeverDriveContext.CurrentCoreGui.ClockContainer.Text = "Previous"; };
+
+			this.ctrl_play = new MetroidButton("core_play.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
+			this.ctrl_play.Index = -3;
+			this.ctrl_play.Location = new System.Drawing.Point(70, 70);
+			this.ctrl_play.Click += (sender, e) => { this.TogglePlayback(); };
+			this.ctrl_play.Hover += (sender, e) => { BeverDriveContext.CurrentCoreGui.ClockContainer.Text = "Set fullscreen"; };
+
+			this.ctrl_next = new MetroidButton("core_next.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
+			this.ctrl_next.Index = -2;
+			this.ctrl_next.Location = new System.Drawing.Point(70, 120);
+			this.ctrl_next.Click += (sender, e) => { };
+			this.ctrl_next.Hover += (sender, e) => { BeverDriveContext.CurrentCoreGui.ClockContainer.Text = "Next"; };
+
+			this.ctrl_full = new MetroidButton("core_full.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
+			this.ctrl_full.Index = -1;
+			this.ctrl_full.Location = new System.Drawing.Point(70, 170);
+			this.ctrl_full.Click += (sender, e) => { this.SetFullScreen(true); };
+			this.ctrl_full.Hover += (sender, e) => { BeverDriveContext.CurrentCoreGui.ClockContainer.Text = "Set fullscreen"; };
+
+			this.ctrl_vlc = new Panel();
+			this.ctrl_vlc.Name = "ctrl_vlc";
+			this.ctrl_vlc.Visible = false;
+
+			VlcContext.VideoPlayer.WindowHandle = this.ctrl_vlc.Handle;
+			VlcContext.VideoPlayer.Events.MediaEnded += new EventHandler(Events_MediaEnded);
+			playlist = new Playlist();
+
+			base.Controls.Add(ctrl_browser);
+			base.Controls.Add(ctrl_full);
+			base.Controls.Add(ctrl_next);
+			base.Controls.Add(ctrl_play);
+			base.Controls.Add(ctrl_prev);
 			BeverDriveContext.CurrentCoreGui.ModuleContainer.Controls.Add(ctrl_vlc);
-			this.ShowControls();
-			this.SetVlcControl();
 		}
 	}
 }

@@ -29,7 +29,7 @@ using BeverDrive.Gui.Styles;
 namespace BeverDrive.Modules
 {
 	[BackButtonVisible(true)]
-	public partial class Bluetooth : AModule
+	public partial class Bluetooth : Module
 	{
 		private Label lbl_title;
 		private Label lbl_bt1;
@@ -38,7 +38,15 @@ namespace BeverDrive.Modules
 
 		public Bluetooth()
 		{
-			this.SelectedIndex = 0;
+		}
+
+		public override void Back()
+		{
+			BeverDriveContext.SetActiveModule("");
+		}
+
+		public override void Init()
+		{
 			this.CreateControls();
 
 			try
@@ -54,68 +62,27 @@ namespace BeverDrive.Modules
 
 		public override void OnCommand(ModuleCommandEventArgs e)
 		{
+			base.OnCommand(e);
+
+			if (this.SelectedIndex < -2)
+				this.SelectedIndex = -2;
+
+			if (this.SelectedIndex > 0)
+				this.SelectedIndex = 0;
+
 			switch (e.Command)
 			{
-				case ModuleCommands.SelectClick:
-					this.SelectClick();
-					break;
-				case ModuleCommands.SelectLeft:
-					this.SelectNext();
-					break;
-				case ModuleCommands.SelectRight:
-					this.SelectPrevious();
-					break;
 				case ModuleCommands.Show:
 					this.Show();
 					break;
+
 				case ModuleCommands.Hide:
 					this.Hide();
 					break;
-			}
 
-			BeverDriveContext.CurrentCoreGui.Invalidate();
-		}
-
-		private void SelectClick()
-		{
-			switch (this.SelectedIndex)
-			{
-				case -1:
-					BeverDriveContext.SetActiveModule("MainMenu");
-					break;
 				default:
 					break;
 			}
-		}
-
-		private void SelectNext()
-		{
-			if (this.SelectedIndex == 0)
-				this.SelectedIndex = 0;
-			else
-			{
-				this.SelectedIndex++;
-
-				if (this.SelectedIndex == 0)
-					BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
-			}
-
-			this.Update();
-		}
-
-		private void SelectPrevious()
-		{
-			if (this.SelectedIndex == -1)
-				this.SelectedIndex = -1;
-			else
-			{
-				this.SelectedIndex--;
-
-				if (this.SelectedIndex == -1)
-					BeverDriveContext.CurrentCoreGui.BackButton.Selected = true;
-			}
-
-			this.Update();
 		}
 
 		private void Show()
@@ -123,20 +90,12 @@ namespace BeverDrive.Modules
 			VlcContext.AudioPlayer.Stop();
 			VlcContext.VideoPlayer.Stop();
 			isActive = true;
-			this.SelectedIndex = 0;
-			BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
-			this.ShowControls();
-			this.Update();
 		}
 
 		private void Hide()
 		{
 			BeverDriveContext.CurrentCoreGui.ClearModuleContainer();
 			isActive = false;
-		}
-
-		private void Update()
-		{
 		}
 
 		private void CreateControls()
@@ -167,6 +126,10 @@ namespace BeverDrive.Modules
 			this.lbl_bt2.Size = new System.Drawing.Size(300, 36);
 			this.lbl_bt2.Text = "Connect device now";
 			this.lbl_bt2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+
+			base.Controls.Add(lbl_bt1);
+			base.Controls.Add(lbl_bt2);
+			base.Controls.Add(lbl_title);
 		}
 	}
 }

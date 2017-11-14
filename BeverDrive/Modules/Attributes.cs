@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2014 Sebastian Sjödin
+// Copyright 2012-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -18,9 +18,6 @@
 //
 // ============================================================================
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace BeverDrive.Modules
 {
@@ -34,6 +31,32 @@ namespace BeverDrive.Modules
 		public BackButtonVisibleAttribute(bool visible)
 		{
 			this.backButtonVisible = visible;
+		}
+	}
+
+	[AttributeUsage(AttributeTargets.Class)]
+	public class HandlesSelectionAttribute : Attribute
+	{
+		private bool handlesSelection;
+
+		public bool HandlesSelection { get { return handlesSelection; } }
+
+		public HandlesSelectionAttribute(bool handlesSelection)
+		{
+			this.handlesSelection = handlesSelection;
+		}
+	}
+
+	[AttributeUsage(AttributeTargets.Class)]
+	public class MenuTextAttribute : Attribute
+	{
+		private string menutext;
+
+		public string MenuText { get { return menutext; } }
+
+		public MenuTextAttribute(string text)
+		{
+			this.menutext = text;
 		}
 	}
 

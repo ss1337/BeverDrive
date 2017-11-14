@@ -61,11 +61,16 @@ namespace BeverDrive.Gui.Controls
 						BeverDriveContext.CurrentCoreGui.ModuleContainer.SetBackgroundImage(browser.Items[value].Name, browser.Items[value].CoverImage);
 					else
 						BeverDriveContext.CurrentCoreGui.ModuleContainer.SetBackgroundImage(browser.CurrentItem.Name, browser.CurrentItem.CoverImage);
-
-					this.Invalidate();
 				}
 			}
 		}
+
+		/// <summary>
+		/// Holds a list of items in the list box, and wheter they are selected or not
+		/// </summary>
+		public List<FileSystemItem> Items { get { return browser.Items; } }
+		public DirectoryInfo CurrentDirectory { get { return browser.CurrentDirectory; } }
+		public FileSystemItem CurrentItem { get { return this.browser.CurrentItem; } }
 
 		public GraphicBrowser() : this("C:\\") { }
 
@@ -81,16 +86,7 @@ namespace BeverDrive.Gui.Controls
 			// Pre-render images?
 		}
 
-		protected override void OnSizeChanged(EventArgs e)
-		{
-			base.OnSizeChanged(e);
-			textRect.Width = (float)(this.Width);
-			textRect.Height = 64f;
-			textRect.X = 0;
-			textRect.Y = this.ClientRectangle.Bottom - 72f;
-		}
-
-		public new void Select()
+		public void Select()
 		{
 			if (this.SelectedIndex > -1 && this.SelectedIndex < this.browser.Items.Count)
 			{
@@ -103,13 +99,17 @@ namespace BeverDrive.Gui.Controls
 
 					BeverDriveContext.CurrentCoreGui.ClockContainer.Text = this.browser.CurrentDirectory.Name;
 					this.SelectedIndex = 0;
-					this.Invalidate();
 				}
 			}
 		}
 
 		public override void PaintToBuffer(System.Drawing.Graphics graphic)
 		{
+			textRect.Width = (float)(this.Width);
+			textRect.Height = 64f;
+			textRect.X = 0;
+			textRect.Y = this.ClientRectangle.Bottom - 72f;
+	
 			if (this.SelectedIndex > -1)
 			{
 				graphic.DrawString(browser.Items[this.SelectedIndex].Name,

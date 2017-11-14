@@ -43,18 +43,20 @@ namespace BeverDrive.Core
 	{
 		public System.Drawing.Image CoverImage { get; set; }
 		public string DriveName { get; set; }
-		public string Name { get; set; }
 		public FileType FileType { get; set; }
+		public string FullPath { get; set; }
+		public string Name { get; set; }
+		public bool Selected { get; set; }
 
 		public static FileSystemItem MyComputer()
 		{
-			var result = new FileSystemItem("> My computer");
+			var result = new FileSystemItem("> My computer", "");
 			result.FileType = FileType.MyComputer;
 			return result;
 		}
 
-		public FileSystemItem(string name)
-			: this(name, string.Empty)
+		public FileSystemItem(string name, string fullPath)
+			: this(name, fullPath, string.Empty)
 		{
 		}
 
@@ -88,18 +90,20 @@ namespace BeverDrive.Core
 				}
 			}
 
-			this.Name = string.Format("{0} ({1})", label, di.Name.TrimEnd( new char[] { '\\' } ));
-			this.FileType = FileType.Drive;
 			this.DriveName = di.Name;
+			this.FileType = FileType.Drive;
+			this.FullPath = "";
+			this.Name = string.Format("{0} ({1})", label, di.Name.TrimEnd(new char[] { '\\' }));
 		}
 
-		public FileSystemItem(string name, string coverImageFile)
+		public FileSystemItem(string name, string fullPath, string coverImageFile)
 		{
 			if (!string.IsNullOrEmpty(coverImageFile))
 				this.CoverImage = System.Drawing.Image.FromFile(coverImageFile);
 
 			this.Name = name;
 			this.FileType = FileType.Unknown;
+			this.FullPath = fullPath;
 
 			if (name.StartsWith(Path.DirectorySeparatorChar.ToString()))
 			{

@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2012-2016 Sebastian Sjödin
+// Copyright 2012-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -30,9 +30,9 @@ namespace BeverDrive.Gui.Controls
 {
 	public class MetroidButton : AGraphicsControl
 	{
-		public int GridLeft { get { return gridLeft; } set { this.gridLeft = value; this.Left = 16 + value * 37; } }
-		public int GridTop { get { return gridTop; } set { this.gridTop = value; this.Top = 24 + value * 37; } }
-		public bool Selected { get; set; }
+		// TODO: Fix
+		public int GridLeft { get { return gridLeft; } set { this.gridLeft = value; /*this.Location.X = 16 + value * 37;*/ } }
+		public int GridTop { get { return gridTop; } set { this.gridTop = value; /*this.Location.Y = 24 + value * 37;*/ } }
 
 		private int gridLeft;
 		private int gridTop;
@@ -100,10 +100,10 @@ namespace BeverDrive.Gui.Controls
 			this.Height = icon.Height;
 		}
 
-		public void PerformClick()
+		/*public void PerformClick()
 		{
 			OnClick(EventArgs.Empty);
-		}
+		}*/
 
 		public override void PaintToBuffer(Graphics graphic)
 		{

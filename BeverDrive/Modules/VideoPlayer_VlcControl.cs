@@ -26,8 +26,17 @@ using BeverDrive.Core;
 
 namespace BeverDrive.Modules
 {
-	public partial class VideoPlayer : AModule
+	public enum VlcMode
 	{
+		Normal = 0,
+		FullScreen = 1,
+		FullScreen_Zoom = 2
+	}
+
+	public partial class VideoPlayer : Module
+	{
+		private VlcMode vlcMode;
+
 		/// <summary>
 		/// Returns true or false if we are in or coming from fullscreen 
 		/// mode and thus the keypress shouldn't be processed elsewhere
@@ -39,25 +48,25 @@ namespace BeverDrive.Modules
 			// Fullscreen 0 = GUI visible
 			// Fullscreen 1 = normal zoom on video
 			// Fullscreen 2 = zoomed video
-			if (fullScreen == 2)
+			if (vlcMode == VlcMode.FullScreen_Zoom)
 			{
 				// Set every control in ModuleContainer as visible
-				foreach (Control ctrl in BeverDriveContext.CurrentCoreGui.ModuleContainer.Controls)
+				foreach (var ctrl in BeverDriveContext.CurrentCoreGui.ModuleContainer.GraphicControls)
 					ctrl.Visible = true;
 
 				BeverDriveContext.CurrentCoreGui.ClockContainer.Visible = true;
 				BeverDriveContext.CurrentMainForm.BackColor = BeverDrive.Gui.Styles.Colors.BackColor;
 
 				// Un-fullscreen
-				this.fullScreen = 0;
+				this.vlcMode = VlcMode.Normal;
 				VlcContext.VideoPlayer.VideoScale = 0.0f;
 				this.SetVlcControl();
 				return true;
 			}
 
-			if (fullScreen == 1)
+			if (vlcMode == VlcMode.FullScreen)
 			{
-				this.fullScreen = 2;
+				this.vlcMode = VlcMode.FullScreen_Zoom;
 				VlcContext.VideoPlayer.VideoScale = 1.6f;
 				return true;
 			}
@@ -65,14 +74,13 @@ namespace BeverDrive.Modules
 			if (switchTo)
 			{
 				// Set every control except ctrl_vlc as not visible
-				foreach (Control ctrl in BeverDriveContext.CurrentCoreGui.ModuleContainer.Controls)
-					if (ctrl != ctrl_vlc)
-						ctrl.Visible = false;
+				foreach (var ctrl in BeverDriveContext.CurrentCoreGui.ModuleContainer.GraphicControls)
+					ctrl.Visible = false;
 
 				BeverDriveContext.CurrentCoreGui.ClockContainer.Visible = false;
 				BeverDriveContext.CurrentMainForm.BackColor = Color.Black;
 
-				this.fullScreen = 1;
+				this.vlcMode = VlcMode.FullScreen;
 				this.SetVlcControl();
 				return true;
 			}
@@ -84,21 +92,22 @@ namespace BeverDrive.Modules
 		{
 			var vlcx = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width / 2 - 210;
 
-			if (this.fullScreen == 1)
+			switch(this.vlcMode)
 			{
-				this.ctrl_vlc.BackColor = Color.Black;
-				this.ctrl_vlc.Location = new System.Drawing.Point(0, 0);
-				this.ctrl_vlc.Size = BeverDriveContext.CurrentCoreGui.ModuleAreaSize;
-			}
+				case VlcMode.FullScreen:
+					this.ctrl_vlc.BackColor = Color.Black;
+					this.ctrl_vlc.Location = new System.Drawing.Point(0, 0);
+					this.ctrl_vlc.Size = BeverDriveContext.CurrentCoreGui.ModuleAreaSize;
+					break;
 
-			if (fullScreen == 0)
-			{
-				int height = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Height - ctrl_browser.Height - 10;
-				this.ctrl_vlc.BackColor = Color.Black;
-				this.ctrl_vlc.Location = new System.Drawing.Point(vlcx, 0);
-				this.ctrl_vlc.Size = new System.Drawing.Size(420, height);
-				BeverDriveContext.CurrentCoreGui.ModuleContainer.BackColor = BeverDriveContext.Settings.BackColor;
-				BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
+				case VlcMode.Normal:
+					int height = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Height - ctrl_browser.Height - 10;
+					this.ctrl_vlc.BackColor = Color.Black;
+					this.ctrl_vlc.Location = new System.Drawing.Point(vlcx, 0);
+					this.ctrl_vlc.Size = new System.Drawing.Size(420, height);
+					BeverDriveContext.CurrentCoreGui.ModuleContainer.BackColor = BeverDriveContext.Settings.BackColor;
+					BeverDriveContext.CurrentCoreGui.ModuleContainer.Invalidate();
+					break;
 			}
 		}
 	}

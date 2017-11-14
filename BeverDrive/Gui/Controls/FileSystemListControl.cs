@@ -27,7 +27,7 @@ using BeverDrive.Gui.Styles;
 
 namespace BeverDrive.Gui.Controls
 {
-	public class FileSystemBrowserListControl : ListControl
+	public class FileSystemListControl : ListControl
 	{
 		private FileSystemBrowser browser;
 
@@ -38,11 +38,11 @@ namespace BeverDrive.Gui.Controls
 		public bool ShowDirectories { get { return this.browser.ShowDirectories; } set { this.browser.ShowDirectories = value; } }
 		public bool ShowFiles { get { return this.browser.ShowFiles; } set { this.browser.ShowFiles = value; } }
 
-		public FileSystemBrowserListControl() : this("C:\\") { }
+		public FileSystemListControl() : this("C:\\") { }
 
-		public FileSystemBrowserListControl(string rootPath) : this(rootPath, false) { }
+		public FileSystemListControl(string rootPath) : this(rootPath, false) { }
 
-		public FileSystemBrowserListControl(string rootPath, bool chrootBehavior)
+		public FileSystemListControl(string rootPath, bool chrootBehavior)
 		{
 			this.browser = new FileSystemBrowser(rootPath, chrootBehavior);
 			this.Font = Fonts.GuiFont26;
@@ -57,15 +57,20 @@ namespace BeverDrive.Gui.Controls
 
 				if (!this.SelectedItemIsFile())
 				{
-					var childName = Path.DirectorySeparatorChar + browser.CurrentDirectory.Name;
+					string currentDir = "";
+					if (browser.CurrentDirectory != null)
+						currentDir = Path.DirectorySeparatorChar + browser.CurrentDirectory.Name;
+
 					this.browser.Select(this.SelectedIndex);
 					this.PopulateBrowser();
-					this.Invalidate();
 
-					if (item.Name == Path.DirectorySeparatorChar + "..") {
-						int newIndex = this.Items.IndexOf(childName);
-						this.ScrollToCenter(newIndex);
-						this.SelectedIndex = newIndex;
+					if (item.Name == Path.DirectorySeparatorChar + "..")
+					{
+						for (int i = 0; i < this.Items.Count; i++)
+						{
+							if (this.Items[i] == currentDir)
+								this.ScrollToCenter(i);
+						}
 					}
 				}
 			}

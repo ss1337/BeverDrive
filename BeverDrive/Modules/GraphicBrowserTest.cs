@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2014 Sebastian Sjödin
+// Copyright 2014-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -28,12 +28,49 @@ using BeverDrive.Gui.Styles;
 namespace BeverDrive.Modules
 {
 	[BackButtonVisible(true)]
-	public class GraphicBrowserTest : AModule
+	[MenuText("Graphic test")]
+	public class GraphicBrowserTest : Module
 	{
 		private Label ctrl_title;
-		private GraphicBrowser br;
+		private GraphicBrowser browser;
 
 		public GraphicBrowserTest()
+		{
+		}
+
+		public override void Back()
+		{
+			BeverDriveContext.SetActiveModule("");
+		}
+
+		public override void Init()
+		{
+			this.CreateControls();
+		}
+
+		public override void OnCommand(ModuleCommandEventArgs e)
+		{
+			BeverDriveContext.CurrentCoreGui.ClockContainer.Text = "Graphic browser test";
+			base.OnCommand(e);
+
+			if (this.SelectedIndex == this.browser.Items.Count)
+				this.SelectedIndex--;
+
+			this.browser.SelectedIndex = this.SelectedIndex;
+
+			if (e.Command == ModuleCommands.SelectClick)
+			{
+				this.browser.Select();
+				this.SelectedIndex = this.browser.SelectedIndex;
+			}
+		}
+
+		public override void Update1Hz()
+		{
+			BeverDriveContext.CurrentCoreGui.Invalidate();
+		}
+
+		private void CreateControls()
 		{
 			var width = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width;
 			var height = BeverDriveContext.CurrentCoreGui.ModuleContainer.Height;
@@ -46,54 +83,13 @@ namespace BeverDrive.Modules
 			this.ctrl_title.Text = "GraphicBrowser Test";
 			this.ctrl_title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 
-			this.br = new GraphicBrowser("D:\\BeverDrive");
-			this.br.Location = new System.Drawing.Point(0, 180);
-			this.br.Size = new System.Drawing.Size(width, 380);
-		}
+			this.browser = new GraphicBrowser("D:\\BeverDrive");
+			this.browser.Index = 0;
+			this.browser.Location = new System.Drawing.Point(0, 180);
+			this.browser.Size = new System.Drawing.Size(width, 380);
 
-		public override void Init()
-		{
-		}
-
-		public override void OnCommand(ModuleCommandEventArgs e)
-		{
-			switch (e.Command)
-			{
-				case ModuleCommands.Show:
-					this.Show();
-					break;
-				case ModuleCommands.Hide:
-					this.Hide();
-					break;
-				case ModuleCommands.SelectClick:
-					this.br.Select();
-					break;
-				case ModuleCommands.SelectLeft:
-					this.br.SelectedIndex++;
-					break;
-				case ModuleCommands.SelectRight:
-					this.br.SelectedIndex--;
-					break;
-				default:
-					break;
-			}
-
-			BeverDriveContext.CurrentCoreGui.Invalidate();
-		}
-
-		public override void Update1Hz()
-		{
-			BeverDriveContext.CurrentCoreGui.Invalidate();
-		}
-
-		private void Show()
-		{
-			BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
-			this.ShowControls();
-		}
-
-		private void Hide()
-		{
+			base.Controls.Add(this.browser);
+			base.Controls.Add(this.ctrl_title);
 		}
 	}
 }

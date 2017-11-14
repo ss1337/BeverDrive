@@ -10,10 +10,15 @@
 			<setting name ="MenuItem2" value="BeverDrive.Modules.VideoPlayer" />
 			<setting name ="MenuItem3" value="BeverDrive.Modules.NubblesModule" />
 			<setting name ="MenuItem4" value="BeverDrive.Modules.IbusDebug" />
+			<setting name ="MenuItem5" value="BeverDrive.Modules.FileManager_Step1" />
+			<setting name ="MenuItem6" value="BeverDrive.Modules.GraphicBrowserTest" />
 		</module>
 		<module name="BeverDrive.Modules.Mp3Player" />
 		<module name="BeverDrive.Modules.VideoPlayer" />
 		<module name="BeverDrive.Modules.NubblesModule" />
+		<module name="BeverDrive.Modules.FileManager_Step1" />
+		<module name="BeverDrive.Modules.FileManager_Step2" />
+		<module name="BeverDrive.Modules.GraphicBrowserTest" />
 
 		<!-- The bluetooth module requires a bluetooth interface -->
 		<!-- <module name="BeverDrive.Modules.Bluetooth" /> -->

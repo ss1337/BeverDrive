@@ -1,5 +1,5 @@
 ﻿//
-// Copyright 2014-2015 Sebastian Sjödin
+// Copyright 2014-2017 Sebastian Sjödin
 //
 // This file is part of BeverDrive.
 //
@@ -28,10 +28,9 @@ using BeverDrive.Gui.Styles;
 namespace BeverDrive.Modules
 {
 	[BackButtonVisible(true)]
-	public class IbusDebug : AModule
+	public class IbusDebug : Module
 	{
 		public bool Logging;
-		public bool Rts;
 
 		private Label title;
 		private Label log;
@@ -40,86 +39,32 @@ namespace BeverDrive.Modules
 
 		public IbusDebug()
 		{
-			var width = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width;
-			var height = BeverDriveContext.CurrentCoreGui.ModuleContainer.Height;
+		}
 
-			this.title = new Label();
-			this.title.Font = Fonts.GuiFont36;
-			this.title.ForeColor = Colors.SelectedColor;
-			this.title.Location = new System.Drawing.Point(0, 16);
-			this.title.Size = new System.Drawing.Size(width, 50);
-			this.title.Text = "Ibus debugging";
-			this.title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-
-			this.log = new Label();
-			this.log.Font = Fonts.GuiFont14;
-			this.log.ForeColor = Colors.ForeColor;
-			this.log.Location = new System.Drawing.Point(0, 130);
-			this.log.Size = new System.Drawing.Size(width, height - 130);
-			this.log.Text = "";
-			this.log.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-
-			this.button1 = new TextButton();
-			this.button1.Font = Fonts.GuiFont14;
-			this.button1.ForeColor = Colors.ForeColor;
-			this.button1.Location = new System.Drawing.Point(16, 90);
-			this.button1.Size = new System.Drawing.Size(200, 24);
-			this.button1.Text = "Start/stop Logging";
-
-			this.button2 = new TextButton();
-			this.button2.Font = Fonts.GuiFont14;
-			this.button2.ForeColor = Colors.ForeColor;
-			this.button2.Location = new System.Drawing.Point(232, 90);
-			this.button2.Size = new System.Drawing.Size(150, 24);
-			this.button2.Text = "RTS on/off";
+		public override void Back()
+		{
+			this.Logging = false;
+			BeverDriveContext.SetActiveModule("");
 		}
 
 		public override void Init()
 		{
+			this.CreateControls();
+			this.Logging = false;
 		}
 
 		public override void OnCommand(ModuleCommandEventArgs e)
 		{
-			switch (e.Command)
-			{
-				case ModuleCommands.Show:
-					this.Show();
-					break;
-				case ModuleCommands.Hide:
-					this.Hide();
-					break;
-				case ModuleCommands.SelectClick:
-					this.SelectClick();
-					break;
-				case ModuleCommands.SelectLeft:
-					if (this.SelectedIndex > -1)
-						this.SelectedIndex--;
-					break;
-				case ModuleCommands.SelectRight:
-					if (this.SelectedIndex < 1)
-						this.SelectedIndex++;
-					break;
-				default:
-					break;
-			}
+			base.OnCommand(e);
 
-			switch (this.SelectedIndex)
-			{
-				case -1:
-					BeverDriveContext.CurrentCoreGui.BackButton.Selected = true;
-					this.button1.Selected = false;
-					break;
+			if (this.SelectedIndex < -2)
+				this.SelectedIndex = -2;
 
-				case 0:
-					BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
-					this.button1.Selected = true;
-					this.button2.Selected = false;
-					break;
-				case 1:
-					this.button1.Selected = false;
-					this.button2.Selected = true;
-					break;
-			}
+			if (this.SelectedIndex > 0)
+				this.SelectedIndex = 0;
+
+			if (this.SelectedIndex == 0)
+				this.button2.Selected = true;
 
 			BeverDriveContext.CurrentCoreGui.Invalidate();
 		}
@@ -137,44 +82,58 @@ namespace BeverDrive.Modules
 			BeverDriveContext.CurrentCoreGui.Invalidate();
 		}
 
-		private void SelectClick()
+		private void CreateControls()
 		{
-			switch (this.SelectedIndex)
+			var width = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width;
+			var height = BeverDriveContext.CurrentCoreGui.ModuleContainer.Height;
+
+			this.title = new Label();
+			this.title.Font = Fonts.GuiFont36;
+			this.title.ForeColor = Colors.ForeColor;
+			this.title.Location = new System.Drawing.Point(0, 16);
+			this.title.Size = new System.Drawing.Size(width, 50);
+			this.title.Text = "Ibus debugging";
+			this.title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+
+			this.log = new Label();
+			this.log.Font = Fonts.GuiFont14;
+			this.log.ForeColor = Colors.ForeColor;
+			this.log.Location = new System.Drawing.Point(0, 130);
+			this.log.Size = new System.Drawing.Size(width, height - 130);
+			this.log.Text = "";
+			this.log.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+
+			this.button1 = new TextButton();
+			this.button1.Font = Fonts.GuiFont14;
+			this.button1.ForeColor = Colors.ForeColor;
+			this.button1.Index = -1;
+			this.button1.Location = new System.Drawing.Point(16, 90);
+			this.button1.Size = new System.Drawing.Size(200, 24);
+			this.button1.Text = "Start/stop Logging";
+			this.button1.Click += (sender, e) =>
 			{
-				case -1:
-					BeverDriveContext.SetActiveModule("");
-					break;
+				this.Logging = !this.Logging;
+				if (this.Logging)
+				{
+					this.log.Text = "";
+				}
+			};
+			this.button1.Hover += (sender, e) => { BeverDriveContext.CurrentCoreGui.ClockContainer.Text = "Start/stop logging"; };
 
-				case 0:
-					this.Logging = !this.Logging;
+			this.button2 = new TextButton();
+			this.button2.Font = Fonts.GuiFont14;
+			this.button2.ForeColor = Colors.ForeColor;
+			this.button2.Index = 0;
+			this.button2.Location = new System.Drawing.Point(232, 90);
+			this.button2.Size = new System.Drawing.Size(150, 24);
+			this.button2.Text = "RTS on/off";
+			this.button2.Click += (sender, e) => { BeverDriveContext.Ibus.RtsEnable = !BeverDriveContext.Ibus.RtsEnable; };
+			this.button2.Hover += (sender, e) => { BeverDriveContext.CurrentCoreGui.ClockContainer.Text = "RTS on/off"; };
 
-					// Clear log on start of Logging
-					if (this.Logging)
-						this.log.Text = "";
-
-					break;
-				case 1:
-					BeverDriveContext.Ibus.RtsEnable = !BeverDriveContext.Ibus.RtsEnable;
-					break;
-				default:
-					break;
-			}
-		}
-
-		private void Show()
-		{
-			BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
-			this.button1.Selected = true;
-			this.Logging = false;
-			this.Rts = false;
-			this.SelectedIndex = 0;
-			base.ShowControls();
-		}
-
-		private void Hide()
-		{
-			BeverDriveContext.CurrentCoreGui.ClearModuleContainer();
-			this.Logging = false;
+			base.Controls.Add(button1);
+			base.Controls.Add(button2);
+			base.Controls.Add(log);
+			base.Controls.Add(title);
 		}
 	}
 }

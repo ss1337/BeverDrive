@@ -34,31 +34,30 @@ using nVlc.LibVlcWrapper.Implementation;
 namespace BeverDrive.Modules
 {
 	[BackButtonVisible(true)]
+	[MenuText("Music player")]
 	[PlaybackModule]
-	public class Mp3Player : AModule
+	public class Mp3Player : Module
 	{
 		/// <summary>
 		/// Controls...
 		/// </summary>
-		private FileSystemBrowserListControl ctrl_browser;
-		private Label ctrl_album;
-		private Label ctrl_filename;
-		private Label ctrl_title;
-		private ProgressBar ctrl_pb;
-		private MetroidButton ctrl_prev;
-		private MetroidButton ctrl_play;
-		private MetroidButton ctrl_next;
-		private MetroidButton ctrl_shuffle;
+		private FileSystemListControl ctrlBrowser;
+		private Label lblAlbum;
+		private Label lblFilename;
+		private Label lblTitle;
+		private ProgressBar ctrlPb;
+		private MetroidButton mbPrev;
+		private MetroidButton mbPlay;
+		private MetroidButton mbNext;
+		private MetroidButton mbShuffle;
 
 		private Playlist playlist;
 		private bool vlcPopulated;
+		private bool playing;
 		private bool shuffle;
 
 		public Mp3Player()
 		{
-			this.CreateControls();
-			VlcContext.AudioPlayer.Events.MediaEnded += new EventHandler(Events_MediaEnded);
-			playlist = new Playlist();
 		}
 
 		protected void Events_MediaEnded(object sender, EventArgs e)
@@ -67,25 +66,33 @@ namespace BeverDrive.Modules
 			this.PlayTrack();
 		}
 
-		#region IModule methods
+		#region Module methods
+		public override void Back()
+		{
+			BeverDriveContext.SetActiveModule("");
+		}
+
+		public override void Init()
+		{
+			this.CreateControls();
+			VlcContext.AudioPlayer.Events.MediaEnded += new EventHandler(Events_MediaEnded);
+			playlist = new Playlist();
+		}
+
 		public override void OnCommand(ModuleCommandEventArgs e)
 		{
+			BeverDriveContext.CurrentCoreGui.ClockContainer.Text = "Music player";
+			base.OnCommand(e);
+
+			if (this.SelectedIndex == this.ctrlBrowser.Items.Count)
+				this.SelectedIndex--;
+
 			switch (e.Command)
 			{
-				case ModuleCommands.Hide:
-					this.Hide();
-					break;
-				case ModuleCommands.SelectClick:
-					this.SelectClick();
-					break;
-				case ModuleCommands.SelectLeft:
-					this.SelectNext();
-					break;
-				case ModuleCommands.SelectRight:
-					this.SelectPrevious();
-					break;
 				case ModuleCommands.Show:
-					this.Show();
+					if (VlcContext.VideoPlayer.IsPlaying)
+						VlcContext.VideoPlayer.Pause();
+
 					break;
 				case ModuleCommands.StartPlayback:
 					this.StartPlayback();
@@ -101,79 +108,19 @@ namespace BeverDrive.Modules
 					break;
 			}
 
-			BeverDriveContext.CurrentCoreGui.Invalidate();
-		}
-
-		public override void Update1Hz()
-		{
-			if (VlcContext.AudioPlayer.IsPlaying)
+			if (e.Command == ModuleCommands.SelectClick && this.SelectedIndex > -1)
 			{
-				var d = VlcContext.AudioPlayer.Length;
-				var t = VlcContext.AudioPlayer.Time;
-				this.ctrl_pb.Maximum = (int)d;
-				this.ctrl_pb.Value = (int)t;
-				BeverDriveContext.CurrentCoreGui.Invalidate();
-			}
-		}
-		#endregion
+				this.ctrlBrowser.Select();
 
-		#region Command methods
-		private void Hide()
-		{
-			BeverDriveContext.CurrentCoreGui.ClearModuleContainer();
-		}
-
-		private void SelectClick()
-		{
-			switch (this.ctrl_browser.SelectedIndex)
-			{
-				case -5:
-					BeverDriveContext.SetActiveModule("");
-					break;
-				case -4:
-					this.PreviousTrack();
-					break;
-				case -3:
-					if (VlcContext.AudioPlayer.IsPlaying)
-						this.StopPlayback();
-					else
-						this.StartPlayback();
-
-					break;
-				case -2:
-					this.NextTrack();
-					break;
-				case -1:
-					// Enable/disable shuffle
-					if (this.shuffle)
-					{
-						this.shuffle = false;
-						playlist.Unshuffle();
-					}
-					else
-					{
-						this.shuffle = true;
-						playlist.Shuffle();
-					}
-
-					break;
-				default:
-					break;
-			}
-
-			if (this.ctrl_browser.SelectedIndex > -1)
-			{
-				this.ctrl_browser.Select();
-
-				if (this.ctrl_browser.SelectedItemIsFile())
+				if (this.ctrlBrowser.SelectedItemIsFile())
 				{
 					if (!vlcPopulated)
 					{
 						this.playlist.Clear();
 
 						// Add stuff to list
-						foreach (var f in ctrl_browser.Files)
-							playlist.AddFile(ctrl_browser.CurrentPath + Path.DirectorySeparatorChar + f.Name);
+						foreach (var f in ctrlBrowser.Files)
+							playlist.AddFile(ctrlBrowser.CurrentPath + Path.DirectorySeparatorChar + f.Name);
 
 						// TODO: Add cover image
 						/*if (ctrl_browser.CurrentItem.CoverImage != null)
@@ -189,94 +136,47 @@ namespace BeverDrive.Modules
 
 					vlcPopulated = true;
 
-					playlist.CurrentIndex = this.ctrl_browser.SelectedIndex - this.ctrl_browser.Directories.Count - 1;
+					playlist.CurrentIndex = this.ctrlBrowser.SelectedIndex - this.ctrlBrowser.Directories.Count - 1;
 					this.PlayTrack();
 				}
 				else
 				{
 					vlcPopulated = false;
 					shuffle = false;
+					this.SelectedIndex = this.ctrlBrowser.SelectedIndex;
 				}
 			}
+
+			this.ctrlBrowser.SelectedIndex = this.SelectedIndex;
+			this.mbShuffle.Selected = this.mbShuffle.Selected || this.shuffle;
+			this.mbPlay.Selected = this.mbPlay.Selected || this.playing;
+			BeverDriveContext.CurrentCoreGui.Invalidate();
 		}
 
-		private void SelectNext()
+		public override void Update1Hz()
 		{
-			if (this.ctrl_browser.SelectedIndex != this.ctrl_browser.Items.Count - 1)
-				this.ctrl_browser.SelectedIndex++;
-
-			switch (this.ctrl_browser.SelectedIndex)
+			if (VlcContext.AudioPlayer.IsPlaying)
 			{
-				case -4:
-					BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
-					ctrl_prev.Selected = true;
-					break;
-				case -3:
-					ctrl_prev.Selected = false;
-					ctrl_play.Selected = true;
-					break;
-				case -2:
-					ctrl_play.Selected = false;
-					ctrl_next.Selected = true;
-					break;
-				case -1:
-					ctrl_next.Selected = false;
-					ctrl_shuffle.Selected = true;
-					break;
-				case 0:
-					ctrl_shuffle.Selected = this.shuffle;
-					break;
-				default:
-					break;
+				var d = VlcContext.AudioPlayer.Length;
+				var t = VlcContext.AudioPlayer.Time;
+				this.ctrlPb.Maximum = (int)d;
+				this.ctrlPb.Value = (int)t;
+				BeverDriveContext.CurrentCoreGui.Invalidate();
 			}
 		}
+		#endregion
 
-		private void SelectPrevious()
-		{
-			if (this.ctrl_browser.SelectedIndex > -5)
-				this.ctrl_browser.SelectedIndex--;
-
-			switch (this.ctrl_browser.SelectedIndex)
-			{
-				case -5:
-					BeverDriveContext.CurrentCoreGui.BackButton.Selected = true;
-					ctrl_prev.Selected = false;
-					break;
-				case -4:
-					ctrl_prev.Selected = true;
-					ctrl_play.Selected = false;
-					break;
-				case -3:
-					ctrl_play.Selected = true;
-					ctrl_next.Selected = false;
-					break;
-				case -2:
-					ctrl_next.Selected = true;
-					ctrl_shuffle.Selected = this.shuffle;
-					break;
-				case -1:
-					ctrl_shuffle.Selected = true;
-					break;
-				default:
-					break;
-			}
-		}
-
-		private void Show()
-		{
-			this.ctrl_browser.SelectedIndex = 0;
-			this.ShowControls();
-			BeverDriveContext.CurrentCoreGui.BackButton.Selected = false;
-		}
-
+		#region Playback
 		private void StartPlayback()
 		{
 			VlcContext.PlayAudio();
+			this.playing = true;
 		}
 
 		private void StopPlayback()
 		{
 			VlcContext.AudioPlayer.Pause();
+			this.playing = false;
 		}
 
 		private void NextTrack()
@@ -293,29 +193,51 @@ namespace BeverDrive.Modules
 			this.PlayTrack();
 		}
 
-		#endregion
+		private void TogglePlayback()
+		{
+			if (VlcContext.AudioPlayer.IsPlaying)
+				this.StopPlayback();
+			else
+				this.StartPlayback();
+		}
+
+		private void ToggleShuffle()
+		{
+			if (this.shuffle)
+			{
+				playlist.Unshuffle();
+				this.shuffle = false;
+			}
+			else
+			{
+				playlist.Shuffle();
+				this.shuffle = true;
+			}
+		}
 
 		private void PlayTrack()
 		{
 			VlcContext.AudioPlayer.Stop();
 			VlcContext.AudioPlayer.Open(playlist.CurrentItem.VlcMedia);
 			VlcContext.PlayAudio();
+			this.playing = true;
 
 			VlcContext.CurrentTrack = playlist.CurrentIndex + 1;
 			BeverDriveContext.Ibus.Send(BeverDrive.Ibus.Messages.Predefined.CdChanger.Cd2Radio_TrackStart(VlcContext.CurrentDisc, VlcContext.CurrentTrack));
 
 			if (BeverDriveContext.CurrentMainForm.InvokeRequired)
-				BeverDriveContext.CurrentMainForm.Invoke(new Action(() => this.PopulateGui()));
+				BeverDriveContext.CurrentMainForm.Invoke(new Action(() => this.RefreshGui()));
 			else
-				this.PopulateGui();
+				this.RefreshGui();
 		}
+		#endregion
 
-		private void PopulateGui()
+		private void RefreshGui()
 		{
-			this.ctrl_pb.Reset();
-			this.ctrl_title.Text = playlist.CurrentItem.Artist + " - " + playlist.CurrentItem.Title;
-			this.ctrl_album.Text = playlist.CurrentItem.Album;
-			this.ctrl_filename.Text = playlist.CurrentItem.Filename;
+			this.ctrlPb.Reset();
+			this.lblTitle.Text = playlist.CurrentItem.Artist + " - " + playlist.CurrentItem.Title;
+			this.lblAlbum.Text = playlist.CurrentItem.Album;
+			this.lblFilename.Text = playlist.CurrentItem.Filename;
 		}
 
 		private void CreateControls()
@@ -326,61 +248,80 @@ namespace BeverDrive.Modules
 
 			var width = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width;
 
-			this.ctrl_browser = new FileSystemBrowserListControl(BeverDriveContext.Settings.MusicRoot);
-			this.ctrl_browser.HeightInItems = browserHeight;
-			this.ctrl_browser.Name = "list1";
-			this.ctrl_browser.Width = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width;
-			this.ctrl_browser.Location = new System.Drawing.Point(0, BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Height - this.ctrl_browser.Height);
-			this.ctrl_browser.TabIndex = 0;
+			this.ctrlBrowser = new FileSystemListControl(BeverDriveContext.Settings.MusicRoot);
+			this.ctrlBrowser.HeightInItems = browserHeight;
+			this.ctrlBrowser.Index = 0;
+			this.ctrlBrowser.Name = "list1";
+			this.ctrlBrowser.Width = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width;
+			this.ctrlBrowser.Location = new System.Drawing.Point(0, BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Height - this.ctrlBrowser.Height);
 
-			this.ctrl_title = new Label();
-			this.ctrl_title.AutoSize = false;
-			this.ctrl_title.Font = Fonts.GuiFont32;
-			this.ctrl_title.ForeColor = Colors.ForeColor;
-			this.ctrl_title.Location = new System.Drawing.Point(42, 16);
-			this.ctrl_title.Size = new System.Drawing.Size(width - 84, 50);
-			this.ctrl_title.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.ctrl_title.Text = "";
+			this.lblTitle = new Label();
+			this.lblTitle.Font = Fonts.GuiFont32;
+			this.lblTitle.ForeColor = Colors.ForeColor;
+			this.lblTitle.Location = new System.Drawing.Point(42, 16);
+			this.lblTitle.Size = new System.Drawing.Size(width - 84, 50);
+			this.lblTitle.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.lblTitle.Text = "";
 
-			this.ctrl_album = new Label();
-			this.ctrl_album.AutoSize = false;
-			this.ctrl_album.Font = Fonts.GuiFont24;
-			this.ctrl_album.ForeColor = Colors.ForeColor;
-			this.ctrl_album.Location = new System.Drawing.Point(19, 66);
-			this.ctrl_album.Size = new System.Drawing.Size(width, 38);
-			this.ctrl_album.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.ctrl_album.Text = "";
+			this.lblAlbum = new Label();
+			this.lblAlbum.Font = Fonts.GuiFont24;
+			this.lblAlbum.ForeColor = Colors.ForeColor;
+			this.lblAlbum.Location = new System.Drawing.Point(19, 66);
+			this.lblAlbum.Size = new System.Drawing.Size(width, 38);
+			this.lblAlbum.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.lblAlbum.Text = "";
 
-			this.ctrl_filename = new Label();
-			this.ctrl_filename.AutoSize = false;
-			this.ctrl_filename.Font = Fonts.GuiFont14;
-			this.ctrl_filename.ForeColor = Colors.ForeColor;
-			this.ctrl_filename.Location = new System.Drawing.Point(13, 104);
-			this.ctrl_filename.Size = new System.Drawing.Size(width, 26);
-			this.ctrl_filename.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.ctrl_filename.Text = "";
+			this.lblFilename = new Label();
+			this.lblFilename.Font = Fonts.GuiFont14;
+			this.lblFilename.ForeColor = Colors.ForeColor;
+			this.lblFilename.Location = new System.Drawing.Point(13, 104);
+			this.lblFilename.Size = new System.Drawing.Size(width, 26);
+			this.lblFilename.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.lblFilename.Text = "";
 
-			this.ctrl_pb = new ProgressBar();
-			this.ctrl_pb.BackColor = Colors.BackColor;
-			this.ctrl_pb.Location = new System.Drawing.Point(15, 138);
-			this.ctrl_pb.Height = 25;
-			this.ctrl_pb.Width = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width - 30;
-			this.ctrl_pb.Maximum = 100;
-			this.ctrl_pb.Value = 0;
+			this.ctrlPb = new ProgressBar();
+			this.ctrlPb.BackColor = Colors.BackColor;
+			this.ctrlPb.Location = new System.Drawing.Point(15, 138);
+			this.ctrlPb.Height = 25;
+			this.ctrlPb.Width = BeverDriveContext.CurrentCoreGui.ModuleAreaSize.Width - 30;
+			this.ctrlPb.Maximum = 100;
+			this.ctrlPb.Value = 0;
 
 			var x = width / 2 - 120;
 
-			this.ctrl_prev = new MetroidButton("core_prev.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
-			this.ctrl_prev.Location = new System.Drawing.Point(x, 172);
+			this.mbPrev = new MetroidButton("core_prev.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
+			this.mbPrev.Index = -4;
+			this.mbPrev.Location = new System.Drawing.Point(x, 172);
+			this.mbPrev.Click += (sender, e) => { this.PreviousTrack(); };
+			this.mbPrev.Hover += (sender, e) => { BeverDriveContext.CurrentCoreGui.ClockContainer.Text = "Previous track"; };
 
-			this.ctrl_play = new MetroidButton("core_play.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
-			this.ctrl_play.Location = new System.Drawing.Point(x + 60, 172);
+			this.mbPlay = new MetroidButton("core_play.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
+			this.mbPlay.Index = -3;
+			this.mbPlay.Location = new System.Drawing.Point(x + 60, 172);
+			this.mbPlay.Click += (sender, e) => { this.TogglePlayback(); };
+			this.mbPlay.Hover += (sender, e) => { BeverDriveContext.CurrentCoreGui.ClockContainer.Text = "Play"; };
 
-			this.ctrl_next = new MetroidButton("core_next.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
-			this.ctrl_next.Location = new System.Drawing.Point(x + 120, 172);
+			this.mbNext = new MetroidButton("core_next.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
+			this.mbNext.Index = -2;
+			this.mbNext.Location = new System.Drawing.Point(x + 120, 172);
+			this.mbNext.Click += (sender, e) => { this.NextTrack(); };
+			this.mbNext.Hover += (sender, e) => { BeverDriveContext.CurrentCoreGui.ClockContainer.Text = "Next track"; };
 
-			this.ctrl_shuffle = new MetroidButton("core_shuffle.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
-			this.ctrl_shuffle.Location = new System.Drawing.Point(x + 180, 172);
+			this.mbShuffle = new MetroidButton("core_shuffle.png", BeverDriveContext.Settings.ForeColor, BeverDriveContext.Settings.SelectedColor);
+			this.mbShuffle.Index = -1;
+			this.mbShuffle.Location = new System.Drawing.Point(x + 180, 172);
+			this.mbShuffle.Click += (sender, e) => { this.ToggleShuffle(); };
+			this.mbShuffle.Hover += (sender, e) => { BeverDriveContext.CurrentCoreGui.ClockContainer.Text = "Shuffle on/off"; };
+
+			base.Controls.Add(ctrlBrowser);
+			base.Controls.Add(ctrlPb);
+			base.Controls.Add(mbNext);
+			base.Controls.Add(mbPlay);
+			base.Controls.Add(mbPrev);
+			base.Controls.Add(mbShuffle);
+			base.Controls.Add(lblAlbum);
+			base.Controls.Add(lblFilename);
+			base.Controls.Add(lblTitle);
 		}
 	}
 }
