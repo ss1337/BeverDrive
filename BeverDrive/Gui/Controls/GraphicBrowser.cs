@@ -43,24 +43,27 @@ namespace BeverDrive.Gui.Controls
 		{
 			get { return selectedIndex; }
 			set {
-				if (value > -1 && value < browser.Items.Count)
+				if (value < browser.Items.Count)
 				{
-					if ((value > selectedIndex) && (value > scrollCount * 5 + 9))
+					if (value > -1)
 					{
-						scrollCount++;
-					}
+						if ((value > selectedIndex) && (value > scrollCount * 5 + 9))
+						{
+							scrollCount++;
+						}
 
-					if ((value < selectedIndex) && (value < scrollCount * 5))
-					{
-						scrollCount--;
+						if ((value < selectedIndex) && (value < scrollCount * 5))
+						{
+							scrollCount--;
+						}
+
+						if (browser.Items[value].CoverImage != null)
+							BeverDriveContext.CurrentCoreGui.ModuleContainer.SetBackgroundImage(browser.Items[value].Name, browser.Items[value].CoverImage);
+						else
+							BeverDriveContext.CurrentCoreGui.ModuleContainer.SetBackgroundImage(browser.CurrentItem.Name, browser.CurrentItem.CoverImage);
 					}
 
 					selectedIndex = value;
-
-					if (browser.Items[value].CoverImage != null)
-						BeverDriveContext.CurrentCoreGui.ModuleContainer.SetBackgroundImage(browser.Items[value].Name, browser.Items[value].CoverImage);
-					else
-						BeverDriveContext.CurrentCoreGui.ModuleContainer.SetBackgroundImage(browser.CurrentItem.Name, browser.CurrentItem.CoverImage);
 				}
 			}
 		}
