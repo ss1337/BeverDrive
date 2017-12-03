@@ -27,7 +27,7 @@ using NUnit.Framework;
 
 namespace BeverDrive.Tests.Core
 {
-	[TestFixture]
+	[TestFixture(Ignore = true)]
 	public class ImageProcessorTests
 	{
 		public ImageProcessorTests()

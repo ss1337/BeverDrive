@@ -28,6 +28,7 @@ namespace BeverDrive
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.SuspendLayout();
 			// 
 			// MainForm
@@ -38,6 +39,7 @@ namespace BeverDrive
 			this.ClientSize = new System.Drawing.Size(800, 600);
 			this.Cursor = System.Windows.Forms.Cursors.Default;
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "MainForm";
 			this.Text = "BeverDrive";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
